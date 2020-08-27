@@ -7,10 +7,6 @@
   font-size: 0.8em;
 }
 
-.cp_iptxt i {
-  padding: 7px 15px;
-  color: #515c6f;
-}
 .cp_iptxt ons-select {
   margin: 0px;
 }
@@ -46,8 +42,8 @@
 }
 .cp_iptxt i {
   position: absolute;
-  top: 17px;
-  left: 5px;
+  top: 11px;
+  left: 0px;
   padding: 9px 8px;
   transition: 0.3s;
   color: #aaaaaa;
@@ -84,25 +80,6 @@
 .fa-spinner {
   font-size: 40px;
   color: #0799d7;
-}
-
-p,
-h4,
-.navy-font,
-ons-toolbar > .center {
-  color: #515c6f;
-  font-family: "Lato", "Noto Sans JP", "ヒラギノ角ゴ ProN",
-    "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, "ＭＳ Ｐゴシック",
-    "MS PGothic", sans-serif !important;
-}
-
-.light-navy-font,
-#chat-detail-page ons-card {
-  color: #515c6f;
-  font-size: 0.8em;
-  font-family: "Lato", "Noto Sans JP", "ヒラギノ角ゴ ProN",
-    "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, "ＭＳ Ｐゴシック",
-    "MS PGothic", sans-serif !important;
 }
 
 #chat-page > .page__content,
@@ -192,27 +169,20 @@ ons-toolbar > .center {
 
 .back-button__icon,
 .back-button__label {
-  fill: #ff9831;
-  color: #ff9831;
-}
-
-.button--large--cta,
-ons-bottom-toolbar {
-  font-family: "Lato", "Noto Sans JP", "ヒラギノ角ゴ ProN",
-    "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, "ＭＳ Ｐゴシック",
-    "MS PGothic", sans-serif !important;
-}
-
-#womanPageCarender ons-col {
-  color: #515c6f;
-  font-family: "Lato", "Noto Sans JP", "ヒラギノ角ゴ ProN",
-    "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, "ＭＳ Ｐゴシック",
-    "MS PGothic", sans-serif !important;
-  font-size: 0.8em;
+  fill: gray;
+  color: gray;
 }
 
 #mypageProfileEdit-page > .page__content {
   padding-right: 10px;
   padding-left: 10px;
+  background: white !important;
+}
+
+#accountCreate .cp_iptxt {
+  margin: 3px 3%;
+}
+
+#accountCreate > .page__content {
   background: white !important;
 }
