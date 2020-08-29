@@ -32,9 +32,14 @@
       background-color: #0799d7;
       transition-duration: 0.3s;
     }
-
+    #firstPage .page__background {
+      background-color: white;
+    }
     #firstPage .bottom-bar {
-      height: 60px;
+      height: 50px;
+      bottom: 15px;
+      background-image: none;
+      background: white;
     }
     .balloon1 {
       position: relative;
@@ -67,7 +72,7 @@
   <ons-bottom-toolbar> </ons-bottom-toolbar>
   <ons-bottom-toolbar
     id="firstPageBottom"
-    style="background-color:#ff9831; text-align: center;color:white;line-height: 35px;font-weight: bold;"
+    style="background-color:#ff9831; text-align: center;color:white;line-height: 50px;font-weight: bold;width:90%;margin:0 auto;border-radius:10px;"
     onclick="nextSlide()"
   >
     次へ
@@ -101,9 +106,9 @@
       </ons-carousel-item>
       <ons-carousel-item>
         <div style="text-align: center;margin-top: 5%;">
-          <h3>
+          <h2 style="font-weight: bold;color:gray;">
             利用方法
-          </h3>
+          </h2>
           <ons-list>
             <ons-list-header>1.知識/経験を検索して購入</ons-list-header>
             <ons-list-item>
@@ -147,9 +152,9 @@
       </ons-carousel-item>
       <ons-carousel-item>
         <div style="text-align: center;margin-top: 30%;">
-          <h3>
+          <h2 style="font-weight: bold;color:gray;">
             通知をONに
-          </h3>
+          </h2>
           <p>通知を許可して購入者/出品者<br />のメッセージを逃さない</p>
           <img
             src="https://img.icons8.com/nolan/256/push-notifications.png"
@@ -174,9 +179,11 @@
       </ons-carousel-item>
       <ons-carousel-item>
         <div style="text-align: center;margin-top: 5%;">
-          <h3>
+          <h2
+            style="font-weight: bold;color:gray;border-bottom:1px solid #eee;padding-bottom:14px;"
+          >
             知識/経験を出品しよう
-          </h3>
+          </h2>
           <div class="balloon1">
             <ons-row style="height:150px;">
               <ons-col vertical-align="center">
