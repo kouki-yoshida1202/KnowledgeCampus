@@ -1,0 +1,214 @@
+<ons-page id="loginPage2">
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div class="center">ログイン</div>
+  </ons-toolbar>
+
+  <ons-list style="padding-top:11px;">
+    <ons-list-item>
+      <ons-row>
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: left;padding:0px 3%;"
+        >
+          メールアドレス
+        </ons-col>
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: right;"
+        >
+          <div class="cp_iptxt">
+            <input
+              type="email"
+              placeholder="メールアドレスを入力してください"
+              id="loginMailAddress"
+            />
+            <i class="fas fa-envelope fa-lg fa-fw" aria-hidden="true"></i>
+          </div>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+      <ons-row>
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: left;padding:0px 3%;"
+        >
+          パスワード
+        </ons-col>
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: right;"
+        >
+          <div class="cp_iptxt">
+            <input type="password" placeholder="6文字以上" id="loginPassword" />
+            <i class="fas fa-unlock-alt fa-lg fa-fw" aria-hidden="true"></i>
+          </div>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+  </ons-list>
+  <div class="cp_iptxt" style="margin-top:20px;margin-bottom:30px;">
+    <ons-button
+      class="button--large--cta"
+      style="margin: 0 auto;border-radius: 10px;padding:0.5em;background-color:#ff9831;width:90%"
+      ripple
+      onclick="loginCheck($('#loginMailAddress').val(),$('#loginPassword').val());"
+    >
+      ログイン
+    </ons-button>
+  </div>
+  <div class="cp_iptxt" style="width:90%">
+    <p style="text-align: right;" onclick="showPasswordReminderModal();">
+      パスワードを忘れた方 >
+    </p>
+  </div>
+  <ons-modal id="passwordReminder" direction="up" animation="fade">
+    <ons-card>
+      <ons-icon
+        icon="fa-times-circle"
+        style="color:gray;float:right;font-size: 1.5em;"
+        onclick="hidePasswordReminderModal();"
+      ></ons-icon>
+      <div class="title"></div>
+      <div class="content">
+        <div style="text-align: center; margin-top: 30px;">
+          <p>
+            <ons-input
+              id="updateMailaddress"
+              modifier="underbar"
+              type="email"
+              placeholder="メールアドレス"
+              style="padding:1.2em;width:65%;"
+              float
+            ></ons-input>
+          </p>
+          <p style="margin-top: 2em;">
+            <ons-button
+              class="button--cta"
+              onclick="passwordReminder($('#updateMailaddress').val())"
+              style="border-radius: 10px;padding:0.5em 1em;"
+              ripple
+              >パスワード再設定をする</ons-button
+            >
+          </p>
+        </div>
+      </div>
+    </ons-card>
+  </ons-modal>
+  <div id="recaptcha-container"></div>
+  <script>
+    function loginCheck(email, password) {
+      showLoad();
+      console.log(email, password);
+      if (email == "" || email == null) {
+        hideLoad();
+        ons.notification.alert({
+          message: "メールアドレスが未入力です"
+        });
+      } else if (password == "") {
+        hideLoad();
+        ons.notification.alert({
+          message: "パスワードが未入力です。"
+        });
+      } else {
+        var mailcheck = MailCheck(email);
+        if (mailcheck) {
+          firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(function(user) {
+              console.log("aaaaa");
+              if (firebase.auth().currentUser.emailVerified) {
+                // メールアドレスの認証ができている
+                // ログイン
+                firebase.auth().onAuthStateChanged(function(user) {
+                  console.log("aiu");
+                  if (user) {
+                    console.log("There's a user", user);
+                  } else {
+                    console.log("No user");
+                  }
+                });
+                myNavigator.replacePage("html/homePage.html");
+                hideLoad();
+              } else {
+                // メルアド認証ができていない場合
+                firebase.auth().currentUser.sendEmailVerification();
+                // もう一度メールを送信して、認証アラートを出す
+                ons.notification.alert({
+                  title: "ログイン失敗",
+                  message:
+                    "メールアドレス認証が済んでおりません。登録したメールアドレスに認証メールが届いておりますので、ご確認ください。"
+                });
+                hideLoad();
+              }
+            })
+            .catch(function(error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              console.log(errorCode);
+              console.log(errorMessage);
+              ons.notification.alert({
+                title: "ログイン失敗",
+                message: "メールアドレスかパスワードが間違っております。"
+              });
+              hideLoad();
+            });
+        } else {
+          ons.notification.alert({
+            title: "登録失敗",
+            message: "メールアドレスの形式が正しくありません。"
+          });
+          hideLoad();
+        }
+      }
+    }
+
+    function showPasswordReminderModal() {
+      var modal = document.querySelector("#passwordReminder");
+      modal.show();
+      // setTimeout(function() {
+      //   modal.hide();
+      // }, 2000);
+    }
+
+    function hidePasswordReminderModal() {
+      var modal = document.querySelector("#passwordReminder");
+      modal.hide();
+    }
+
+    function passwordReminder(email) {
+      showLoad();
+      var auth = firebase.auth();
+
+      auth
+        .sendPasswordResetEmail(email)
+        .then(function() {
+          // Email sent.
+          ons.notification.alert({
+            title: "メール送信",
+            message: "パスワード再設定メールを送信しました。ご確認ください。"
+          });
+          hidePasswordReminderModal();
+          hideLoad();
+        })
+        .catch(function(error) {
+          // An error happened.
+          ons.notification.alert({
+            title: "メール送信失敗",
+            message:
+              "パスワード再設定メールの送信に失敗しました。再度メールアドレスをお確かめください。"
+          });
+          hideLoad();
+        });
+    }
+  </script>
+</ons-page>

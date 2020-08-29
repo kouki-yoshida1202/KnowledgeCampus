@@ -55,14 +55,24 @@
 
       ons.ready(function() {
         var myNavigator = document.getElementById("myNavigator");
-        // ログインチェック
-        var loginUser = firebase.auth().currentUser;
-        var authenticationCheck = firebase.emailVerified;
-        if (authenticationCheck == true) {
-          myNavigator.pushPage("html/homePage.html");
+        var obj = localStorage.getItem("first-time");
+        console.log(obj);
+        if (obj == false) {
+          // ログインチェック
+          var user = firebase.auth().currentUser;
+          if (user) {
+            if (!user.emailVerified) {
+              // メアド確認終わってない
+              myNavigator.pushPage("html/loginPage.html");
+            } else {
+              // メアド確認終わってる
+              myNavigator.pushPage("html/homePage.html");
+            }
+          } else {
+            myNavigator.pushPage("html/loginPage.html");
+          }
         } else {
-          // No user is signed in.
-          myNavigator.pushPage("html/loginPage.html");
+          myNavigator.pushPage("html/firstPage.html");
         }
       });
 

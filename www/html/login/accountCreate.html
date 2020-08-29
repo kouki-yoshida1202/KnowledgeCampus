@@ -9,7 +9,11 @@
   <ons-list style="padding-top:11px;">
     <ons-list-item>
       <ons-row>
-        <ons-col vertical-align="center" width="100%" style="text-align: left;">
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: left;padding:0px 3%;"
+        >
           ユーザーネーム
         </ons-col>
         <ons-col
@@ -30,7 +34,11 @@
     </ons-list-item>
     <ons-list-item>
       <ons-row>
-        <ons-col vertical-align="center" width="100%" style="text-align: left;">
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: left;padding:0px 3%;"
+        >
           メールアドレス
         </ons-col>
         <ons-col
@@ -51,7 +59,11 @@
     </ons-list-item>
     <ons-list-item>
       <ons-row>
-        <ons-col vertical-align="center" width="100%" style="text-align: left;">
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: left;padding:0px 3%;"
+        >
           パスワード
         </ons-col>
         <ons-col
@@ -68,7 +80,11 @@
     </ons-list-item>
     <ons-list-item>
       <ons-row>
-        <ons-col vertical-align="center" width="100%" style="text-align: left;">
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: left;padding:0px 3%;"
+        >
           パスワード再確認
         </ons-col>
         <ons-col
@@ -89,7 +105,11 @@
     </ons-list-item>
     <ons-list-item>
       <ons-row>
-        <ons-col vertical-align="center" width="100%" style="text-align: left;">
+        <ons-col
+          vertical-align="center"
+          width="100%"
+          style="text-align: left;padding:0px 3%;"
+        >
           招待コード
         </ons-col>
         <ons-col
@@ -186,33 +206,6 @@
           });
           hideLoad();
         }
-      }
-    }
-
-    // -------------------------------------------------------------------
-    // メールアドレスチェック関数
-    // -------------------------------------------------------------------
-    function MailCheck(mail) {
-      var mail_regex1 = new RegExp(
-        "(?:[-!#-'*+/-9=?A-Z^-~]+\.?(?:\.[-!#-'*+/-9=?A-Z^-~]+)*|\"(?:[!#-\[\]-~]|\\\\[\x09 -~])*\")@[-!#-'*+/-9=?A-Z^-~]+(?:\.[-!#-'*+/-9=?A-Z^-~]+)*"
-      );
-      var mail_regex2 = new RegExp("^[^\@]+\@[^\@]+$");
-      if (mail.match(mail_regex1) && mail.match(mail_regex2)) {
-        // 全角チェック
-        if (
-          mail.match(
-            /[^a-zA-Z0-9\!\"\#\$\%\&\'\(\)\=\~\|\-\^\\\@\[\;\:\]\,\.\/\\\<\>\?\_\`\{\+\*\} ]/
-          )
-        ) {
-          return false;
-        }
-        // 末尾TLDチェック（〜.co,jpなどの末尾ミスチェック用）
-        if (!mail.match(/\.[a-z]+$/)) {
-          return false;
-        }
-        return true;
-      } else {
-        return false;
       }
     }
   </script>

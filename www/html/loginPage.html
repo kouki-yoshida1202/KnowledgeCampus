@@ -32,9 +32,9 @@
     <div class="cp_iptxt" style="margin-top:10%;">
       <ons-button
         class="button--large--cta"
-        style="margin: 0 auto;border-radius: 10px;padding:0.5em;background-color:#ff9831;"
+        style="margin: 0 auto;border-radius: 10px;padding:0.5em;background-color:#ff9831;width:90%;"
         ripple
-        onclick="loginCheck($('#login_mailaddress').val(),$('#login_password').val());"
+        onclick="myNavigator.bringPageTop('html/login/loginPage2.html');"
       >
         ログイン
       </ons-button>
@@ -42,7 +42,7 @@
     <div class="cp_iptxt" style="margin-top:10%;">
       <ons-button
         class="button--large--cta"
-        style="margin: 0 auto;border-radius: 10px;padding:0.5em;background-color:darkgray;"
+        style="margin: 0 auto;border-radius: 10px;padding:0.5em;background-color:darkgray;width:90%;"
         ripple
         onclick="myNavigator.bringPageTop('html/login/accountCreate.html');"
       >
@@ -50,4 +50,29 @@
       </ons-button>
     </div>
   </div>
+  <script>
+    function MailCheck(mail) {
+      var mail_regex1 = new RegExp(
+        "(?:[-!#-'*+/-9=?A-Z^-~]+\.?(?:\.[-!#-'*+/-9=?A-Z^-~]+)*|\"(?:[!#-\[\]-~]|\\\\[\x09 -~])*\")@[-!#-'*+/-9=?A-Z^-~]+(?:\.[-!#-'*+/-9=?A-Z^-~]+)*"
+      );
+      var mail_regex2 = new RegExp("^[^\@]+\@[^\@]+$");
+      if (mail.match(mail_regex1) && mail.match(mail_regex2)) {
+        // 全角チェック
+        if (
+          mail.match(
+            /[^a-zA-Z0-9\!\"\#\$\%\&\'\(\)\=\~\|\-\^\\\@\[\;\:\]\,\.\/\\\<\>\?\_\`\{\+\*\} ]/
+          )
+        ) {
+          return false;
+        }
+        // 末尾TLDチェック（〜.co,jpなどの末尾ミスチェック用）
+        if (!mail.match(/\.[a-z]+$/)) {
+          return false;
+        }
+        return true;
+      } else {
+        return false;
+      }
+    }
+  </script>
 </ons-page>

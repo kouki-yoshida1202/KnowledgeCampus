@@ -28,7 +28,7 @@
   box-sizing: border-box;
   width: 100%;
   margin: 8px 0;
-  padding: 0.3em;
+  padding: 0.5em;
   transition: 0.3s;
   border: 1px solid #898989;
   border-radius: 4px;
@@ -42,7 +42,7 @@
 }
 .cp_iptxt i {
   position: absolute;
-  top: 11px;
+  top: 13px;
   left: 0px;
   padding: 9px 8px;
   transition: 0.3s;
@@ -171,6 +171,7 @@
 .back-button__label {
   fill: gray;
   color: gray;
+  padding-left: 7px;
 }
 
 #mypageProfileEdit-page > .page__content {
@@ -183,6 +184,9 @@
   margin: 3px 3%;
 }
 
-#accountCreate > .page__content {
+#loginPage > .page__content,
+#loginPage2 > .page__content,
+#accountCreate > .page__content,
+#firstPage > .page__content {
   background: white !important;
 }
