@@ -57,10 +57,12 @@
         var myNavigator = document.getElementById("myNavigator");
         var obj = localStorage.getItem("first-time");
         console.log(obj);
+        obj = false;
         if (obj == false) {
           // ログインチェック
           var user = firebase.auth().currentUser;
           if (user) {
+            console.log(user);
             if (!user.emailVerified) {
               // メアド確認終わってない
               myNavigator.pushPage("html/loginPage.html");
@@ -69,7 +71,9 @@
               myNavigator.pushPage("html/homePage.html");
             }
           } else {
-            myNavigator.pushPage("html/loginPage.html");
+            // myNavigator.pushPage("html/loginPage.html");
+            // 一時的に
+            myNavigator.pushPage("html/homePage.html");
           }
         } else {
           myNavigator.pushPage("html/firstPage.html");

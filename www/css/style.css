@@ -3,16 +3,9 @@
   margin: 7px 3%;
   font-size: 0.8em;
 }
-#call-page .select-input {
-  font-size: 0.8em;
-}
 
 .cp_iptxt ons-select {
   margin: 0px;
-}
-
-.page__content {
-  background-color: #f5f6f8 !important;
 }
 
 .bottom-bar {
@@ -90,16 +83,6 @@
 #search-page > .page__content {
   padding-right: 10px;
   padding-left: 10px;
-}
-
-#call-page2 > .page__content {
-  padding-right: 10px;
-  padding-left: 10px;
-}
-#call-page3 > .page__content {
-  padding-right: 10px;
-  padding-left: 10px;
-  background: white !important;
 }
 
 .search-input {
@@ -189,4 +172,17 @@
 #accountCreate > .page__content,
 #firstPage > .page__content {
   background: white !important;
+}
+
+.large-button-orange {
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  background-color: #ff9831;
+}
+.large-button-gray {
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  background-color: gray;
 }

@@ -1,0 +1,86 @@
+<ons-page id="syuppinPage">
+  <style>
+    #syuppinPage .page__content {
+      background-color: white !important;
+    }
+  </style>
+  <ons-toolbar>
+    <div class="center" id="toolbar-title">出品画面</div>
+  </ons-toolbar>
+  <div class="content">
+    <ons-list-header>サービス名と説明</ons-list-header>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">大カテゴリー</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-input></ons-input>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">小カテゴリー</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-input></ons-input>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+      <ons-col>
+        <ons-col width="100%" vertical-align="center">説明</ons-col>
+        <ons-col width="100%" vertical-align="center">
+          <textarea name="" id="" cols="60" rows="10" width="100%"></textarea>
+        </ons-col>
+      </ons-col>
+    </ons-list-item>
+    <ons-list-header>
+      <ons-row>
+        <ons-col width="70%" vertical-align="center">手段/ツール</ons-col>
+        <ons-col width="30%" vertical-align="center">
+          ※オンラインに限る
+        </ons-col>
+      </ons-row>
+    </ons-list-header>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">通話手段</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-input></ons-input>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-header>
+      <ons-row>
+        <ons-col width="100%" vertical-align="center">販売価格</ons-col>
+      </ons-row>
+    </ons-list-header>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">価格</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-input placeholder="¥3000"></ons-input>
+        </ons-col>
+      </ons-row>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">販売手数料</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          ¥750(25%)
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%">販売利益</ons-col>
+        <ons-col width="70%" vertical-align="center">¥2250</ons-col>
+      </ons-row>
+    </ons-list-item>
+    <div style="padding:0.5rem;margin-top:1rem;">
+      <ons-button modifier="large" class="large-button-orange">出品</ons-button>
+    </div>
+    <div style="padding:0.5rem;">
+      <ons-button modifier="large" class="large-button-gray"
+        >下書き保存</ons-button
+      >
+    </div>
+  </div>
+</ons-page>

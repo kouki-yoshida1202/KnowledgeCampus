@@ -1,146 +1,323 @@
-<ons-page id="chat-page">
+<ons-page id="chatPage">
   <ons-toolbar>
-    <div class="center" id="toolbar-title" class="">
-      メッセージ一覧
+    <div
+      class="center"
+      id="toolbar-title"
+      style="display:flex;align-items: center;justify-content: center;"
+    >
+      トーク
     </div>
   </ons-toolbar>
-  <div>
-    <p style="text-align: center; margin-top: 10px;">
-      <ons-search-input
-        placeholder="Search"
-        onchange="ons.notification.alert('Searched for: ' + this.value)"
-        style="width:80%;border-radius: 20px;"
-      >
-      </ons-search-input>
-    </p>
-    <ons-list>
-      <ons-list-item>
-        <div
-          class="left"
-          onclick="myNavigator.bringPageTop('html/other/womanPage.html');"
-        >
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
+  <div class="mainHeader">
+    <ons-carousel
+      id="tabChatCarousel"
+      swipeable
+      overscrollable
+      auto-scroll
+      var="carousel"
+      item-width="50%"
+      initial-index="0"
+      style="height:40px;"
+    >
+      <ons-carousel-item class="active_tabCarousel">
+        <div class="item-label" style="line-height: 35px;">
+          購入サービス
         </div>
-        <div
-          class="center"
-          style="width:50%;"
-          onclick="myNavigator.bringPageTop('html/chat/chatDetailPage.html');"
-        >
-          <span class="list-item__title navy-font">Hanako</span
-          ><span
-            class="list-item__subtitle light-navy-font"
-            style="height:55px;overflow: hidden;"
-            >テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</span
-          >
-        </div>
-        <div class="right">
-          <span class="list-item__subtitle light-navy-font">9:20 AM</span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title navy-font">Hanako</span
-          ><span
-            class="list-item__subtitle light-navy-font"
-            style="height:55px;overflow: hidden;"
-            >テキストが入ります。テキストが入ります。テキストがます。</span
-          >
-        </div>
-        <div class="right">
-          <span class="list-item__subtitle light-navy-font">9:20 AM</span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title navy-font">Hanako</span
-          ><span
-            class="list-item__subtitle light-navy-font"
-            style="height:55px;overflow: hidden;"
-            >テキストが入ります。</span
-          >
-        </div>
-        <div class="right">
-          <span class="list-item__subtitle light-navy-font">9:20 AM</span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title navy-font">Hanako</span
-          ><span
-            class="list-item__subtitle light-navy-font"
-            style="height:55px;overflow: hidden;"
-            >テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</span
-          >
-        </div>
-        <div class="right">
-          <span class="list-item__subtitle light-navy-font">9:20 AM</span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title navy-font">Hanako</span
-          ><span
-            class="list-item__subtitle light-navy-font"
-            style="height:55px;overflow: hidden;"
-            >テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</span
-          >
-        </div>
-        <div class="right">
-          <span class="list-item__subtitle light-navy-font">9:20 AM</span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title navy-font">Hanako</span
-          ><span
-            class="list-item__subtitle light-navy-font"
-            style="height:55px;overflow: hidden;"
-            >テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</span
-          >
-        </div>
-        <div class="right">
-          <span class="list-item__subtitle light-navy-font">9:20 AM</span>
-        </div>
-      </ons-list-item>
-    </ons-list>
+      </ons-carousel-item>
+      <ons-carousel-item style="line-height: 35px;">
+        <div class="item-label">出品サービス</div>
+      </ons-carousel-item>
+    </ons-carousel>
   </div>
+  <div class="content">
+    <ons-carousel
+      id="chatCarousel"
+      swipeable
+      overscrollable
+      auto-scroll
+      var="carousel"
+      item-width="100%"
+      initial-index="0"
+      reflesh="console.log('Changed to ' + $event.activeIndex)"
+    >
+      <ons-carousel-item>
+        <ons-list style="background-image: none;">
+          <ons-list-item>
+            <div
+              class="left"
+              onclick="myNavigator.bringPageTop('html/other/womanPage.html');"
+            >
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div
+              class="center"
+              style="width:50%;"
+              onclick="myNavigator.bringPageTop('html/chat/chatDetailPage.html');"
+            >
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+        </ons-list>
+      </ons-carousel-item>
+      <ons-carousel-item>
+        <ons-list style="background-image: none;">
+          <ons-list-item>
+            <div
+              class="left"
+              onclick="myNavigator.bringPageTop('html/other/womanPage.html');"
+            >
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div
+              class="center"
+              style="width:50%;"
+              onclick="myNavigator.bringPageTop('html/chat/chatDetailPage.html');"
+            >
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="left">
+              <img
+                class="list-item__thumbnail"
+                src="img/image61.jpg"
+                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+              />
+            </div>
+            <div class="center" style="width:50%;">
+              <span
+                class="list-item__subtitle light-navy-font"
+                style="height:55px;overflow: hidden;"
+                >ハナコさんから「就活教えます。」の取引メッセージが届きました。</span
+              >
+            </div>
+            <div class="right">
+              <span class="list-item__subtitle light-navy-font">9:20 AM</span>
+            </div>
+          </ons-list-item>
+        </ons-list>
+      </ons-carousel-item>
+    </ons-carousel>
+  </div>
+  <script>
+    ("use strict");
+    document.addEventListener("init", function(event) {
+      if (event.target.matches("#chatPage")) {
+        var chatCarousel = document.getElementById("chatCarousel");
+        chatCarousel.addEventListener("postchange", function(e) {
+          // alert(e.activeIndex);
+          tabCarouselChange(e.activeIndex);
+        });
+      }
+    });
+
+    function tabCarouselChange(carouselIndex) {
+      console.log(carouselIndex);
+      $("#tabChatCarousel ons-carousel-item").removeClass("active_tabCarousel");
+      $("#tabChatCarousel ons-carousel-item")
+        .eq(carouselIndex)
+        .addClass("active_tabCarousel");
+    }
+    ons.ready(function() {
+      var page = document.getElementById("chatPage");
+      var toolbar = page.querySelector(".toolbar");
+      var header = page.querySelector(".mainHeader");
+      var content = page.querySelector(".content");
+      header.style.top = toolbar.clientHeight + "px";
+      content.style.marginTop = 40 + "px";
+    });
+  </script>
 </ons-page>
