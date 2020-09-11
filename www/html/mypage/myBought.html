@@ -1,0 +1,269 @@
+<ons-page id="myBoughtPage">
+  <style>
+    #myBoughtPage .fa-heart,
+    #myBoughtPage .fa-comment-dots {
+      margin-right: 0.5rem;
+    }
+    #myBoughtPage .fa-comment-dots {
+      margin-left: 1rem;
+    }
+  </style>
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div
+      class="center"
+      id="toolbar-title"
+      style="display:flex;align-items: center;justify-content: center;"
+    >
+      購入したサービス
+    </div>
+  </ons-toolbar>
+  <div class="mainHeader">
+    <ons-carousel
+      id="tabMyBoughtCarousel"
+      swipeable
+      overscrollable
+      auto-scroll
+      var="carousel"
+      item-width="50%"
+      initial-index="0"
+      style="height:40px;"
+    >
+      <ons-carousel-item class="active_tabCarousel">
+        <div class="item-label" style="line-height: 35px;">
+          取引中
+        </div>
+      </ons-carousel-item>
+      <ons-carousel-item style="line-height: 35px;">
+        <div class="item-label">取引完了</div>
+      </ons-carousel-item>
+    </ons-carousel>
+  </div>
+  <div class="content">
+    <ons-carousel
+      id="myBoughtCarousel"
+      swipeable
+      overscrollable
+      auto-scroll
+      var="carousel"
+      item-width="100%"
+      initial-index="0"
+      reflesh="console.log('Changed to ' + $event.activeIndex)"
+    >
+      <ons-carousel-item>
+        <ons-list
+          style="background-image: none;"
+          onclick="myNavigator.bringPageTop('html/other/womanPage.html');"
+        >
+          <ons-list-item>
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="list-item__thumbnail"
+                  src="img/image61.jpg"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                就活教えます<br />¥3000 <br />
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i
+                    class="far fa-comment-dots"
+                  ></i
+                  >4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="list-item__thumbnail"
+                  src="img/image61.jpg"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                就活教えます<br />¥3000 <br />
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i
+                    class="far fa-comment-dots"
+                  ></i
+                  >4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="list-item__thumbnail"
+                  src="img/image61.jpg"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                就活教えます<br />¥3000 <br />
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i
+                    class="far fa-comment-dots"
+                  ></i
+                  >4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="list-item__thumbnail"
+                  src="img/image61.jpg"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                就活教えます<br />¥3000 <br />
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i
+                    class="far fa-comment-dots"
+                  ></i
+                  >4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+        </ons-list>
+      </ons-carousel-item>
+      <ons-carousel-item>
+        <ons-list
+          style="background-image: none;"
+          onclick="myNavigator.bringPageTop('html/other/womanPage.html');"
+        >
+          <ons-list-item>
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="list-item__thumbnail"
+                  src="img/image61.jpg"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                就活教えます<br />¥3000 <br />
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i
+                    class="far fa-comment-dots"
+                  ></i
+                  >4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="list-item__thumbnail"
+                  src="img/image61.jpg"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                就活教えます<br />¥3000 <br />
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i
+                    class="far fa-comment-dots"
+                  ></i
+                  >4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="list-item__thumbnail"
+                  src="img/image61.jpg"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                就活教えます<br />¥3000 <br />
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i
+                    class="far fa-comment-dots"
+                  ></i
+                  >4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="list-item__thumbnail"
+                  src="img/image61.jpg"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                就活教えます<br />¥3000 <br />
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i
+                    class="far fa-comment-dots"
+                  ></i
+                  >4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+        </ons-list>
+      </ons-carousel-item>
+    </ons-carousel>
+  </div>
+  <script>
+    ("use strict");
+    document.addEventListener("init", function(event) {
+      if (event.target.matches("#myBoughtPage")) {
+        var chatCarousel = document.getElementById("myBoughtCarousel");
+        chatCarousel.addEventListener("postchange", function(e) {
+          // alert(e.activeIndex);
+          tabMyBoughtCarouselChange(e.activeIndex);
+        });
+      }
+    });
+
+    function tabMyBoughtCarouselChange(carouselIndex) {
+      console.log(carouselIndex);
+      $("#tabMyBoughtCarousel ons-carousel-item").removeClass(
+        "active_tabCarousel"
+      );
+      $("#tabMyBoughtCarousel ons-carousel-item")
+        .eq(carouselIndex)
+        .addClass("active_tabCarousel");
+    }
+    ons.ready(function() {
+      var page = document.getElementById("myBoughtPage");
+      var toolbar = page.querySelector(".toolbar");
+      var header = page.querySelector(".mainHeader");
+      var content = page.querySelector(".content");
+      header.style.top = toolbar.clientHeight + "px";
+      content.style.marginTop = 40 + "px";
+    });
+  </script>
+</ons-page>

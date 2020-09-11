@@ -21,7 +21,9 @@
           style="text-align: right;padding-right:0.5em;"
           onclick="myNavigator.bringPageTop('html/syuppinGenre1.html');"
         >
-          (必須)　>
+          学業 ><br />
+          授業 ><br />
+          講義&emsp;
         </ons-col>
       </ons-row>
     </ons-list-item>
@@ -59,19 +61,12 @@
       <ons-row>
         <ons-col width="30%" vertical-align="center">通話手段</ons-col>
         <ons-col width="70%" vertical-align="center">
-          <ons-select class="howtoTalk">
+          <ons-select>
             <option value="basic">Zoom</option>
             <option value="material">Google Meet</option>
             <option value="underbar">Skype</option>
             <option value="underbar">Facetime</option>
-            <option value="other">その他</option>
           </ons-select>
-          <ons-input
-            id="howtoTalkOther"
-            placeholder="通話手段をご記入ください"
-            type="text"
-            style="margin-top:3px;"
-          ></ons-input>
         </ons-col>
       </ons-row>
     </ons-list-item>
@@ -114,17 +109,4 @@
       >
     </div>
   </div>
-  <script>
-    $("#howtoTalkOther").hide();
-    $(".howtoTalk").change(function() {
-      // 選択されているvalue属性値を取り出す
-      var val = $(this).val();
-      console.log(val);
-      if (val == "other") {
-        $("#howtoTalkOther").show();
-      } else {
-        $("#howtoTalkOther").hide();
-      }
-    });
-  </script>
 </ons-page>

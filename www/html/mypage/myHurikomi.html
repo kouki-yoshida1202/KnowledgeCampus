@@ -1,0 +1,66 @@
+<ons-page id="myHurikomiPage">
+  <style>
+    #myHurikomiPage .page__content {
+      background-color: white !important;
+    }
+    #myHurikomiPage ons-list-item ons-col {
+      font-size: 0.9em;
+    }
+  </style>
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div class="center" id="toolbar-title">振込申請額を入力</div>
+  </ons-toolbar>
+  <div class="content">
+    <ons-list>
+      <ons-list-item style="padding-top:1em;">
+        <ons-row>
+          <ons-col width="30%" vertical-align="center">振込申請金額</ons-col>
+          <ons-col width="70%" vertical-align="center">
+            <ons-input placeholder="入力してください" type="tel"></ons-input>
+          </ons-col>
+        </ons-row>
+        <ons-row>
+          <p style="font-size:0.8em;color:gray;">
+            ※振込手数料330円が発生します。
+          </p>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item>
+        <ons-row>
+          <ons-col width="30%" vertical-align="center">現在の売上金</ons-col>
+          <ons-col width="70%" vertical-align="center">
+            <p style="text-align: right;padding-right:0.5em;">¥6000</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item>
+        <ons-row>
+          <ons-col width="30%" vertical-align="center">振込手数料</ons-col>
+          <ons-col width="70%" vertical-align="center">
+            <p style="text-align: right;padding-right:0.5em;">¥330</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item>
+        <ons-row>
+          <ons-col width="30%" vertical-align="center">振込金額</ons-col>
+          <ons-col width="70%" vertical-align="center">
+            <p style="text-align: right;padding-right:0.5em;">¥3000</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+
+    <div style="padding:0.5rem;margin-top:1rem;">
+      <ons-button
+        modifier="large"
+        class="large-button-orange"
+        onclick="myNavigator.bringPageTop('html/mypage/myHurikomiKakunin.html');"
+        >確認する</ons-button
+      >
+    </div>
+  </div>
+</ons-page>

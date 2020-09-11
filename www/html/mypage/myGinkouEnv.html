@@ -1,0 +1,78 @@
+<ons-page id="myGinkouEnvPage">
+  <style>
+    #myGinkouEnvPage .page__content {
+      background-color: white !important;
+    }
+  </style>
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div class="center" id="toolbar-title">銀行口座設定</div>
+  </ons-toolbar>
+  <div class="content">
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">銀行</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-input placeholder="(必須)"></ons-input>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">口座種別</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-select>
+            <option value="basic">普通</option>
+            <option value="material">当座</option>
+            <option value="underbar">その他</option>
+          </ons-select>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">支店コード</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-input
+            placeholder="数字3桁"
+            type="tel"
+            min="3"
+            max="3"
+          ></ons-input>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">口座番号</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-input
+            placeholder="数字7桁"
+            type="tel"
+            min="7"
+            max="7"
+          ></ons-input>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+      <ons-row>
+        <ons-col width="30%" vertical-align="center">口座名義</ons-col>
+        <ons-col width="70%" vertical-align="center">
+          <ons-input placeholder="(例)ヤマダタロウ"></ons-input>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <div style="padding:0.5rem;margin-top:1rem;font-size:0.8em;color:gray;">
+      <p>※口座番号が7桁未満の場合は先頭に0を付けてください。</p>
+      <p>※振込手数料330円が発生します。</p>
+    </div>
+    <div style="padding:0.5rem;margin-top:1rem;">
+      <ons-button modifier="large" class="large-button-orange"
+        >設定を完了する</ons-button
+      >
+    </div>
+  </div>
+</ons-page>

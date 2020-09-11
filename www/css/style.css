@@ -170,7 +170,15 @@
 #loginPage > .page__content,
 #loginPage2 > .page__content,
 #accountCreate > .page__content,
-#firstPage > .page__content {
+#firstPage > .page__content,
+#myPage > .page__content,
+#myPointKanriPage > .page__content,
+#searchBeforePage > .page__content,
+#searchAfterPage > .page__content,
+#productDetailPage > .page__content,
+#syuppinGenrePage1 > .page__content,
+#syuppinGenrePage2 > .page__content,
+#syuppinGenrePage3 > .page__content {
   background: white !important;
 }
 
@@ -185,4 +193,43 @@
   color: white;
   font-weight: bold;
   background-color: gray;
+}
+
+ons-input,
+ons-select {
+  border: 1px solid #ccc;
+  width: 95%;
+  border-radius: 5px;
+  padding: 0.3em;
+}
+
+.select-input,
+.text-input,
+.textarea {
+  font-size: 1em;
+}
+.textarea {
+  border: 1px solid #ccc;
+  width: 100%;
+  border-radius: 5px;
+  padding: 3%;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.item-label,
+.toolbar__center,
+.list-item__center,
+.list-header {
+  color: #515c6f;
+}
+
+.back-button__icon {
+  fill: #515c6f;
+  color: #515c6f;
 }

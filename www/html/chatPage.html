@@ -299,12 +299,12 @@
         var chatCarousel = document.getElementById("chatCarousel");
         chatCarousel.addEventListener("postchange", function(e) {
           // alert(e.activeIndex);
-          tabCarouselChange(e.activeIndex);
+          tabChatCarouselChange(e.activeIndex);
         });
       }
     });
 
-    function tabCarouselChange(carouselIndex) {
+    function tabChatCarouselChange(carouselIndex) {
       console.log(carouselIndex);
       $("#tabChatCarousel ons-carousel-item").removeClass("active_tabCarousel");
       $("#tabChatCarousel ons-carousel-item")

@@ -1,0 +1,68 @@
+<ons-page id="mypageProfileEdit-page">
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div class="center">メール/パスワード設定</div>
+  </ons-toolbar>
+  <ons-list class="content">
+    <ons-list style="margin-top:1rem;">
+      <ons-list-header>メールアドレス</ons-list-header>
+      <ons-list-item>
+        <ons-row>
+          <ons-col
+            vertical-align="center"
+            width="100%"
+            style="text-align: right;"
+          >
+            <ons-input placeholder="(必須)" type="email"></ons-input>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-header>パスワード</ons-list-header>
+      <ons-list-item>
+        <ons-row>
+          <ons-col
+            vertical-align="center"
+            width="100%"
+            style="text-align: right;"
+          >
+            <ons-input
+              placeholder="現在のパスワード"
+              type="password"
+            ></ons-input>
+          </ons-col>
+        </ons-row>
+        <ons-row>
+          <ons-col
+            vertical-align="center"
+            width="100%"
+            style="text-align: right;"
+          >
+            <ons-input
+              placeholder="新たなパスワード"
+              type="password"
+            ></ons-input>
+          </ons-col>
+        </ons-row>
+        <ons-row>
+          <ons-col
+            vertical-align="center"
+            width="100%"
+            style="text-align: right;"
+          >
+            <ons-input
+              placeholder="新たなパスワード(再度)"
+              type="password"
+            ></ons-input>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+    <div style="padding:0.5rem;margin-top:1rem;">
+      <ons-button modifier="large" class="large-button-orange"
+        >変更する</ons-button
+      >
+    </div>
+  </ons-list>
+</ons-page>

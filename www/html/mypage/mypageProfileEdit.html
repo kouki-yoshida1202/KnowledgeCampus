@@ -3,7 +3,7 @@
     <div class="left">
       <ons-back-button> </ons-back-button>
     </div>
-    <div class="center">その他</div>
+    <div class="center">編集画面</div>
   </ons-toolbar>
 
   <ons-row style="padding-top:30px;">
@@ -11,7 +11,7 @@
       <img
         src="img/manSample.jpeg"
         alt=""
-        style="width:100px;height:100px;object-fit:cover;border-radius: 10px;"
+        style="width:100px;height:100px;object-fit:cover;border-radius: 50%;"
       />
       <br />
       <p style="color:#0799d7;">写真を変更する</p>
@@ -21,61 +21,32 @@
     <ons-list-header>基本情報</ons-list-header>
     <ons-list-item>
       <ons-row>
-        <ons-col vertical-align="center" width="20%" style="text-align: left;">
+        <ons-col vertical-align="center" width="30%" style="text-align: left;">
           表示名
         </ons-col>
-        <ons-col vertical-align="center" width="80%" style="text-align: right;">
-          <ons-input></ons-input>
+        <ons-col vertical-align="center" width="70%" style="text-align: right;">
+          <ons-input placeholder="(必須)"></ons-input>
         </ons-col>
       </ons-row>
     </ons-list-item>
     <ons-list-item>
       <ons-row>
-        <ons-col vertical-align="center" width="20%" style="text-align: left;">
-          年齢
-        </ons-col>
-        <ons-col vertical-align="center" width="80%" style="text-align: right;">
-          <ons-input></ons-input>
-        </ons-col>
-      </ons-row>
-    </ons-list-item>
-    <ons-list-item>
-      <ons-row>
-        <ons-col vertical-align="center" width="20%" style="text-align: left;">
+        <ons-col vertical-align="center" width="30%" style="text-align: left;">
           自己紹介
         </ons-col>
-        <ons-col vertical-align="center" width="80%" style="text-align: right;">
+        <ons-col vertical-align="center" width="70%" style="text-align: right;">
           <textarea
             class="textarea textarea--transparent"
             rows="5"
-            placeholder="Textarea"
-            style="width:90%;"
+            placeholder=""
           ></textarea>
         </ons-col>
       </ons-row>
     </ons-list-item>
   </ons-list>
-  <ons-list>
-    <ons-list-header>追加情報</ons-list-header>
-    <ons-list-item>
-      <ons-row>
-        <ons-col vertical-align="center" width="20%" style="text-align: left;">
-          表示名
-        </ons-col>
-        <ons-col vertical-align="center" width="80%" style="text-align: right;">
-          <ons-input></ons-input>
-        </ons-col>
-      </ons-row>
-    </ons-list-item>
-    <ons-list-item>
-      <ons-row>
-        <ons-col vertical-align="center" width="20%" style="text-align: left;">
-          年齢
-        </ons-col>
-        <ons-col vertical-align="center" width="80%" style="text-align: right;">
-          <ons-input></ons-input>
-        </ons-col>
-      </ons-row>
-    </ons-list-item>
-  </ons-list>
+  <div style="padding:0.5rem;margin-top:1rem;">
+    <ons-button modifier="large" class="large-button-orange"
+      >編集を完了する</ons-button
+    >
+  </div>
 </ons-page>

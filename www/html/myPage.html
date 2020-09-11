@@ -1,158 +1,135 @@
-<ons-page id="second-page">
-  <ons-speed-dial position="top right" direction="down">
-    <ons-fab modifier="mini" ripple>
-      <ons-icon icon="fa-ellipsis-h"></ons-icon>
-    </ons-fab>
-    <ons-speed-dial-item
-      onclick="myNavigator.bringPageTop('html/mypage/mypageProfileEdit.html');"
-    >
-      <ons-icon
-        icon="fa-user-edit"
-        style="font-size:0.8em;transform:translate(2px,-2px);"
-      ></ons-icon>
-    </ons-speed-dial-item>
-    <ons-speed-dial-item
-      onclick="myNavigator.bringPageTop('html/mypage/mypageImformation.html');"
-    >
-      <ons-icon
-        icon="fa-info"
-        style="font-size:0.8em;transform:translate(0px,-1px);"
-      ></ons-icon>
-    </ons-speed-dial-item>
-    <ons-speed-dial-item onclick="logoutOpen();">
-      <ons-icon
-        icon="fa-sign-out-alt"
-        style="font-size:0.8em;transform:translate(2px,-1px);"
-      ></ons-icon>
-    </ons-speed-dial-item>
-  </ons-speed-dial>
-  <div style="height:350px;position: relative;">
+<ons-page id="myPage">
+  <!-- <ons-toolbar>
+    <div class="center" id="toolbar-title">マイページ</div>
+  </ons-toolbar> -->
+  <ons-fab
+    modifier="mini"
+    position="top right"
+    ripple
+    onclick="myNavigator.bringPageTop('html/mypage/mypageProfileEdit.html');"
+    style=""
+  >
+    <ons-icon
+      icon="fa-user-edit"
+      style="font-size:0.8em;transform:translate(2px,-2px);"
+    ></ons-icon>
+  </ons-fab>
+  <div style="height:150px;text-align: center;margin-top:3rem;">
     <img
       src="img/manSample.jpeg"
       alt=""
-      style="width:100%;height:350px;object-fit:cover;"
+      style="width:150px;height:150px;object-fit:cover;border-radius: 50%;"
     />
-    <div
-      style="position: absolute;bottom:20px;left: 50%;
-        transform: translateX(-50%);
-        -webkit-transform: translateX(-50%);
-        -ms-transform: translateX(-50%);width:90%;background-color:rgba(255,152,49,0.2);font-weight: bold;height:60px;border-radius: 50px;margin:0 auto;"
-    >
-      <ons-row style="height:100%;width:90%;margin:0 auto;">
-        <ons-col style="text-align: center;" vertical-align="center">
-          <img src="img/starOn.png" alt="" style="height:35px;" />
-        </ons-col>
-        <ons-col style="text-align: center;" vertical-align="center">
-          <img src="img/starOn.png" alt="" style="height:35px;" />
-        </ons-col>
-        <ons-col style="text-align: center;" vertical-align="center">
-          <img src="img/starOn.png" alt="" style="height:35px;" />
-        </ons-col>
-        <ons-col style="text-align: center;" vertical-align="center">
-          <img src="img/starOn.png" alt="" style="height:35px;" />
-        </ons-col>
-        <ons-col style="text-align: center;" vertical-align="center">
-          <img src="img/starOff.png" alt="" style="height:35px;" />
-        </ons-col>
-      </ons-row>
-    </div>
   </div>
-  <ons-card style="width:85%;margin:0 auto;margin-top:20px;">
-    <p style="text-align: center;font-size:1.0em;">たなかたろう　32才</p>
-    <p class="light-navy" style="font-size:0.8em;">
-      テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。
+  <div style="width:85%;margin:0 auto;margin-top:20px;">
+    <p
+      style="text-align: center;font-size:1.2em;margin-top:0.5rem;margin-bottom:0.5rem;"
+    >
+      たろう
     </p>
-  </ons-card>
-  <ons-card style="width:85%;margin:0 auto;margin-top:20px;margin-bottom:30px;">
-    <ons-list-item>
-      <div class="left">
-        <i class="fas fa-male fa-fw" style="color:#ff9831;"></i>
+    <div>
+      <p style="text-align: center;width:100%;">
+        <img src="img/starOn.png" alt="" style="height:18px;" />
+        <img src="img/starOn.png" alt="" style="height:18px;" />
+        <img src="img/starOn.png" alt="" style="height:18px;" />
+        <img src="img/starOn.png" alt="" style="height:18px;" />
+        <img src="img/starOff.png" alt="" style="height:18px;" />
+        <span>(39)</span>
+      </p>
+    </div>
+    <p class="navy" style="font-size:0.8em;">
+      自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。
+    </p>
+  </div>
+  <div style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:30px;">
+    <ons-list-header>サービス関連</ons-list-header>
+    <ons-list-item
+      onclick="myNavigator.bringPageTop('html/mypage/myFavorite.html');"
+    >
+      <div class="center">
+        いいねしたサービス
       </div>
-      <div class="center navy-font">
-        身長
-      </div>
-      <div class="right light-navy-font">
-        172
-      </div>
-    </ons-list-item>
-    <ons-list-item>
-      <div class="left">
-        <i class="fas fa-home fa-fw" style="color:#ff9831;"></i>
-      </div>
-      <div class="center navy-font">
-        居住地
-      </div>
-      <div class="right light-navy-font">
-        宇都宮
-      </div>
-    </ons-list-item>
-    <ons-list-item>
-      <div class="left">
-        <i class="fas fa-map-pin fa-fw" style="color:#ff9831;"></i>
-      </div>
-      <div class="center navy-font">
-        出身地
-      </div>
-      <div class="right light-navy-font">
-        埼玉
+      <div class="right">
+        >
       </div>
     </ons-list-item>
-    <ons-list-item>
-      <div class="left">
-        <i class="fas fa-briefcase fa-fw" style="color:#ff9831;"></i>
+    <ons-list-item
+      onclick="myNavigator.bringPageTop('html/mypage/mySyuppin.html');"
+    >
+      <div class="center">
+        出品したサービス
       </div>
-      <div class="center navy-font">
-        仕事
-      </div>
-      <div class="right light-navy-font">
-        不動産関係
-      </div>
-    </ons-list-item>
-    <ons-list-item>
-      <div class="left">
-        <i class="fas fa-beer fa-fw" style="color:#ff9831;"></i>
-      </div>
-      <div class="center navy-font">
-        おさけ
-      </div>
-      <div class="right light-navy-font">
-        ときどき飲む
+      <div class="right">
+        >
       </div>
     </ons-list-item>
-    <ons-list-item>
-      <div class="left">
-        <i class="fas fa-smoking fa-fw" style="color:#ff9831;"></i>
+    <ons-list-item
+      onclick="myNavigator.bringPageTop('html/mypage/myBought.html');"
+    >
+      <div class="center">
+        購入したサービス
       </div>
-      <div class="center navy-font">
-        たばこ
-      </div>
-      <div class="right light-navy-font">
-        吸わない
-      </div>
-    </ons-list-item>
-    <ons-list-item>
-      <div class="left">
-        <i class="fas fa-user fa-fw" style="color:#ff9831;"></i>
-      </div>
-      <div class="center navy-font">
-        髪型
-      </div>
-      <div class="right light-navy-font">
-        ショート
+      <div class="right">
+        >
       </div>
     </ons-list-item>
-    <ons-list-item>
-      <div class="left">
-        <i class="fas fa-paint-brush fa-fw" style="color:#ff9831;"></i>
+    <ons-list-item
+      onclick="myNavigator.bringPageTop('html/mypage/myShitagaki.html');"
+    >
+      <div class="center">
+        下書き一覧
       </div>
-      <div class="center navy-font">
-        髪の色
-      </div>
-      <div class="right light-navy-font">
-        黒
+      <div class="right">
+        >
       </div>
     </ons-list-item>
-  </ons-card>
+    <ons-list-header>個人情報関連</ons-list-header>
+    <ons-list-item
+      onclick="myNavigator.bringPageTop('html/mypage/myPointKanri.html');"
+    >
+      <div class="center">
+        売り上げ・ポイント管理
+      </div>
+      <div class="right">
+        >
+      </div>
+    </ons-list-item>
+    <ons-list-item
+      onclick="myNavigator.bringPageTop('html/mypage/myInfoEnv.html');"
+    >
+      <div class="center">
+        個人情報設定
+      </div>
+      <div class="right">
+        >
+      </div>
+    </ons-list-item>
+    <!-- <ons-list-item>
+      <div class="center">
+        友人を招待
+      </div>
+      <div class="right">
+        >
+      </div>
+    </ons-list-item> -->
+    <ons-list-header>その他</ons-list-header>
+    <ons-list-item onclick="myNavigator.bringPageTop('html/toiawase.html');">
+      <div class="center">
+        お問い合わせ
+      </div>
+      <div class="right">
+        >
+      </div>
+    </ons-list-item>
+  </div>
+  <div
+    style="width:85%;margin-top:1rem;margin:0 auto;margin-bottom:3rem;"
+    onclick="logoutOpen();"
+  >
+    <ons-button modifier="large" class="large-button-gray"
+      >ログアウト</ons-button
+    >
+  </div>
   <script>
     function logoutOpen() {
       ons.notification.confirm({
