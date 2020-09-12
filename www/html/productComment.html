@@ -1,32 +1,25 @@
-<ons-page id="productDetailPage">
+<ons-page id="productCommentPage">
   <style>
-    .productTitle .fa-heart,
-    .productTitle .fa-comment-dots {
-      margin-right: 0.5rem;
+    #productCommentPage ons-list {
+      background-image: none;
+      background-color: transparent;
     }
-    .productTitle .fa-comment-dots {
-      margin-left: 1rem;
-    }
-    #productDetailPage ons-list p {
+    #productCommentPage ons-list p {
       margin-top: 0px;
       margin-bottom: 0px;
     }
 
-    #productDetailComment ons-card {
+    #productCommentPage ons-card {
       margin-left: 0px;
       margin-top: 0px;
     }
-    #productDetailPage .list-item__center {
+    #productCommentPage .list-item__center {
       background-image: none;
       padding-top: 5px;
       padding-bottom: 5px;
     }
-    #productDetailComment {
-      background-image: none;
-      background-color: #eee;
-    }
 
-    #productDetailComment .list-item__title {
+    #productCommentPage .list-item__title {
       font-size: 0.8em;
     }
   </style>
@@ -56,77 +49,14 @@
         <ons-button
           class="large-button-orange"
           style="padding:5px 2em;font-size:1.2em;"
-          onclick="showProductDetailModal()"
-          >購入</ons-button
-        >
+          onclick="showModal()"
+          >購入
+        </ons-button>
       </ons-col>
     </ons-row>
   </ons-bottom-toolbar>
-  <div style="width:85%;margin:0 auto;margin-top:0px;">
-    <div style="height:70px;text-align: center;margin-top:1.5rem;">
-      <img
-        src="img/manSample.jpeg"
-        alt=""
-        style="width:70px;height:70px;object-fit:cover;border-radius: 50%;"
-      />
-    </div>
-    <p style="text-align: center;margin-top:5px;margin-bottom:5px;">
-      たろう
-    </p>
-
-    <div>
-      <p
-        style="text-align: center;width:100%;margin-top:5px;margin-bottom:5px;"
-      >
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOff.png" alt="" style="height:18px;" />
-        <span>(39)</span>
-      </p>
-    </div>
-    <p class="navy" style="font-size:0.8em;">
-      自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。
-    </p>
-  </div>
-  <div style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:50px;">
-    <ons-list-header>商品タイトル</ons-list-header>
-    <ons-list-item class="productTitle">
-      <ons-row style="font-weight: bold;">
-        就活の必勝法伝授します！
-      </ons-row>
-      <ons-row>
-        <p style="margin-bottom:0px;">
-          <i class="far fa-heart"></i>3<i
-            class="far fa-comment-dots"
-            onclick="myNavigator.bringPageTop('html/productComment.html');"
-          ></i
-          >4
-        </p>
-      </ons-row>
-    </ons-list-item>
-    <ons-list-header>商品の説明</ons-list-header>
-    <ons-list-item>
-      <ons-row style="font-size:0.8em;padding-right:0.25em;">
-        説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。
-      </ons-row>
-    </ons-list-item>
-    <ons-list-header>通話手段</ons-list-header>
-    <ons-list-item>
-      <ons-row>
-        Zoom
-      </ons-row>
-    </ons-list-item>
-    <br />
-    <ons-list id="productDetailComment">
-      <ons-list-item>
-        <br />
-        <ons-row>
-          <i class="far fa-comment-dots" style="margin-right:0.3em;"></i
-          >コメント
-        </ons-row>
-      </ons-list-item>
+  <div class="content">
+    <ons-list>
       <ons-list-item>
         <div class="left">
           <img
@@ -194,20 +124,10 @@
             </ons-card>
           </span>
         </div>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row style="padding:1em;">
-          <ons-button
-            class="large-button-gray"
-            style="margin:0 auto;"
-            onclick="myNavigator.bringPageTop('html/productComment.html');"
-            >全てのコメントを見る</ons-button
-          >
-        </ons-row>
       </ons-list-item>
     </ons-list>
   </div>
-  <ons-modal id="productDetailModal" direction="up">
+  <ons-modal direction="up" id="productCommentModal">
     <div style="text-align: center">
       <ons-card>
         <ons-list style="background-image: none;">
@@ -218,7 +138,7 @@
                   購入手続き
                   <span
                     style="float:right;padding-right:0.5em;"
-                    onclick="hideProductDetailModal()"
+                    onclick="hideModal();"
                     ><i class="fas fa-times"></i
                   ></span>
                 </p>
@@ -274,8 +194,8 @@
                 width="50%"
                 vertical-align="center"
                 style="text-align: right;padding-right:0.5em;"
-                >カード払い ></ons-col
-              >
+                >カード払い >
+              </ons-col>
             </ons-row>
           </ons-list-item>
           <ons-list-item>
@@ -311,12 +231,7 @@
                 vertical-align="center"
                 style="text-align: center;"
               >
-                <ons-button
-                  class="large-button-orange"
-                  style="padding-left:2em;padding-right:2em;"
-                  onclick="myNavigator.bringPageTop('html/productTorihiki.html');"
-                  >購入する</ons-button
-                >
+                <ons-button class="large-button-orange">購入する</ons-button>
               </ons-col>
             </ons-row>
           </ons-list-item>
@@ -325,13 +240,13 @@
     </div>
   </ons-modal>
   <script>
-    function showProductDetailModal() {
-      var modal = document.querySelector("#productDetailModal");
+    function showModal() {
+      var modal = document.querySelector("#productCommentModal");
       modal.show();
     }
 
-    function hideProductDetailModal() {
-      var modal = document.querySelector("#productDetailModal");
+    function hideModal() {
+      var modal = document.querySelector("#productCommentModal");
       modal.hide();
     }
   </script>

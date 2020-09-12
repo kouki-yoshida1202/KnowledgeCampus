@@ -1,0 +1,197 @@
+<ons-page id="productTorihikiPage">
+  <style>
+    .hyouka {
+      display: -ms-flex;
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -o-flex;
+      display: flex;
+      margin: 0 auto;
+
+      flex-direction: -ms-row-reverse;
+      flex-direction: -webkit-row-reverse;
+      flex-direction: -moz-row-reverse;
+      flex-direction: -o-row-reverse;
+      flex-direction: row-reverse;
+
+      justify-content: -ms-right;
+      justify-content: -webkit-right;
+      justify-content: -moz-right;
+      justify-content: -o-right;
+      justify-content: right;
+    }
+    .hyouka input[type="radio"] {
+      display: none;
+    }
+    .hyouka input[type="radio"] {
+      display: none;
+    }
+    .hyouka label {
+      position: relative;
+      padding: 10px 0px 20px 0px;
+      color: #bbb;
+      cursor: pointer;
+      font-size: 30px;
+    }
+
+    .hyouka label:hover,
+    .hyouka label:hover ~ label,
+    .hyouka input[type="radio"]:checked ~ label {
+      color: #ffd43b;
+    }
+    #productTorihikiComment {
+      background-image: none;
+      background-color: #eee;
+      padding-bottom: 50px;
+    }
+
+    #productTorihikiPage ons-list p {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    #productTorihikiComment ons-card {
+      margin-left: 0px;
+      margin-top: 0px;
+    }
+
+    #productTorihikiComment .list-item__title {
+      font-size: 0.8em;
+    }
+    #productTorihikiPage .list-item__center {
+      background-image: none;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    #productTorihikiPage ons-list-header {
+      font-size: 0.9em;
+      padding-top: 0.25em;
+      padding-bottom: 0.25em;
+    }
+  </style>
+  <ons-toolbar>
+    <div class="left" id="toolbar-title">
+      <ons-back-button></ons-back-button>
+    </div>
+    <div class="center" id="toolbar-title">取引画面</div>
+  </ons-toolbar>
+  <div class="content">
+    <ons-list>
+      <ons-list-header>
+        評価
+      </ons-list-header>
+      <ons-list-item>
+        <ons-row style="position: relative;">
+          <div class="hyouka">
+            <input id="hoshi1" type="radio" name="hoshi" value="5" />
+            <label for="hoshi1">★</label>
+            <input id="hoshi2" type="radio" name="hoshi" value="4" />
+            <label for="hoshi2">★</label>
+            <input id="hoshi3" type="radio" name="hoshi" value="3" />
+            <label for="hoshi3">★</label>
+            <input id="hoshi4" type="radio" name="hoshi" value="2" />
+            <label for="hoshi4">★</label>
+            <input id="hoshi5" type="radio" name="hoshi" value="1" />
+            <label for="hoshi5">★</label>
+          </div>
+        </ons-row>
+        <ons-row>
+          <ons-col vertical-align="center" style="text-align: left;">
+            コメント
+          </ons-col>
+        </ons-row>
+        <ons-row>
+          <ons-col vertical-align="center">
+            <textarea
+              class="textarea textarea--transparent"
+              rows="5"
+              placeholder=""
+            ></textarea>
+          </ons-col>
+        </ons-row>
+        <ons-row>
+          <ons-button
+            modifier="large"
+            class="large-button-orange"
+            style="margin-top:1em;margin-bottom:1em;"
+            >評価する</ons-button
+          >
+        </ons-row>
+      </ons-list-item>
+      <ons-list id="productTorihikiComment">
+        <ons-list-header>
+          トーク画面
+        </ons-list-header>
+        <ons-list-item>
+          <div class="left">
+            <img
+              class="list-item__thumbnail"
+              src="img/image61.jpg"
+              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+            />
+          </div>
+          <div class="center" style="width:50%;">
+            <span class="list-item__title">ハナコ</span>
+            <span class="list-item__subtitle">
+              <ons-card>
+                質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？
+              </ons-card>
+            </span>
+          </div>
+        </ons-list-item>
+        <ons-list-item>
+          <div class="left">
+            <img
+              class="list-item__thumbnail"
+              src="img/manSample.jpeg"
+              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+            />
+          </div>
+          <div class="center" style="width:50%;">
+            <span class="list-item__title">タナカタロウ</span>
+            <span class="list-item__subtitle">
+              <ons-card>
+                質問してもいいですよ
+              </ons-card>
+            </span>
+          </div>
+        </ons-list-item>
+        <ons-list-item>
+          <div class="left">
+            <img
+              class="list-item__thumbnail"
+              src="img/image61.jpg"
+              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+            />
+          </div>
+          <div class="center" style="width:50%;">
+            <span class="list-item__title">ハナコ</span>
+            <span class="list-item__subtitle">
+              <ons-card>
+                質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？
+              </ons-card>
+            </span>
+          </div>
+        </ons-list-item>
+        <ons-list-item>
+          <div class="left">
+            <img
+              class="list-item__thumbnail"
+              src="img/manSample.jpeg"
+              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+            />
+          </div>
+          <div class="center" style="width:50%;">
+            <span class="list-item__title">タナカタロウ</span>
+            <span class="list-item__subtitle">
+              <ons-card>
+                質問してもいいですよ
+              </ons-card>
+            </span>
+          </div>
+        </ons-list-item>
+      </ons-list>
+    </ons-list>
+  </div>
+</ons-page>
