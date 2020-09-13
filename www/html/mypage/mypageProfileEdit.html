@@ -9,12 +9,16 @@
   <ons-row style="padding-top:30px;">
     <ons-col vertical-align="center" style="text-align: center;">
       <img
-        src="img/manSample.jpeg"
+        id="myImageEdit"
+        src="img/userSampleImageMan.png"
         alt=""
         style="width:100px;height:100px;object-fit:cover;border-radius: 50%;"
       />
       <br />
-      <p style="color:#0799d7;">写真を変更する</p>
+      <input id="myImageInput" type="file" hidden />
+      <p style="color:#0799d7;" onclick="$('#myImageInput').click();">
+        写真を変更する
+      </p>
     </ons-col>
   </ons-row>
   <ons-list>
@@ -25,7 +29,7 @@
           表示名
         </ons-col>
         <ons-col vertical-align="center" width="70%" style="text-align: right;">
-          <ons-input placeholder="(必須)"></ons-input>
+          <ons-input id="myUserNameEdit" placeholder="(必須)"></ons-input>
         </ons-col>
       </ons-row>
     </ons-list-item>
@@ -36,6 +40,7 @@
         </ons-col>
         <ons-col vertical-align="center" width="70%" style="text-align: right;">
           <textarea
+            id="myTextEdit"
             class="textarea textarea--transparent"
             rows="5"
             placeholder=""
@@ -45,8 +50,92 @@
     </ons-list-item>
   </ons-list>
   <div style="padding:0.5rem;margin-top:1rem;">
-    <ons-button modifier="large" class="large-button-orange"
+    <ons-button
+      modifier="large"
+      class="large-button-orange"
+      onclick="profileEdit()"
       >編集を完了する</ons-button
     >
   </div>
+  <script>
+    var userId = firebase.auth().currentUser["uid"];
+    var docRef = db.collection("users").doc(userId);
+
+    docRef
+      .get()
+      .then(function(doc) {
+        if (doc.exists) {
+          $("#myUserNameEdit").val(doc.data().username);
+          $("#myTextEdit").val(doc.data().text);
+          ref = firebase
+            .storage()
+            .ref()
+            .child("profilePicture/" + userId);
+          ref.getDownloadURL().then(url => {
+            document.getElementById("myImageEdit").src = url;
+          });
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting document:", error);
+      });
+
+    $("#myImageInput").on("change", function(e) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        $("#myImageEdit").attr("src", e.target.result);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    });
+
+    function profileEdit() {
+      showLoad();
+      var username = $("#myUserNameEdit").val();
+      var text = $("#myTextEdit").val();
+      if (username == "") {
+        ons.notification.alert({
+          title: "失敗",
+          message: "ユーザー名を入力してください"
+        });
+      } else {
+        var user = firebase.auth().currentUser;
+        // Add a new document in collection "cities"
+        db.collection("users")
+          .doc(user["uid"])
+          .set({
+            username: username,
+            text: text
+          })
+          .then(function() {
+            console.log("Document successfully written!");
+            var imgs = document.querySelector("#myImageInput");
+            var uploads = [];
+            for (var file of imgs.files) {
+              //選択したファイルのファイル名を使うが、場合によってはかぶるので注意
+              var storageRef = firebase
+                .storage()
+                .ref("profilePicture/" + user["uid"]);
+              uploads.push(storageRef.put(file));
+            }
+            //すべての画像のアップロード完了を待つ
+            Promise.all(uploads).then(function() {
+              ons.notification.alert({
+                title: "成功",
+                message: "プロフィールを編集しました。"
+              });
+              myNavigator.popPage();
+              userInfo(user["uid"]);
+              hideLoad();
+            });
+          })
+          .catch(function(error) {
+            console.error("Error writing document: ", error);
+            hideLoad();
+          });
+      }
+    }
+  </script>
 </ons-page>

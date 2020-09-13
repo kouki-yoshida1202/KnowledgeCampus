@@ -1,0 +1,325 @@
+<ons-page id="syuppinGenrePage2">
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div
+      class="center"
+      id="syuppinGenrePage2Toolbar"
+      style="display:flex;align-items: center;justify-content: center;"
+    ></div>
+  </ons-toolbar>
+  <div class="content">
+    <div
+      id="syuppinGenre2"
+      style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:30px;"
+    ></div>
+  </div>
+  <input type="hidden" id="syuppinGenrePage2Input" />
+  <script>
+    function syuppinGenreThirdPage(category2) {
+      showLoad();
+      var category1 = $("#syuppinGenrePage2Input").val();
+      if (
+        category2 == "その他" ||
+        category2 == "転職" ||
+        category2 == "起業/経営" ||
+        category2 == "マーケティング" ||
+        category2 == "IT/プログラミング" ||
+        category2 == "投資(FX/株など)" ||
+        category2 == "アフィリエイト" ||
+        category2 == "ブログ" ||
+        category2 == "転売" ||
+        category2 == "ライブ配信" ||
+        category2 == "YouTuber"
+      ) {
+        myNavigator.popPage().then(function() {
+          myNavigator.popPage().then(function() {
+            // 新規か変更かの判断
+            if ($("#productDocumentUid").val() == "") {
+              // 新規
+              $("#syuppinCategory").html(
+                category1 + " ><br>" + category2 + "&emsp;"
+              );
+              $("#syuppinCategory1").val(category1);
+              $("#syuppinCategory2").val(category2);
+              $("#syuppinCategory3").val("");
+              hideLoad();
+              return;
+            } else {
+              // 変更
+              $("#syuppinCategoryEdit").html(
+                category1 + " ><br>" + category2 + "&emsp;"
+              );
+              $("#syuppinCategory1Edit").val(category1);
+              $("#syuppinCategory2Edit").val(category2);
+              $("#syuppinCategory3Edit").val("");
+              hideLoad();
+              return;
+            }
+          });
+        });
+      } else {
+        myNavigator.bringPageTop("html/syuppin/syuppinGenre3.html");
+        if (category2 == "授業") {
+          var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('講義')">
+            <div class="center">
+              講義
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('試験')">
+            <div class="center">
+              試験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('研究')">
+            <div class="center">
+              研究
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('その他')">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+        } else if (category2 == "受験") {
+          var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('中学受験')">
+            <div class="center">
+              中学受験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('高校受験')">
+            <div class="center">
+              高校受験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('大学受験')">
+            <div class="center">
+              大学受験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('大学院試験')">
+            <div class="center">
+              大学院試験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('その他')">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+        } else if (category2 == "語学") {
+          var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('留学')">
+            <div class="center">
+              留学
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('TOEIC/TOEFL')">
+            <div class="center">
+              TOEIC/TOEFL
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('英検')">
+            <div class="center">
+              英検
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('その他')">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+        } else if (category2 == "就活") {
+          var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('ES添削')">
+            <div class="center">
+              ES添削
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('面接対策')">
+            <div class="center">
+              面接対策
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('自己分析')">
+            <div class="center">
+              自己分析
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('Webテスト')">
+            <div class="center">
+              Webテスト
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('その他')">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+        } else if (category2 == "インターン") {
+          var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('長期インターン')">
+            <div class="center">
+              長期インターン
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('短期インターン')">
+            <div class="center">
+              短期インターン
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+        } else if (category2 == "資格") {
+          var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('国家公務員')">
+            <div class="center">
+              国家公務員
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('公認会計士')">
+            <div class="center">
+              公認会計士
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('税理士')">
+            <div class="center">
+              税理士
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('司法書士')">
+            <div class="center">
+              司法書士
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('簿記')">
+            <div class="center">
+              簿記
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('宅地建物取引士')">
+            <div class="center">
+              宅地建物取引士
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('ITパスポート')">
+            <div class="center">
+              ITパスポート
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('その他')">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+        }
+        document.addEventListener(
+          "init",
+          function(event) {
+            if (event.target.matches("#syuppinGenrePage3")) {
+              $("#syuppinGenre3").empty();
+              $("#syuppinGenre3").append(listItem);
+              $("#syuppinGenrePage3Toolbar").html(category2);
+
+              $("#syuppinGenrePage3InputFirst").val(category1);
+              $("#syuppinGenrePage3InputSecond").val(category2);
+              hideLoad();
+            }
+          },
+          false
+        );
+      }
+    }
+  </script>
+</ons-page>

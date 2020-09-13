@@ -36,7 +36,8 @@
     https://firebase.google.com/docs/web/setup#available-libraries -->
     <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-storage.js"></script>
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {
@@ -52,17 +53,17 @@
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
       firebase.analytics();
-
+      var db = firebase.firestore();
+      var storage = firebase.storage();
       ons.ready(function() {
         var myNavigator = document.getElementById("myNavigator");
-        var obj = localStorage.getItem("first-time");
-        console.log(obj);
-        obj = false;
-        if (obj == false) {
-          // ログインチェック
-          var user = firebase.auth().currentUser;
+        // var obj = localStorage.getItem("first-time");
+        // console.log(obj);
+        // obj = false;
+        // if (obj == false) {
+        // ログインチェック
+        firebase.auth().onAuthStateChanged(user => {
           if (user) {
-            console.log(user);
             if (!user.emailVerified) {
               // メアド確認終わってない
               myNavigator.pushPage("html/loginPage.html");
@@ -71,13 +72,12 @@
               myNavigator.pushPage("html/homePage.html");
             }
           } else {
-            // myNavigator.pushPage("html/loginPage.html");
-            // 一時的に
-            myNavigator.pushPage("html/homePage.html");
+            myNavigator.pushPage("html/loginPage.html");
           }
-        } else {
-          myNavigator.pushPage("html/firstPage.html");
-        }
+        });
+        // } else {
+        //   myNavigator.pushPage("html/firstPage.html");
+        // }
       });
 
       if (ons.platform.isIPhoneX()) {

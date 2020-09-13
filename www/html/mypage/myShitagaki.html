@@ -21,82 +21,81 @@
     </div>
   </ons-toolbar>
   <div class="content">
-    <ons-list
-      style="background-image: none;"
-      onclick="myNavigator.bringPageTop('html/other/womanPage.html');"
-    >
-      <ons-list-item>
-        <ons-row>
-          <ons-col width="20%" vertical-align="center">
-            <img
-              class="list-item__thumbnail"
-              src="img/image61.jpg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </ons-col>
-          <ons-col width="70%" vertical-align="center">
-            就活教えます<br />¥3000 <br />
-            <p style="margin-bottom:0px;">
-              <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
-            </p>
-          </ons-col>
-          <ons-col width="10%" vertical-align="center">＞</ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col width="20%" vertical-align="center">
-            <img
-              class="list-item__thumbnail"
-              src="img/image61.jpg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </ons-col>
-          <ons-col width="70%" vertical-align="center">
-            就活教えます<br />¥3000 <br />
-            <p style="margin-bottom:0px;">
-              <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
-            </p>
-          </ons-col>
-          <ons-col width="10%" vertical-align="center">＞</ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col width="20%" vertical-align="center">
-            <img
-              class="list-item__thumbnail"
-              src="img/image61.jpg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </ons-col>
-          <ons-col width="70%" vertical-align="center">
-            就活教えます<br />¥3000 <br />
-            <p style="margin-bottom:0px;">
-              <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
-            </p>
-          </ons-col>
-          <ons-col width="10%" vertical-align="center">＞</ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col width="20%" vertical-align="center">
-            <img
-              class="list-item__thumbnail"
-              src="img/image61.jpg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </ons-col>
-          <ons-col width="70%" vertical-align="center">
-            就活教えます<br />¥3000 <br />
-            <p style="margin-bottom:0px;">
-              <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
-            </p>
-          </ons-col>
-          <ons-col width="10%" vertical-align="center">＞</ons-col>
-        </ons-row>
-      </ons-list-item>
-    </ons-list>
+    <ons-list id="myShitagakiList" style="background-image: none;"> </ons-list>
   </div>
+  <script>
+    shitagakiGet();
+    function shitagakiGet() {
+      showLoad();
+      var user = firebase.auth().currentUser;
+      var userId = user.uid;
+      $("#myShitagakiList").empty();
+      var nowDataCount = 0;
+      let products = db.collection("products");
+      products
+        .where("releasestatus", "==", "shitagaki")
+        .where("userId", "==", userId)
+        .orderBy("createTime", "desc")
+        .get()
+        .then(results => {
+          console.log(results.size);
+          if (results.size > 0) {
+            results.forEach(doc => {
+              nowDataCount++;
+              shitagakiIndicate(doc.id, doc.data(), nowDataCount, results.size);
+            });
+          } else {
+            hideLoad();
+          }
+        })
+        .catch(error => {
+          console.log(`データの取得に失敗しました (${error})`);
+          hideLoad();
+        });
+    }
+
+    function shitagakiIndicate(docId, data, nowDataCount, size) {
+      var shitagaki = "";
+      shitagaki +=
+        `
+          <ons-list-item onclick="giftDetailJump('` +
+        docId +
+        `')">
+            <ons-row>
+              <ons-col width="20%" vertical-align="center">
+                <img
+                  class="shitagakiImage list-item__thumbnail"
+                  src="img/userSampleImageMan.png"
+                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                />
+              </ons-col>
+              <ons-col width="70%" vertical-align="center">
+                <p style="margin-bottom:0px;margin-top:0px;">` +
+        data.title +
+        `<br />¥` +
+        data.price +
+        `</p>
+                <p style="margin-bottom:0px;">
+                  <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
+                </p>
+              </ons-col>
+              <ons-col width="10%" vertical-align="center">＞</ons-col>
+            </ons-row>
+          </ons-list-item>
+      `;
+      $("#myShitagakiList").append(shitagaki);
+      if (nowDataCount == size) {
+        ref = firebase
+          .storage()
+          .ref()
+          .child("profilePicture/" + user["uid"]);
+        ref.getDownloadURL().then(url => {
+          if (url == "") {
+            url = "img / userSampleImageMan.png";
+          }
+          document.getElementsByClassName("shitagakiImage").src = url;
+        });
+      }
+    }
+  </script>
 </ons-page>

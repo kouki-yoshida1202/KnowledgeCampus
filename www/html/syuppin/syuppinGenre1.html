@@ -1,0 +1,215 @@
+<ons-page id="syuppinGenrePage1">
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div
+      class="center"
+      id="toolbar-title"
+      style="display:flex;align-items: center;justify-content: center;"
+    >
+      カテゴリ
+    </div>
+  </ons-toolbar>
+  <div class="content">
+    <div style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:30px;">
+      <ons-list-item onclick="syuppinGenreSecondPage('学業')">
+        <div class="center">
+          学業
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="syuppinGenreSecondPage('ビジネス')">
+        <div class="center">
+          ビジネス
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="syuppinGenreSecondPage('キャリア')">
+        <div class="center">
+          キャリア
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+    </div>
+  </div>
+  <script>
+    function syuppinGenreSecondPage(category1) {
+      showLoad();
+      myNavigator.bringPageTop("html/syuppin/syuppinGenre2.html");
+      if (category1 == "学業") {
+        var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('授業')">
+            <div class="center">
+              授業
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('受験')">
+            <div class="center">
+              受験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('語学')">
+            <div class="center">
+              語学
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('その他')">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+      } else if (category1 == "キャリア") {
+        var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('就活')">
+            <div class="center">
+              就活
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('インターン')">
+            <div class="center">
+              インターン
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('資格')">
+            <div class="center">
+              資格
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('転職')">
+            <div class="center">
+              転職
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+      } else if (category1 == "ビジネス") {
+        var listItem = `
+          <ons-list-item onclick="syuppinGenreThirdPage('起業/経営')">
+            <div class="center">
+              起業/経営
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('マーケティング')">
+            <div class="center">
+              マーケティング
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('IT/プログラミング')">
+            <div class="center">
+              IT/プログラミング
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('投資(FX/株など)')">
+            <div class="center">
+              投資(FX/株など)
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('アフィリエイト')">
+            <div class="center">
+              アフィリエイト
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('ブログ')">
+            <div class="center">
+              ブログ
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('転売')">
+            <div class="center">
+              転売
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('ライブ配信')">
+            <div class="center">
+              ライブ配信
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('YouTuber')">
+            <div class="center">
+              YouTuber
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="syuppinGenreThirdPage('その他')">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        `;
+      }
+      document.addEventListener(
+        "init",
+        function(event) {
+          if (event.target.matches("#syuppinGenrePage2")) {
+            $("#syuppinGenre2").empty();
+            $("#syuppinGenre2").append(listItem);
+            $("#syuppinGenrePage2Toolbar").html(category1);
+            $("#syuppinGenrePage2Input").val(category1);
+            hideLoad();
+          }
+        },
+        false
+      );
+    }
+  </script>
+</ons-page>

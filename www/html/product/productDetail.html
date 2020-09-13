@@ -47,13 +47,15 @@
     </ons-row>
     <ons-row>
       <ons-col
+        id="productDetailPriceTime"
         width="50%"
         style="text-align: center;font-size:1.2em;"
         vertical-align="center"
-        >¥3000/30分</ons-col
+        >¥/分</ons-col
       >
       <ons-col width="50%" style="text-align: center;" vertical-align="center">
         <ons-button
+          id="productDetailButton"
           class="large-button-orange"
           style="padding:5px 2em;font-size:1.2em;"
           onclick="showProductDetailModal()"
@@ -65,14 +67,16 @@
   <div style="width:85%;margin:0 auto;margin-top:0px;">
     <div style="height:70px;text-align: center;margin-top:1.5rem;">
       <img
-        src="img/manSample.jpeg"
+        id="productDetailUserImage"
+        src="img/userSampleImageMan.png"
         alt=""
         style="width:70px;height:70px;object-fit:cover;border-radius: 50%;"
       />
     </div>
-    <p style="text-align: center;margin-top:5px;margin-bottom:5px;">
-      たろう
-    </p>
+    <p
+      id="productDetailUserName"
+      style="text-align: center;margin-top:5px;margin-bottom:5px;"
+    ></p>
 
     <div>
       <p
@@ -86,16 +90,12 @@
         <span>(39)</span>
       </p>
     </div>
-    <p class="navy" style="font-size:0.8em;">
-      自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。自己紹介テキストが入ります。
-    </p>
+    <p id="productDetailText" class="navy" style="font-size:0.8em;"></p>
   </div>
   <div style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:50px;">
     <ons-list-header>商品タイトル</ons-list-header>
     <ons-list-item class="productTitle">
-      <ons-row style="font-weight: bold;">
-        就活の必勝法伝授します！
-      </ons-row>
+      <ons-row id="productDetailTitle" style="font-weight: bold;"> </ons-row>
       <ons-row>
         <p style="margin-bottom:0px;">
           <i class="far fa-heart"></i>3<i
@@ -108,15 +108,15 @@
     </ons-list-item>
     <ons-list-header>商品の説明</ons-list-header>
     <ons-list-item>
-      <ons-row style="font-size:0.8em;padding-right:0.25em;">
-        説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。説明文が入ります。
+      <ons-row
+        id="productDetailExplanation"
+        style="font-size:0.8em;padding-right:0.25em;"
+      >
       </ons-row>
     </ons-list-item>
     <ons-list-header>通話手段</ons-list-header>
     <ons-list-item>
-      <ons-row>
-        Zoom
-      </ons-row>
+      <ons-row id="productDetailHowToTalk"> </ons-row>
     </ons-list-item>
     <br />
     <ons-list id="productDetailComment">
@@ -231,6 +231,7 @@
                 サービス代金
               </ons-col>
               <ons-col
+                id="productDetailModalPrice"
                 width="50%"
                 vertical-align="center"
                 style="text-align: right;padding-right:0.5em;"
@@ -244,6 +245,7 @@
                 ポイント使用
               </ons-col>
               <ons-col
+                id="productDetailModalMyPoint"
                 width="50%"
                 vertical-align="center"
                 style="text-align: right;padding-right:0.5em;"
@@ -297,6 +299,7 @@
                 通話手段
               </ons-col>
               <ons-col
+                id="productDetailModalHowToTalk"
                 width="50%"
                 vertical-align="center"
                 style="text-align: right;padding-right:0.5em;"
@@ -333,6 +336,114 @@
     function hideProductDetailModal() {
       var modal = document.querySelector("#productDetailModal");
       modal.hide();
+    }
+
+    function productInfo(docId) {
+      showLoad();
+      var docRef = db.collection("products").doc(docId);
+
+      docRef
+        .get()
+        .then(function(doc) {
+          // 商品情報取得
+          $("#productDetailTitle").html(doc.data().title);
+          $("#productDetailExplanation").html(doc.data().explanation);
+          $("#productDetailHowToTalk").html(doc.data().howtotalk);
+          $("#productDetailPriceTime").html(
+            "¥" + doc.data().price + "/" + doc.data().time
+          );
+          $("#productDetailModalHowToTalk").html(doc.data().howtotalk);
+          if (doc.data().howtotalk == "その他") {
+            $("#productDetailModalHowToTalk").append(doc.data().howtotalkother);
+          }
+          $("#productDetailModalPrice").html(doc.data().price);
+          var productData = doc.data();
+          return productData;
+        })
+        .then(function(productData) {
+          // ユーザー情報取得
+          var docRef = db.collection("users").doc(productData.userId);
+
+          docRef.get().then(function(doc) {
+            $("#productDetailUserName").html(doc.data().username);
+            $("#productDetailText").html(doc.data().text);
+            // ユーザー写真取得
+            ref = firebase
+              .storage()
+              .ref()
+              .child("profilePicture/" + productData.userId);
+            ref.getDownloadURL().then(url => {
+              if (url != "") {
+                document.getElementById("productDetailUserImage").src = url;
+              }
+            });
+          });
+          return productData;
+        })
+        .then(function(productData) {
+          var user = firebase.auth().currentUser;
+          var myUserId = user.uid;
+          if (myUserId == productData.userId) {
+            $("#productDetailButton").html("変更");
+            document.getElementById(
+              "productDetailButton"
+            ).onclick = new Function(
+              "myProductEdit('" +
+                JSON.stringify(productData) +
+                "','" +
+                docId +
+                "');"
+            );
+          }
+          hideLoad();
+        })
+        .catch(function(error) {
+          hideLoad();
+          console.log("Error getting document:", error);
+        });
+    }
+
+    function myProductEdit(productData, productDocumentUid) {
+      var productData = JSON.parse(productData);
+      myNavigator.bringPageTop("html/product/syuppinEditPage.html");
+
+      document.addEventListener(
+        "init",
+        function(event) {
+          if (event.target.matches("#syuppinEditPage")) {
+            $("#productDocumentUid").val(productDocumentUid);
+            //初期値で入れておく
+            $("#syuppinCategory1Edit").val(productData.category1);
+            $("#syuppinCategory2Edit").val(productData.category2);
+            $("#syuppinCategory3Edit").val(productData.category3);
+            $("#syuppinTitleEdit").val(productData.title);
+            $("#syuppinExplanationEdit").val(productData.explanation);
+            $("#howToTalkEdit").val(productData.howtotalk);
+            $("#howToTalkOtherEdit").val(productData.howtotalkother);
+            $("#syuppinTimeEdit").val(productData.time);
+            $("#syuppinPriceEdit").val(productData.price);
+            if (productData.category3 == "") {
+              $("#syuppinCategoryEdit").html(
+                productData.category1 +
+                  " ><br>" +
+                  productData.category2 +
+                  "&emsp;"
+              );
+            } else {
+              $("#syuppinCategoryEdit").html(
+                productData.category1 +
+                  " ><br>" +
+                  productData.category2 +
+                  " ><br>" +
+                  productData.category3 +
+                  "&emsp;"
+              );
+            }
+            riekiCalc();
+          }
+        },
+        false
+      );
     }
   </script>
 </ons-page>

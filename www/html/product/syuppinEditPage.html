@@ -1,24 +1,28 @@
-<ons-page id="syuppinPage">
+<ons-page id="syuppinEditPage">
   <style>
-    #syuppinPage .page__content {
+    #syuppinEditPage .page__content {
       background-color: white !important;
     }
-    #syuppinPage ons-list-item ons-col {
+    #syuppinEditPage ons-list-item ons-col {
       font-size: 0.9em;
     }
   </style>
   <ons-toolbar>
+    <div class="left">
+      <ons-back-button></ons-back-button>
+    </div>
     <div class="center" id="toolbar-title">
-      出品画面
+      変更画面
     </div>
   </ons-toolbar>
+  <input type="hidden" id="productDocumentUid" />
   <div class="content">
     <ons-list-header>サービス名と説明</ons-list-header>
     <ons-list-item>
       <ons-row>
         <ons-col width="30%" vertical-align="center">カテゴリ</ons-col>
         <ons-col
-          id="syuppinCategory"
+          id="syuppinCategoryEdit"
           width="70%"
           vertical-align="center"
           style="text-align: right;padding-right:0.5em;"
@@ -26,16 +30,16 @@
         >
           (必須)　>
         </ons-col>
-        <input type="hidden" id="syuppinCategory1" />
-        <input type="hidden" id="syuppinCategory2" />
-        <input type="hidden" id="syuppinCategory3" />
+        <input type="hidden" id="syuppinCategory1Edit" />
+        <input type="hidden" id="syuppinCategory2Edit" />
+        <input type="hidden" id="syuppinCategory3Edit" />
       </ons-row>
     </ons-list-item>
     <ons-list-item>
       <ons-row>
         <ons-col width="30%" vertical-align="center">タイトル</ons-col>
         <ons-col width="70%" vertical-align="center">
-          <ons-input id="syuppinTitle" placeholder="(必須)"></ons-input>
+          <ons-input id="syuppinTitleEdit" placeholder="(必須)"></ons-input>
         </ons-col>
       </ons-row>
     </ons-list-item>
@@ -46,7 +50,7 @@
         </ons-col>
         <ons-col vertical-align="center" width="70%" style="text-align: right;">
           <textarea
-            id="syuppinExplanation"
+            id="syuppinExplanationEdit"
             class="textarea textarea--transparent"
             rows="5"
             placeholder="(必須)"
@@ -66,7 +70,7 @@
       <ons-row>
         <ons-col width="30%" vertical-align="center">通話手段</ons-col>
         <ons-col width="70%" vertical-align="center">
-          <ons-select id="howToTalk" class="howtoTalk">
+          <ons-select id="howToTalkEdit">
             <option value="Zoom">Zoom</option>
             <option value="Google Meet">Google Meet</option>
             <option value="Skype">Skype</option>
@@ -74,7 +78,7 @@
             <option value="その他">その他</option>
           </ons-select>
           <ons-input
-            id="howToTalkOther"
+            id="howToTalkOtherEdit"
             placeholder="通話手段をご記入ください"
             type="text"
             style="margin-top:3px;"
@@ -91,7 +95,7 @@
       <ons-row>
         <ons-col width="30%" vertical-align="center">時間</ons-col>
         <ons-col width="70%" vertical-align="center">
-          <ons-select id="syuppinTime">
+          <ons-select id="syuppinTimeEdit">
             <option value="15分">15分</option>
             <option value="30分" selected>30分</option>
             <option value="45分">45分</option>
@@ -110,7 +114,7 @@
         <ons-col width="30%" vertical-align="center">価格</ons-col>
         <ons-col width="70%" vertical-align="center">
           <ons-input
-            id="syuppinPrice"
+            id="syuppinPriceEdit"
             placeholder="¥3000"
             type="tel"
             style="margin-top:3px;"
@@ -121,7 +125,7 @@
       <ons-row style="margin-top:1rem;">
         <ons-col width="30%" vertical-align="center">販売手数料</ons-col>
         <ons-col
-          id="syuppinTesuryo"
+          id="syuppinTesuryoEdit"
           width="70%"
           vertical-align="center"
           style="text-align: right;"
@@ -134,7 +138,7 @@
       <ons-row>
         <ons-col width="30%">販売利益</ons-col>
         <ons-col
-          id="syuppinRieki"
+          id="syuppinRiekiEdit"
           width="70%"
           vertical-align="center"
           style="text-align: right;font-weight: bold;font-size:1.5rem;"
@@ -146,7 +150,7 @@
       <ons-button
         modifier="large"
         class="large-button-orange"
-        onclick="productSubmitCheck('syuppin');"
+        onclick="productSubmitCheckEdit('syuppin')"
         >出品</ons-button
       >
     </div>
@@ -154,49 +158,48 @@
       <ons-button
         modifier="large"
         class="large-button-gray"
-        onclick="productSubmitCheck('shitagaki');"
+        onclick="productSubmitCheckEdit('shitagaki')"
         >下書き保存</ons-button
       >
     </div>
   </div>
   <script>
-    function testPush() {
-      var title = $("#syuppinTitle").val();
-      console.log(title);
-    }
-    $("#howToTalkOther").hide();
-    $(".howtoTalk").change(function() {
+    $("#howToTalkOtherEdit").hide();
+    $("#howToTalkEdit").change(function() {
       // 選択されているvalue属性値を取り出す
       var val = $(this).val();
       if (val == "その他") {
-        $("#howToTalkOther").show();
+        $("#howToTalkOtherEdit").show();
       } else {
-        $("#howToTalkOther").hide();
+        $("#howToTalkOtherEdit").hide();
       }
     });
 
-    $("#syuppinPrice").change(function() {
+    $("#syuppinPriceEdit").change(function() {
       // 選択されているvalue属性値を取り出す
-      var price = $(this).val();
-      console.log(price);
+      riekiCalc();
+    });
+
+    function riekiCalc() {
+      var price = $("#syuppinPriceEdit").val();
       if (price != "" && price != 0) {
         var tesuryo = Math.ceil(price * 0.25);
-        $("#syuppinTesuryo").html("¥" + tesuryo + "(25%)");
-        $("#syuppinRieki").html("¥" + (price - tesuryo));
+        $("#syuppinTesuryoEdit").html("¥" + tesuryo + "(25%)");
+        $("#syuppinRiekiEdit").html("¥" + (price - tesuryo));
       } else {
-        $("#syuppinTesuryo").html("¥0(25%)");
-        $("#syuppinRieki").html("¥0");
+        $("#syuppinTesuryoEdit").html("¥0(25%)");
+        $("#syuppinRiekiEdit").html("¥0");
       }
-    });
-    function productSubmitCheck(releasestatus) {
-      var category1 = $("#syuppinCategory1").val();
-      var category2 = $("#syuppinCategory2").val();
-      var title = $("#syuppinTitle").val();
-      var explanation = $("#syuppinExplanation").val();
-      var howtotalk = $("#howToTalk").val();
-      var howtotalkother = $("#howToTalkOther").val();
-      var time = $("#syuppinTime").val();
-      var price = $("#syuppinPrice").val();
+    }
+    function productSubmitCheckEdit(releasestatus) {
+      var category1 = $("#syuppinCategory1Edit").val();
+      var category2 = $("#syuppinCategory2Edit").val();
+      var title = $("#syuppinTitleEdit").val();
+      var explanation = $("#syuppinExplanationEdit").val();
+      var howtotalk = $("#howToTalkEdit").val();
+      var howtotalkother = $("#howToTalkOtherEdit").val();
+      var time = $("#syuppinTimeEdit").val();
+      var price = $("#syuppinPriceEdit").val();
 
       if (category1 == "" || category2 == "") {
         ons.notification.alert({
@@ -224,21 +227,22 @@
           message: "価格を入力してください"
         });
       } else {
-        productSubmit(releasestatus);
+        productSubmitEdit(releasestatus);
       }
     }
-    function productSubmit(releasestatus) {
+    function productSubmitEdit(releasestatus) {
       showLoad();
-      var category1 = $("#syuppinCategory1").val();
-      var category2 = $("#syuppinCategory2").val();
-      var category3 = $("#syuppinCategory3").val();
-      var title = $("#syuppinTitle").val();
-      var explanation = $("#syuppinExplanation").val();
-      var howtotalk = $("#howToTalk").val();
-      var howtotalkother = $("#howToTalkOther").val();
-      var time = $("#syuppinTime").val();
-      var price = $("#syuppinPrice").val();
+      var category1 = $("#syuppinCategory1Edit").val();
+      var category2 = $("#syuppinCategory2Edit").val();
+      var category3 = $("#syuppinCategory3Edit").val();
+      var title = $("#syuppinTitleEdit").val();
+      var explanation = $("#syuppinExplanationEdit").val();
+      var howtotalk = $("#howToTalkEdit").val();
+      var howtotalkother = $("#howToTalkOtherEdit").val();
+      var time = $("#syuppinTimeEdit").val();
+      var price = $("#syuppinPriceEdit").val();
       var productUid = getCurrentTime();
+      var productDocumentUid = $("#productDocumentUid").val();
 
       var user = firebase.auth().currentUser;
       var setProductData = {
@@ -256,9 +260,9 @@
         userId: user["uid"],
         releasestatus: releasestatus
       };
-      //新規出品
+      // 商品変更
       db.collection("products")
-        .doc()
+        .doc(productDocumentUid)
         .set(setProductData)
         .then(function() {
           console.log("Document successfully written!");
@@ -284,25 +288,6 @@
             message: "出品に失敗しました。"
           });
         });
-    }
-
-    //yyyymmddhhmmssでuid作成
-    function getCurrentTime() {
-      var now = new Date();
-      var res =
-        "" +
-        now.getFullYear() +
-        padZero(now.getMonth() + 1) +
-        padZero(now.getDate()) +
-        padZero(now.getHours()) +
-        padZero(now.getMinutes()) +
-        padZero(now.getSeconds());
-      return res;
-    }
-
-    //先頭ゼロ付加
-    function padZero(num) {
-      return (num < 10 ? "0" : "") + num;
     }
   </script>
 </ons-page>

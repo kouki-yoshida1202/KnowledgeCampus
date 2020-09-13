@@ -1,0 +1,64 @@
+<ons-page id="syuppinGenrePage3">
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div
+      class="center"
+      id="syuppinGenrePage3Toolbar"
+      style="display:flex;align-items: center;justify-content: center;"
+    ></div>
+  </ons-toolbar>
+  <div class="content">
+    <div
+      id="syuppinGenre3"
+      style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:30px;"
+    ></div>
+  </div>
+  <input type="hidden" id="syuppinGenrePage3InputFirst" />
+  <input type="hidden" id="syuppinGenrePage3InputSecond" />
+  <script>
+    function syuppinGenreThirdPage(category3) {
+      showLoad();
+      var category1 = $("#syuppinGenrePage3InputFirst").val();
+      var category2 = $("#syuppinGenrePage3InputSecond").val();
+
+      myNavigator.popPage().then(function() {
+        myNavigator.popPage().then(function() {
+          myNavigator.popPage().then(function() {
+            // 新規か変更かの判断
+            if ($("#productDocumentUid").val() == "") {
+              // 新規
+              $("#syuppinCategory").html(
+                category1 +
+                  " ><br>" +
+                  category2 +
+                  " ><br>" +
+                  category3 +
+                  "&emsp;"
+              );
+              $("#syuppinCategory1").val(category1);
+              $("#syuppinCategory2").val(category2);
+              $("#syuppinCategory3").val(category3);
+              hideLoad();
+            } else {
+              // 変更
+              $("#syuppinCategoryEdit").html(
+                category1 +
+                  " ><br>" +
+                  category2 +
+                  " ><br>" +
+                  category3 +
+                  "&emsp;"
+              );
+              $("#syuppinCategory1Edit").val(category1);
+              $("#syuppinCategory2Edit").val(category2);
+              $("#syuppinCategory3Edit").val(category3);
+              hideLoad();
+            }
+          });
+        });
+      });
+    }
+  </script>
+</ons-page>
