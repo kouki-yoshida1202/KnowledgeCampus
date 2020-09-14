@@ -17,11 +17,10 @@
     </div>
   </ons-toolbar>
   <div class="content">
-    <div style="margin:0 auto;padding:0.5em;margin-top:1em;margin-bottom:1em;">
+    <div style="margin:0 auto;padding:0.5em;">
       <p style="text-align: left;font-size:0.9em;">
         友人があなたの招待コードを入力して、ユーザー登録および電話番号の認証を完了すると、あなたと友人のそれぞれに300Pをプレゼント！
-      </p>
-      <p style="text-align: left;font-size:0.9em;">
+        <br />
         ※不正取得が発覚した場合、ポイントの失効・アカウントの停止処分になります。
       </p>
     </div>
@@ -126,27 +125,46 @@
     });
 
     $("#inviteCodeBorn").click(function() {
-      var firstPart = (Math.random() * 46656) | 0;
-      var secondPart = (Math.random() * 46656) | 0;
-      firstPart = ("000" + firstPart.toString(36)).slice(-3);
-      secondPart = ("000" + secondPart.toString(36)).slice(-3);
-      var invitecode = firstPart + secondPart;
       var user = firebase.auth().currentUser;
-      db.collection("users")
-        .doc(user.uid)
-        .set(
-          {
-            invitecode: invitecode
-          },
-          { merge: true }
-        )
-        .then(function() {
-          inviteIndicate();
-        })
-        .catch(function(error) {
-          console.error("Error writing document: ", error);
-          hideLoad();
+      var phoneNumber = user.phoneNumber;
+      if (phoneNumber == null || phoneNumber == "") {
+        ons.notification.confirm({
+          message:
+            "電話番号認証が済んでいないため、送信できません。認証作業に移りますか？",
+          title: "確認",
+          buttonLabels: ["いいえ", "はい"],
+          callback: function(buttonIndex) {
+            if (buttonIndex == 1) {
+              cordova.InAppBrowser.open(
+                "https://knowledgecampus-test.web.app/smsTest.html",
+                "_blank",
+                "location=yes"
+              );
+            }
+          }
         });
+      } else {
+        var firstPart = (Math.random() * 46656) | 0;
+        var secondPart = (Math.random() * 46656) | 0;
+        firstPart = ("000" + firstPart.toString(36)).slice(-3);
+        secondPart = ("000" + secondPart.toString(36)).slice(-3);
+        var invitecode = firstPart + secondPart;
+        db.collection("users")
+          .doc(user.uid)
+          .set(
+            {
+              invitecode: invitecode
+            },
+            { merge: true }
+          )
+          .then(function() {
+            inviteIndicate();
+          })
+          .catch(function(error) {
+            console.error("Error writing document: ", error);
+            hideLoad();
+          });
+      }
     });
   </script>
 </ons-page>

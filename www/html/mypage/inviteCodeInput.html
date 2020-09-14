@@ -1,0 +1,188 @@
+<ons-page id="inviteCodeInputPage">
+  <style>
+    #inviteCodeInputPage .page__content {
+      background-color: white !important;
+    }
+  </style>
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div
+      class="center"
+      id="toolbar-title"
+      style="display:flex;align-items: center;justify-content: center;"
+    >
+      招待コードを入力
+    </div>
+  </ons-toolbar>
+  <div class="content">
+    <div style="margin:0 auto;padding:0.5em;">
+      <p style="text-align: left;font-size:0.9em;">
+        友人からもらった招待コードを入力して、電話番号の認証を完了すると、あなたと友人のそれぞれに300Pをプレゼント！
+        <br />
+        ※不正取得が発覚した場合、ポイントの失効・アカウントの停止処分になります。
+      </p>
+    </div>
+    <ons-list>
+      <ons-list-header>もらった招待コード</ons-list-header>
+      <ons-list-item>
+        <ons-row>
+          <ons-col vertical-align="center" style="text-align:center;">
+            <ons-input id="inviteCodeInput"></ons-input>
+            <p id="inviteEnd" style="font-size:0.9em;">
+              既に招待コードの入力は済んでおります。
+            </p>
+          </ons-col>
+        </ons-row>
+        <ons-row>
+          <ons-col
+            vertical-align="center"
+            style="text-align:center;margin-top:1em;margin-bottom:1em;"
+          >
+            <ons-button
+              modifier="large"
+              class="large-button-orange"
+              id="inviteCodeSubmit"
+              >送信</ons-button
+            >
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+  </div>
+  <script>
+    showLoad();
+    $("#inviteEnd").hide();
+    document.addEventListener(
+      "show",
+      function(event) {
+        if (event.target.matches("#inviteCodeInputPage")) {
+          // ons.notification.alert("ページ1が初期化されました");
+          var user = firebase.auth().currentUser;
+          var users = db.collection("users");
+          users
+            .doc(user.uid)
+            .get()
+            .then(function(result) {
+              var invitedcode = result.data().invitedcode;
+              if (invitedcode != "" && invitedcode != null) {
+                $("#inviteCodeSubmit").hide();
+                $("#inviteCodeInput").val(invitedcode);
+                $("#inviteCodeInput").attr("readonly", true);
+                $("#inviteEnd").show();
+                hideLoad();
+              } else {
+                hideLoad();
+              }
+            });
+        }
+      },
+      false
+    );
+    $("#inviteCodeSubmit").click(function() {
+      showLoad();
+      var user = firebase.auth().currentUser;
+      var phoneNumber = user.phoneNumber;
+      if (phoneNumber == null || phoneNumber == "") {
+        hideLoad();
+        ons.notification.confirm({
+          message:
+            "電話番号認証が済んでいないため、送信できません。認証作業に移りますか？",
+          title: "確認",
+          buttonLabels: ["いいえ", "はい"],
+          callback: function(buttonIndex) {
+            if (buttonIndex == 1) {
+              cordova.InAppBrowser.open(
+                "https://knowledgecampus-test.web.app/smsTest.html",
+                "_blank",
+                "location=yes"
+              );
+            }
+          }
+        });
+      } else {
+        var inviteCodeInput = $("#inviteCodeInput").val();
+        var users = db.collection("users");
+        users
+          .where("invitecode", "==", inviteCodeInput)
+          .get()
+          .then(results => {
+            if (results.size > 0) {
+              results.forEach(results => {
+                var userId = user.uid;
+                var inviteUserId = results.id;
+                if (userId == inviteUserId) {
+                  hideLoad();
+                  ons.notification.alert({
+                    message: "自分自身の招待コードは入力できません",
+                    title: "失敗"
+                  });
+                } else {
+                  // 招待者のポイント増やす
+                  var nowPoint = Number(results.data().point) + 300;
+                  console.log("招待した" + nowPoint);
+                  users
+                    .doc(inviteUserId)
+                    .set(
+                      {
+                        point: nowPoint
+                      },
+                      { merge: true }
+                    )
+                    .then(function() {
+                      // 被招待者のポイント増やす
+                      users
+                        .doc(userId)
+                        .get()
+                        .then(function(doc) {
+                          var userPointNow = Number(doc.data().point) + 300;
+                          console.log("招待された" + userPointNow);
+                          users
+                            .doc(userId)
+                            .set(
+                              {
+                                point: userPointNow,
+                                invitedcode: inviteCodeInput
+                              },
+                              { merge: true }
+                            )
+                            .then(function(doc) {
+                              ons.notification.alert({
+                                message: "完了しました",
+                                title: "成功"
+                              });
+                            });
+                        });
+                    })
+                    .catch(function(error) {
+                      hideLoad();
+                      ons.notification.alert({
+                        message: "失敗しました",
+                        title: "失敗"
+                      });
+                      console.log(error);
+                    });
+                  hideLoad();
+                }
+              });
+            } else {
+              hideLoad();
+              ons.notification.alert({
+                message: "招待コードが一致するユーザーが見つかりませんでした",
+                title: "失敗"
+              });
+            }
+          })
+          .catch(error => {
+            console.log(`データの取得に失敗しました (${error})`);
+            hideLoad();
+            ons.notification.alert({
+              message: "招待コードが一致するユーザーが見つかりませんでした",
+              title: "失敗"
+            });
+          });
+      }
+    });
+  </script>
+</ons-page>

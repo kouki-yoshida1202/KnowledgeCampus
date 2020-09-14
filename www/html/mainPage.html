@@ -656,7 +656,7 @@
       $("#studyProduct").empty();
       $("#businessProduct").empty();
       var nowDataCount = 0;
-      let products = db.collection("products");
+      var products = db.collection("products");
       products
         .where("releasestatus", "==", "syuppin")
         .orderBy("createTime", "desc")

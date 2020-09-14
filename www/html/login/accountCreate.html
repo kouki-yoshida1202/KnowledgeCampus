@@ -103,33 +103,12 @@
         </ons-col>
       </ons-row>
     </ons-list-item>
-    <ons-list-item>
-      <ons-row>
-        <ons-col
-          vertical-align="center"
-          width="100%"
-          style="text-align: left;padding:0px 3%;"
-        >
-          招待コード
-        </ons-col>
-        <ons-col
-          vertical-align="center"
-          width="100%"
-          style="text-align: right;"
-        >
-          <div class="cp_iptxt">
-            <input type="tel" placeholder="お持ちの方専用" id="newInviteCode" />
-            <i class="fas fa-gift fa-lg fa-fw" aria-hidden="true"></i>
-          </div>
-        </ons-col>
-      </ons-row>
-    </ons-list-item>
   </ons-list>
   <div style="width:90%;margin:0 auto;">
     <p style="font-size:0.8em;padding:0.5em;">
       「新規登録」のボタンを押すことで、<span
         style="color:#0799d7;"
-        onclick='cordova.InAppBrowser.open("https://lcall-test.web.app/riyouKiyaku.html", "_blank", "location=yes");'
+        onclick='cordova.InAppBrowser.open("https://knowledgecampus-test.web.app/riyouKiyaku.html", "_blank", "location=yes");'
         >利用規約</span
       >に同意したものと判断します。
     </p>
@@ -150,7 +129,6 @@
       var mailAddress = $("#newMailAddress").val();
       var password = $("#newPassword").val();
       var passwordCheck = $("#newPasswordCheck").val();
-      var inviteCode = $("#newInviteCode").val();
       if (userName == "") {
         ons.notification.alert({
           message: "ユーザーネームが未入力です"
@@ -184,13 +162,33 @@
                 .sendEmailVerification()
                 .then(function() {
                   // Email sent.
-                  ons.notification.alert({
-                    title: "メール送信",
-                    message:
-                      "認証メールを送信しました。メールに記載のURLを押下することで登録が完了します。"
-                  });
-                  hideLoad();
-                  myNavigator.popPage();
+                  db.collection("users")
+                    .doc(user.uid)
+                    .set({
+                      username: userName,
+                      point: 0,
+                      text: "",
+                      ginkoukind: "",
+                      ginkoumeigi: "",
+                      ginkouname: "",
+                      ginkounumber: "",
+                      ginkoushiten: "",
+                      invitecode: "",
+                      uriagenow: 0,
+                      invitedcode: ""
+                    })
+                    .then(function() {
+                      hideLoad();
+                      ons.notification.alert({
+                        title: "メール送信",
+                        message:
+                          "認証メールを送信しました。メールに記載のURLを押下することで登録が完了します。"
+                      });
+                    })
+                    .catch(function(error) {
+                      // An error happened.
+                      hideLoad();
+                    });
                 })
                 .catch(function(error) {
                   // An error happened.
