@@ -36,7 +36,10 @@
         myNavigator.popPage().then(function() {
           myNavigator.popPage().then(function() {
             // 新規か変更かの判断
-            if ($("#productDocumentUid").val() == "") {
+            if (
+              $("#productDocumentUid").val() == "" ||
+              $("#productDocumentUid").val() == null
+            ) {
               // 新規
               $("#syuppinCategory").html(
                 category1 + " ><br>" + category2 + "&emsp;"

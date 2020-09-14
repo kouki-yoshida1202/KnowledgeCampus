@@ -16,16 +16,14 @@
       style="width:50%;margin:0 auto;border:2px solid #ff9831;border-radius:5px;padding:0.5em;margin-top:1em;margin-bottom:1em;"
     >
       <p style="text-align: center;">売上残高</p>
-      <h1 style="text-align: center;">¥6000</h1>
+      <h1 id="myUriageNow" style="text-align: center;">¥0</h1>
       <hr />
       <p style="text-align: center;">ポイント</p>
-      <h1 style="text-align: center;">500P</h1>
+      <h1 id="myPoint" style="text-align: center;">0P</h1>
     </div>
     <ons-list>
       <ons-list-header>売上の管理</ons-list-header>
-      <ons-list-item
-        onclick="myNavigator.bringPageTop('html/mypage/myHurikomi.html');"
-      >
+      <ons-list-item id="hurikomiFormJumpButton">
         <div class="center">
           振込申請
         </div>
@@ -45,4 +43,65 @@
       </ons-list-item>
     </ons-list>
   </div>
+  <script>
+    document.addEventListener(
+      "init",
+      function(event) {
+        if (event.target.matches("#myPointKanriPage")) {
+          // ons.notification.alert("ページ1が初期化されました");
+          // コンテンツを準備...
+          var user = firebase.auth().currentUser;
+          if (user) {
+            // User is signed in.
+            myPointUriage(user.uid);
+          } else {
+            // No user is signed in.
+          }
+        }
+      },
+      false
+    );
+
+    function myPointUriage(userId) {
+      var docRef = db.collection("users").doc(userId);
+      docRef
+        .get()
+        .then(function(doc) {
+          if (doc.exists) {
+            $("#myUriageNow").html("¥" + doc.data().uriagenow);
+            $("#myPoint").html(doc.data().point + "P");
+            document.getElementById(
+              "hurikomiFormJumpButton"
+            ).onclick = new Function(
+              "hurikomiFormJump('" +
+                doc.data().uriagenow +
+                "','" +
+                userId +
+                "');"
+            );
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        })
+        .catch(function(error) {
+          console.log("Error getting document:", error);
+        });
+    }
+
+    function hurikomiFormJump(uriageNow, userId) {
+      myNavigator.bringPageTop("html/mypage/myHurikomi.html");
+      document.addEventListener(
+        "show",
+        function(event) {
+          if (event.target.matches("#myHurikomiPage")) {
+            $("#myHurikomiUriageNow").html("¥" + uriageNow);
+            $("#myHurikomiUriageNowHidden").val(uriageNow);
+            $("#myHurikomiUserId").val(userId);
+          }
+        },
+        false
+      );
+    }
+  </script>
 </ons-page>

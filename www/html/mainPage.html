@@ -164,7 +164,7 @@
   </div>
 
   <div class="content page__content">
-    <ons-pull-hook id="pull-hook" style="margin-top:28px;">
+    <ons-pull-hook id="pull-hook" style="margin-top:28px;" height="100px">
       <i class="fas fa-spinner" style="font-size:1.3em;"></i>
     </ons-pull-hook>
     <ons-carousel
@@ -663,17 +663,21 @@
         .get()
         .then(results => {
           // console.log(results.size);
-          results.forEach(doc => {
-            nowDataCount++;
-            productIndicate(
-              doc.id,
-              doc.data(),
-              nowDataCount,
-              results.size,
-              selfReload,
-              done
-            );
-          });
+          if (results.size > 0) {
+            results.forEach(doc => {
+              nowDataCount++;
+              productIndicate(
+                doc.id,
+                doc.data(),
+                nowDataCount,
+                results.size,
+                selfReload,
+                done
+              );
+            });
+          } else {
+            hideLoad();
+          }
         })
         .catch(error => {
           console.log(`データの取得に失敗しました (${error})`);

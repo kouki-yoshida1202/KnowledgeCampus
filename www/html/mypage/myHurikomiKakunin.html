@@ -1,6 +1,6 @@
-<ons-page id="myHurikomiPage">
+<ons-page id="myHurikomiKakuninPage">
   <style>
-    #myHurikomiPage .page__content {
+    #myHurikomiKakuninPage .page__content {
       background-color: white !important;
       padding: 0.5rem;
     }
@@ -18,7 +18,7 @@
         <ons-row>
           <ons-col width="30%" vertical-align="center">現在の売上金</ons-col>
           <ons-col width="70%" vertical-align="center">
-            <p style="text-align: right;">¥6000</p>
+            <p id="myHurikomiKakuninUriageNow" style="text-align: right;">¥0</p>
           </ons-col>
         </ons-row>
       </ons-list-item>
@@ -26,7 +26,9 @@
         <ons-row>
           <ons-col width="30%" vertical-align="center">振込申請額</ons-col>
           <ons-col width="70%" vertical-align="center">
-            <p style="text-align: right;">¥3000</p>
+            <p id="myHurikomiKakuninShinseiKingaku" style="text-align: right;">
+              ¥0
+            </p>
           </ons-col>
         </ons-row>
       </ons-list-item>
@@ -34,7 +36,7 @@
         <ons-row>
           <ons-col width="30%" vertical-align="center">振込手数料</ons-col>
           <ons-col width="70%" vertical-align="center">
-            <p style="text-align: right;">¥330</p>
+            <p style="text-align: right;">¥300</p>
           </ons-col>
         </ons-row>
       </ons-list-item>
@@ -42,7 +44,9 @@
         <ons-row>
           <ons-col width="30%" vertical-align="center">振込金額</ons-col>
           <ons-col width="70%" vertical-align="center">
-            <p style="text-align: right;">¥2670</p>
+            <p id="myHurikomiKakuninHurikomiKingaku" style="text-align: right;">
+              ¥0
+            </p>
           </ons-col>
         </ons-row>
       </ons-list-item>
@@ -51,7 +55,7 @@
         <ons-row>
           <ons-col width="30%" vertical-align="center">銀行</ons-col>
           <ons-col width="70%" vertical-align="center">
-            <p style="text-align: right;">三菱UFJ銀行</p>
+            <p id="myHurikomiKakuninGinkouName" style="text-align: right;"></p>
           </ons-col>
         </ons-row>
       </ons-list-item>
@@ -59,7 +63,10 @@
         <ons-row>
           <ons-col width="30%" vertical-align="center">支店コード</ons-col>
           <ons-col width="70%" vertical-align="center">
-            <p style="text-align: right;">123</p>
+            <p
+              id="myHurikomiKakuninGinkouShiten"
+              style="text-align: right;"
+            ></p>
           </ons-col>
         </ons-row>
       </ons-list-item>
@@ -67,7 +74,10 @@
         <ons-row>
           <ons-col width="30%" vertical-align="center">口座番号</ons-col>
           <ons-col width="70%" vertical-align="center">
-            <p style="text-align: right;">1234567</p>
+            <p
+              id="myHurikomiKakuninGinkouNumber"
+              style="text-align: right;"
+            ></p>
           </ons-col>
         </ons-row>
       </ons-list-item>
@@ -75,7 +85,7 @@
         <ons-row>
           <ons-col width="30%" vertical-align="center">口座名義</ons-col>
           <ons-col width="70%" vertical-align="center">
-            <p style="text-align: right;">ヤマダタロウ</p>
+            <p id="myHurikomiKakuninGinkouMeigi" style="text-align: right;"></p>
           </ons-col>
         </ons-row>
       </ons-list-item>
@@ -87,4 +97,5 @@
       >
     </div>
   </div>
+  <input type="hidden" id="myHurikomiKakuninUserId" />
 </ons-page>

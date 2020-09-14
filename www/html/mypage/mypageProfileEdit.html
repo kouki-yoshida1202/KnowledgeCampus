@@ -105,10 +105,13 @@
         // Add a new document in collection "cities"
         db.collection("users")
           .doc(user["uid"])
-          .set({
-            username: username,
-            text: text
-          })
+          .set(
+            {
+              username: username,
+              text: text
+            },
+            { merge: true }
+          )
           .then(function() {
             console.log("Document successfully written!");
             var imgs = document.querySelector("#myImageInput");

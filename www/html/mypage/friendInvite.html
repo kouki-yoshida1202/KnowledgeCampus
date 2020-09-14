@@ -1,0 +1,152 @@
+<ons-page id="friendInvitePage">
+  <style>
+    #friendInvitePage .page__content {
+      background-color: white !important;
+    }
+  </style>
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button> </ons-back-button>
+    </div>
+    <div
+      class="center"
+      id="toolbar-title"
+      style="display:flex;align-items: center;justify-content: center;"
+    >
+      友人を招待
+    </div>
+  </ons-toolbar>
+  <div class="content">
+    <div style="margin:0 auto;padding:0.5em;margin-top:1em;margin-bottom:1em;">
+      <p style="text-align: left;font-size:0.9em;">
+        友人があなたの招待コードを入力して、ユーザー登録および電話番号の認証を完了すると、あなたと友人のそれぞれに300Pをプレゼント！
+      </p>
+      <p style="text-align: left;font-size:0.9em;">
+        ※不正取得が発覚した場合、ポイントの失効・アカウントの停止処分になります。
+      </p>
+    </div>
+    <ons-list>
+      <ons-list-header>あなたの招待コード</ons-list-header>
+      <ons-list-item>
+        <ons-row>
+          <ons-col vertical-align="center" style="text-align:center;">
+            <h1 id="myInviteCode"></h1>
+          </ons-col>
+        </ons-row>
+        <ons-row>
+          <ons-col
+            vertical-align="center"
+            style="text-align:center;margin-top:1em;margin-bottom:1em;"
+          >
+            <ons-button
+              modifier="large"
+              class="large-button-orange"
+              id="inviteCodeBorn"
+              >招待コードを発行</ons-button
+            >
+            <ons-button
+              modifier="large"
+              class="large-button-orange"
+              id="inviteCodeCopy"
+              >招待コードをコピー</ons-button
+            >
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+  </div>
+  <script>
+    $("#inviteCodeCopy").hide();
+    $("#inviteCodeBorn").hide();
+    document.addEventListener(
+      "show",
+      function(event) {
+        if (event.target.matches("#friendInvitePage")) {
+          // ons.notification.alert("ページ1が初期化されました");
+          inviteIndicate();
+        }
+      },
+      false
+    );
+    function inviteIndicate() {
+      showLoad();
+      $("#inviteCodeCopy").hide();
+      $("#inviteCodeBorn").hide();
+      var user = firebase.auth().currentUser;
+      if (user) {
+        // User is signed in.
+        var docRef = db.collection("users").doc(user.uid);
+        docRef
+          .get()
+          .then(function(doc) {
+            if (doc.exists) {
+              var inviteCode = doc.data().invitecode;
+              if (inviteCode == "" || inviteCode == null) {
+                $("#inviteCodeBorn").show();
+              } else {
+                $("#myInviteCode").html(doc.data().invitecode);
+                $("#inviteCodeCopy").show();
+              }
+              hideLoad();
+            } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+              hideLoad();
+            }
+          })
+          .catch(function(error) {
+            console.log("Error getting document:", error);
+            hideLoad();
+          });
+      } else {
+        // No user is signed in.
+        hideLoad();
+      }
+    }
+    $("#inviteCodeCopy").click(function() {
+      // コピーする文章の取得
+      let text = $("#myInviteCode").text();
+      // テキストエリアの作成
+      let $textarea = $("<textarea></textarea>");
+      // テキストエリアに文章を挿入
+      $textarea.text(text);
+      //　テキストエリアを挿入
+      $(this).append($textarea);
+      //　テキストエリアを選択
+      $textarea.select();
+      // コピー
+      document.execCommand("copy");
+      // テキストエリアの削除
+      $textarea.remove();
+      // アラート文の表示
+      ons.notification.alert({
+        title: "成功",
+        message: "招待コードをコピーしました！"
+      });
+    });
+
+    $("#inviteCodeBorn").click(function() {
+      var firstPart = (Math.random() * 46656) | 0;
+      var secondPart = (Math.random() * 46656) | 0;
+      firstPart = ("000" + firstPart.toString(36)).slice(-3);
+      secondPart = ("000" + secondPart.toString(36)).slice(-3);
+      var invitecode = firstPart + secondPart;
+      var user = firebase.auth().currentUser;
+      db.collection("users")
+        .doc(user.uid)
+        .set(
+          {
+            invitecode: invitecode
+          },
+          { merge: true }
+        )
+        .then(function() {
+          inviteIndicate();
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
+          hideLoad();
+        });
+    });
+  </script>
+</ons-page>

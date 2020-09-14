@@ -154,13 +154,22 @@
         >出品</ons-button
       >
     </div>
-    <div style="padding:0.5rem;margin-bottom:50px;">
+    <div style="padding:0.5rem;">
       <ons-button
         modifier="large"
         class="large-button-gray"
         onclick="productSubmitCheckEdit('shitagaki')"
         >下書き保存</ons-button
       >
+    </div>
+    <div style="padding:0.5rem;margin-bottom:50px;">
+      <ons-button
+        modifier="large"
+        class="large-button-gray"
+        onclick="productDeleteCheck()"
+        style="background: red;"
+        >商品削除
+      </ons-button>
     </div>
   </div>
   <script>
@@ -175,7 +184,7 @@
       }
     });
 
-    $("#syuppinPriceEdit").change(function() {
+    $("#syuppinPriceEdit").keyup(function() {
       // 選択されているvalue属性値を取り出す
       riekiCalc();
     });
@@ -263,7 +272,7 @@
       // 商品変更
       db.collection("products")
         .doc(productDocumentUid)
-        .set(setProductData)
+        .set(setProductData, { merge: true })
         .then(function() {
           console.log("Document successfully written!");
           hideLoad();
@@ -286,6 +295,46 @@
           ons.notification.alert({
             title: "失敗",
             message: "出品に失敗しました。"
+          });
+        });
+    }
+
+    function productDeleteCheck() {
+      ons.notification.confirm({
+        message: "本当に削除しますか？",
+        title: "確認",
+        buttonLabels: ["キャンセル", "OK"],
+        callback: function(buttonIndex) {
+          if (buttonIndex == 1) {
+            productDelete();
+          }
+        }
+      });
+    }
+
+    function productDelete() {
+      showLoad();
+      var productDocumentUid = $("#productDocumentUid").val();
+      db.collection("products")
+        .doc(productDocumentUid)
+        .delete()
+        .then(function() {
+          console.log("Document successfully deleted!");
+          hideLoad();
+          ons.notification.alert({
+            title: "完了",
+            message: "削除しました。",
+            callback: function() {
+              window.location.href = "index.html";
+            }
+          });
+        })
+        .catch(function(error) {
+          console.error("Error removing document: ", error);
+          hideLoad();
+          ons.notification.alert({
+            title: "失敗",
+            message: "削除に失敗しました。"
           });
         });
     }
