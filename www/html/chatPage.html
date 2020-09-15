@@ -294,15 +294,13 @@
   </div>
   <script>
     ("use strict");
-    document.addEventListener("init", function(event) {
-      if (event.target.matches("#chatPage")) {
-        var chatCarousel = document.getElementById("chatCarousel");
-        chatCarousel.addEventListener("postchange", function(e) {
-          // alert(e.activeIndex);
-          tabChatCarouselChange(e.activeIndex);
-        });
-      }
-    });
+    setTimeout(function(){
+      var chatCarousel = document.getElementById("chatCarousel");
+      chatCarousel.addEventListener("postchange", function (e) {
+        // alert(e.activeIndex);
+        tabChatCarouselChange(e.activeIndex);
+      });
+    },100);
 
     function tabChatCarouselChange(carouselIndex) {
       console.log(carouselIndex);

@@ -331,16 +331,13 @@
     </ons-carousel>
   </div>
   <script>
-    ("use strict");
-    document.addEventListener("init", function(event) {
-      if (event.target.matches("#mySyuppinPage")) {
-        var chatCarousel = document.getElementById("mySyuppinCarousel");
-        chatCarousel.addEventListener("postchange", function(e) {
-          // alert(e.activeIndex);
-          tabMySyuppinCarouselChange(e.activeIndex);
-        });
-      }
-    });
+    setTimeout(function(){
+      var chatCarousel = document.getElementById("mySyuppinCarousel");
+      chatCarousel.addEventListener("postchange", function (e) {
+        // alert(e.activeIndex);
+        tabMySyuppinCarouselChange(e.activeIndex);
+      });
+    },100);
 
     function tabMySyuppinCarouselChange(carouselIndex) {
       console.log(carouselIndex);

@@ -39,10 +39,11 @@
   <ons-bottom-toolbar style="line-height: 35px;height:80px">
     <ons-row>
       <ons-col
+        id="productDetailMyPoint"
         width="100%"
         style="text-align: center;font-size:0.9em;color:white;font-weight: bold;background: #0799d7;line-height: 25px;margin-bottom:5px;"
         vertical-align="center"
-        >500ポイント持っています</ons-col
+        >0ポイント持っています</ons-col
       >
     </ons-row>
     <ons-row>
@@ -98,11 +99,13 @@
       <ons-row id="productDetailTitle" style="font-weight: bold;"> </ons-row>
       <ons-row>
         <p style="margin-bottom:0px;">
-          <i class="far fa-heart"></i>3<i
+          <i class="far fa-heart" onclick="favoCheck()"></i
+          ><span id="favoCount">0</span>
+          <i
             class="far fa-comment-dots"
-            onclick="myNavigator.bringPageTop('html/productComment.html');"
+            onclick="myNavigator.bringPageTop('html/product/productComment.html');"
           ></i
-          >4
+          ><span id="commentCount">0</span>
         </p>
       </ons-row>
     </ons-list-item>
@@ -120,87 +123,39 @@
     </ons-list-item>
     <br />
     <ons-list id="productDetailComment">
-      <ons-list-item>
-        <br />
+      <ons-list-header>
         <ons-row>
-          <i class="far fa-comment-dots" style="margin-right:0.3em;"></i
-          >コメント
+          <ons-col vertical-align="center">
+            <i class="far fa-comment-dots" style="margin-right:0.3em;"></i
+            >コメント
+          </ons-col>
         </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title">ハナコ</span>
-          <span class="list-item__subtitle">
-            <ons-card>
-              質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？
-            </ons-card>
-          </span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/manSample.jpeg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title">タナカタロウ</span>
-          <span class="list-item__subtitle">
-            <ons-card>
-              質問してもいいですよ
-            </ons-card>
-          </span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title">ハナコ</span>
-          <span class="list-item__subtitle">
-            <ons-card>
-              質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？
-            </ons-card>
-          </span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/manSample.jpeg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title">タナカタロウ</span>
-          <span class="list-item__subtitle">
-            <ons-card>
-              質問してもいいですよ
-            </ons-card>
-          </span>
-        </div>
-      </ons-list-item>
+      </ons-list-header>
+      <div id="productDetailCommentZone">
+        <ons-list-item>
+          <div class="left">
+            <img
+              class="list-item__thumbnail"
+              src="img/manSample.jpeg"
+              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+            />
+          </div>
+          <div class="center" style="width:50%;">
+            <span class="list-item__title">タナカタロウ</span>
+            <span class="list-item__subtitle">
+              <ons-card>
+                質問してもいいですよ
+              </ons-card>
+            </span>
+          </div>
+        </ons-list-item>
+      </div>
       <ons-list-item>
         <ons-row style="padding:1em;">
           <ons-button
             class="large-button-gray"
             style="margin:0 auto;"
-            onclick="myNavigator.bringPageTop('html/productComment.html');"
+            onclick="myNavigator.bringPageTop('html/product/productComment.html');"
             >全てのコメントを見る</ons-button
           >
         </ons-row>
@@ -327,7 +282,90 @@
       </ons-card>
     </div>
   </ons-modal>
+  <input type="hidden" id="productDetailId" />
   <script>
+    function favoCheck() {
+      showLoad();
+      var productId = $("#productDetailId").val();
+      var user = firebase.auth().currentUser;
+      var myUserId = user.uid;
+      db.collection("products")
+        .doc(productId)
+        .get()
+        .then(function(result) {
+          var productUserId = result.data().userId;
+          if (myUserId == productUserId) {
+            ons.notification.alert({
+              title: "注意",
+              message: "自分の商品にいいねはできません"
+            });
+            var myProduct = true;
+          } else {
+            var myProduct = false;
+          }
+          return myProduct;
+        })
+        .then(function(myProduct) {
+          if (myProduct == true) return;
+          db.collection("favorite")
+            .where("favoUserId", "==", myUserId)
+            .where("productId", "==", productId)
+            .get()
+            .then(function(result) {
+              if (result.size > 0) {
+                // いいね解除した
+                result.forEach(result => {
+                  var favoDocId = result.id;
+                  db.collection("favorite")
+                    .doc(favoDocId)
+                    .delete()
+                    .then(function() {
+                      console.log("Document successfully deleted!");
+                      hideLoad();
+                      $(".fa-heart").removeClass("favoOn");
+                      var favoCount = Number($("#favoCount").html()) - 1;
+                      $("#favoCount").html(favoCount);
+                      ons.notification.alert({
+                        title: "解除",
+                        message: "いいね解除しました"
+                      });
+                    })
+                    .catch(function(error) {
+                      console.log(error);
+                      hideLoad();
+                    });
+                });
+              } else {
+                //いいねする
+                db.collection("favorite")
+                  .doc()
+                  .set(
+                    {
+                      favoUserId: myUserId,
+                      productId: productId,
+                      createTime: new Date()
+                    },
+                    { merge: true }
+                  )
+                  .then(function(result) {
+                    $(".fa-heart").addClass("favoOn");
+                    var favoCount = Number($("#favoCount").html()) + 1;
+                    $("#favoCount").html(favoCount);
+                    hideLoad();
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    hideLoad();
+                  });
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+              hideLoad();
+            });
+        });
+    }
+
     function showProductDetailModal() {
       var modal = document.querySelector("#productDetailModal");
       modal.show();
@@ -340,6 +378,7 @@
 
     function productInfo(docId) {
       showLoad();
+
       var docRef = db.collection("products").doc(docId);
 
       docRef
@@ -367,6 +406,9 @@
           docRef.get().then(function(doc) {
             $("#productDetailUserName").html(doc.data().username);
             $("#productDetailText").html(doc.data().text);
+            $("#productDetailMyPoint").html(
+              doc.data().point + "ポイント持っています"
+            );
             // ユーザー写真取得
             ref = firebase
               .storage()
@@ -384,6 +426,7 @@
           var user = firebase.auth().currentUser;
           var myUserId = user.uid;
           if (myUserId == productData.userId) {
+            console.log("自分");
             $("#productDetailButton").html("変更");
             document.getElementById(
               "productDetailButton"
@@ -395,11 +438,147 @@
                 "');"
             );
           }
-          hideLoad();
+          return docId;
+        })
+        .then(function(productId) {
+          $("#productDetailId").val(productId);
+          var user = firebase.auth().currentUser;
+          var myUserId = user.uid;
+          db.collection("favorite")
+            .where("productId", "==", productId)
+            .where("favoUserId", "==", myUserId)
+            .get()
+            .then(function(result) {
+              if (result.size > 0) {
+                $(".fa-heart").addClass("favoOn");
+              } else {
+                $(".fa-heart").removeClass("favoOn");
+              }
+            });
+          db.collection("favorite")
+            .where("productId", "==", productId)
+            .get()
+            .then(function(result) {
+              if (result.size > 0) {
+                $("#favoCount").html(result.size);
+              } else {
+                $("#favoCount").html("0");
+              }
+            });
+          db.collection("products")
+            .doc(productId)
+            .collection("comments")
+            .get()
+            .then(function(result) {
+              if (result.size > 0) {
+                $("#commentCount").html(result.size);
+              } else {
+                $("#commentCount").html("0");
+              }
+            });
+
+          return productId;
+        })
+        .then(function(productId) {
+          var nowDataCount = 0;
+          $("#productDetailCommentZone").empty();
+          db.collection("products")
+            .doc(productId)
+            .collection("comments")
+            .orderBy("createTime", "desc")
+            .limit(3)
+            .get()
+            .then(function(commentGetResults) {
+              if (commentGetResults.size > 0) {
+                commentGetResults.forEach(commentGetResult => {
+                  nowDataCount++;
+                  productDetailCommenIndicate(
+                    commentGetResult.data().userId,
+                    commentGetResult.data().comment,
+                    commentGetResult.data().createTime
+                  );
+                });
+                hideLoad();
+              } else {
+                hideLoad();
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+              alert("コメント取得失敗");
+              hideLoad();
+            });
         })
         .catch(function(error) {
           hideLoad();
           console.log("Error getting document:", error);
+        });
+    }
+    function productDetailCommenIndicate(commentUserId, comment, createTime) {
+      //「月」を取得する
+      var createTime = new Date(createTime * 1000);
+      var MM = createTime.getMonth() + 1;
+      //「日」を取得する
+      var DD = createTime.getDate();
+      //「時」を取得する
+      var hh = createTime.getHours();
+      //「分」を取得する
+      var mm = createTime.getMinutes();
+      var time = MM + "月" + DD + "日 " + hh + ":" + mm;
+      var docRef = db.collection("users").doc(commentUserId);
+      docRef
+        .get()
+        .then(function(doc) {
+          var commentUserName = doc.data().username;
+          firebase
+            .storage()
+            .ref()
+            .child("profilePicture/" + commentUserId)
+            .getDownloadURL()
+            .then(function(url) {
+              if (url == "") {
+                url = "img / userSampleImageMan.png";
+              }
+              var commentlist = "";
+              commentlist =
+                `
+                <ons-list-item>
+                  <div class="left">
+                    <img
+                      class="list-item__thumbnail"
+                      src="` +
+                url +
+                `"
+                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                    />
+                  </div>
+                  <div class="center" style="width:50%;">
+                    <span class="list-item__title">` +
+                commentUserName +
+                `</span>
+                    <span class="list-item__subtitle">
+                      <ons-card>
+                        ` +
+                comment +
+                `<br><br>
+                        <span style="font-size:0.85em;margin-top:5px;"><i class="far fa-clock" style="margin-right:5px;"></i>` +
+                time +
+                `</span>
+                  </ons-card>
+                    </span>
+                  </div>
+                </ons-list-item>
+              `;
+              $("#productDetailCommentZone").append(commentlist);
+            })
+            .catch(function(error) {
+              console.log("Error getting document:", error);
+              hideLoad();
+            });
+        })
+        .catch(function(error) {
+          console.log("Error getting document:", error);
+          hideLoad();
         });
     }
 

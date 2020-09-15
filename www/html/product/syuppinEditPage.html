@@ -250,13 +250,11 @@
       var howtotalkother = $("#howToTalkOtherEdit").val();
       var time = $("#syuppinTimeEdit").val();
       var price = $("#syuppinPriceEdit").val();
-      var productUid = getCurrentTime();
       var productDocumentUid = $("#productDocumentUid").val();
 
       var user = firebase.auth().currentUser;
       var setProductData = {
-        productUid: productUid,
-        createTime: new Date(),
+        updateTime: new Date(),
         category1: category1,
         category2: category2,
         category3: category3,
@@ -328,6 +326,23 @@
               window.location.href = "index.html";
             }
           });
+        })
+        .then(function() {
+          db.collection("favorite")
+            .where("productId", "==", productDocumentUid)
+            .get()
+            .then(function(results) {
+              if (results.size > 0) {
+                results.forEach(result => {
+                  var favoDocId = result.data().id;
+                  db.collection("favorite")
+                    .doc(favoDocId)
+                    .delete();
+                });
+              } else {
+                hideLoad();
+              }
+            });
         })
         .catch(function(error) {
           console.error("Error removing document: ", error);

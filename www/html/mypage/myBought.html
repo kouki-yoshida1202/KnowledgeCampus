@@ -238,15 +238,13 @@
   </div>
   <script>
     ("use strict");
-    document.addEventListener("init", function(event) {
-      if (event.target.matches("#myBoughtPage")) {
-        var chatCarousel = document.getElementById("myBoughtCarousel");
-        chatCarousel.addEventListener("postchange", function(e) {
-          // alert(e.activeIndex);
-          tabMyBoughtCarouselChange(e.activeIndex);
-        });
-      }
-    });
+    setTimeout(function(){
+      var chatCarousel = document.getElementById("myBoughtCarousel");
+      chatCarousel.addEventListener("postchange", function (e) {
+        // alert(e.activeIndex);
+        tabMyBoughtCarouselChange(e.activeIndex);
+      });
+    },100);
 
     function tabMyBoughtCarouselChange(carouselIndex) {
       console.log(carouselIndex);

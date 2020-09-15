@@ -30,102 +30,30 @@
     <div class="center" id="toolbar-title"></div>
   </ons-toolbar>
   <ons-bottom-toolbar style="line-height: 35px;height:80px">
-    <ons-row>
+    <ons-row style="padding-top:5px;">
       <ons-col
-        width="100%"
-        style="text-align: center;font-size:0.9em;color:white;font-weight: bold;background: #0799d7;line-height: 25px;margin-bottom:5px;"
+        width="80%"
+        style="text-align: center;font-size:1.0em;"
         vertical-align="center"
-        >500ポイント持っています</ons-col
       >
-    </ons-row>
-    <ons-row>
-      <ons-col
-        width="50%"
-        style="text-align: center;font-size:1.2em;"
-        vertical-align="center"
-        >¥3000/30分</ons-col
-      >
-      <ons-col width="50%" style="text-align: center;" vertical-align="center">
+        <ons-input
+          id="productCommentInput"
+          style="background-color: #efeff4;width:90%;"
+          placeholder="コメント入力欄"
+        ></ons-input>
+      </ons-col>
+      <ons-col width="20%" style="text-align: center;" vertical-align="center">
         <ons-button
           class="large-button-orange"
-          style="padding:5px 2em;font-size:1.2em;"
-          onclick="showModal()"
-          >購入
+          style="font-size:1.0em;"
+          onclick="commentSubmit()"
+          >送信
         </ons-button>
       </ons-col>
     </ons-row>
   </ons-bottom-toolbar>
   <div class="content">
-    <ons-list>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title">ハナコ</span>
-          <span class="list-item__subtitle">
-            <ons-card>
-              質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？
-            </ons-card>
-          </span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/manSample.jpeg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title">タナカタロウ</span>
-          <span class="list-item__subtitle">
-            <ons-card>
-              質問してもいいですよ
-            </ons-card>
-          </span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/image61.jpg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title">ハナコ</span>
-          <span class="list-item__subtitle">
-            <ons-card>
-              質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？質問してもよろしいですか？
-            </ons-card>
-          </span>
-        </div>
-      </ons-list-item>
-      <ons-list-item>
-        <div class="left">
-          <img
-            class="list-item__thumbnail"
-            src="img/manSample.jpeg"
-            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-          />
-        </div>
-        <div class="center" style="width:50%;">
-          <span class="list-item__title">タナカタロウ</span>
-          <span class="list-item__subtitle">
-            <ons-card>
-              質問してもいいですよ
-            </ons-card>
-          </span>
-        </div>
-      </ons-list-item>
-    </ons-list>
+    <ons-list id="commentList" style="padding-bottom:100px;"> </ons-list>
   </div>
   <ons-modal direction="up" id="productCommentModal">
     <div style="text-align: center">
@@ -239,7 +167,18 @@
       </ons-card>
     </div>
   </ons-modal>
+  <input type="hidden" id="commentPageProductId" />
   <script>
+    setTimeout(function() {
+      $("#commentPageProductId").val($("#productDetailId").val());
+      commentPageIndicate();
+    }, 100);
+    $("ons-bottom-toolbar").focusin(function(e) {
+      $(this).animate({ height: "500px" }, 500);
+    });
+    $("ons-bottom-toolbar").focusout(function(e) {
+      $(this).animate({ height: "80px" }, 500);
+    });
     function showModal() {
       var modal = document.querySelector("#productCommentModal");
       modal.show();
@@ -248,6 +187,142 @@
     function hideModal() {
       var modal = document.querySelector("#productCommentModal");
       modal.hide();
+    }
+
+    function commentSubmit() {
+      showLoad();
+      var commentInput = $("#productCommentInput").val();
+      var productId = $("#commentPageProductId").val();
+      var user = firebase.auth().currentUser;
+      var userId = user.uid;
+      var createTime = new Date();
+      db.collection("products")
+        .doc(productId)
+        .collection("comments")
+        .doc()
+        .set({
+          comment: commentInput,
+          createTime: createTime,
+          userId: userId
+        })
+        .then(function(result) {
+          commentIndicate(userId, commentInput, 1, 1, createTime);
+        })
+        .catch(function(error) {
+          console.log(error);
+          alert("コメント失敗");
+        });
+    }
+
+    function commentPageIndicate() {
+      showLoad();
+      var nowDataCount = 0;
+      $("#commentList").empty();
+      var productId = $("#commentPageProductId").val();
+      var user = firebase.auth().currentUser;
+      var userId = user.uid;
+      db.collection("products")
+        .doc(productId)
+        .collection("comments")
+        .orderBy("createTime", "asc")
+        .get()
+        .then(function(commentGetResults) {
+          if (commentGetResults.size > 0) {
+            commentGetResults.forEach(commentGetResult => {
+              nowDataCount++;
+              commentIndicate(
+                commentGetResult.data().userId,
+                commentGetResult.data().comment,
+                nowDataCount,
+                commentGetResults.size,
+                commentGetResult.data().createTime
+              );
+            });
+          } else {
+            hideLoad();
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          alert("コメント取得失敗");
+          hideLoad();
+        });
+    }
+
+    function commentIndicate(
+      commentUserId,
+      comment,
+      nowDataCount,
+      size,
+      createTime
+    ) {
+      //「月」を取得する
+      var createTime = new Date(createTime * 1000);
+      var MM = createTime.getMonth() + 1;
+      //「日」を取得する
+      var DD = createTime.getDate();
+      //「時」を取得する
+      var hh = createTime.getHours();
+      //「分」を取得する
+      var mm = createTime.getMinutes();
+      var time = MM + "月" + DD + "日 " + hh + ":" + mm;
+      var docRef = db.collection("users").doc(commentUserId);
+      docRef
+        .get()
+        .then(function(doc) {
+          var commentUserName = doc.data().username;
+          firebase
+            .storage()
+            .ref()
+            .child("profilePicture/" + commentUserId)
+            .getDownloadURL()
+            .then(function(url) {
+              if (url == "") {
+                url = "img / userSampleImageMan.png";
+              }
+              var commentlist = "";
+              commentlist =
+                `
+                <ons-list-item>
+                  <div class="left">
+                    <img
+                      class="list-item__thumbnail"
+                      src="` +
+                url +
+                `"
+                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                    />
+                  </div>
+                  <div class="center" style="width:50%;">
+                    <span class="list-item__title">` +
+                commentUserName +
+                `</span>
+                    <span class="list-item__subtitle">
+                      <ons-card>
+                        ` +
+                comment +
+                `<br><br><span style="font-size:0.85em;margin-top:5px;"><i class="far fa-clock" style="margin-right:5px;"></i>` +
+                time +
+                `</span>
+                      </ons-card>
+                    </span>
+                  </div>
+                </ons-list-item>
+              `;
+              $("#commentList").prepend(commentlist);
+              if (nowDataCount == size) {
+                hideLoad();
+              }
+            })
+            .catch(function(error) {
+              console.log("Error getting document:", error);
+              hideLoad();
+            });
+        })
+        .catch(function(error) {
+          console.log("Error getting document:", error);
+          hideLoad();
+        });
     }
   </script>
 </ons-page>

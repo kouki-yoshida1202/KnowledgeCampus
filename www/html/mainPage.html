@@ -619,16 +619,14 @@
     });
 
     ("use strict");
-    document.addEventListener("init", function(event) {
-      if (event.target.matches("#mainPage")) {
-        productGet();
-        var mainCarousel = document.getElementById("mainCarousel");
-        mainCarousel.addEventListener("postchange", function(e) {
-          // alert(e.activeIndex);
-          tabCarouselChange(e.activeIndex);
-        });
-      }
-    });
+    setTimeout(function(){
+      productGet();
+      var mainCarousel = document.getElementById("mainCarousel");
+      mainCarousel.addEventListener("postchange", function (e) {
+        // alert(e.activeIndex);
+        tabCarouselChange(e.activeIndex);
+      });
+    },100);
 
     function tabCarouselChange(carouselIndex) {
       var test = $("#tabCarousel ons-carousel-item").width();
@@ -705,70 +703,75 @@
             ref = firebase
               .storage()
               .ref()
-              .child("profilePicture/" + user["uid"]);
-            ref.getDownloadURL().then(url => {
-              if (url == "") {
-                url = "img / userSampleImageMan.png";
-              }
-              var product =
-                `
-            <div style="text-align: center;width:47.5%;padding:0.25em;">
-              <ons-card class="mainCard" onclick="giftDetailJump('` +
-                docId +
-                `')">
-                <img class="user_icon_mainPage" src="` +
-                url +
-                `" alt="" />
-                <p class="mainUserName">` +
-                username +
-                `</p>
-                <p class="mainReview">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <div style="display: flex;justify-content: center;align-items: center;height:38px;border: 1px solid;border-radius: 10px;">
-                <p class="mainPageItemText">` +
-                data.title +
-                `</p></div>
-                <p>
-                  <span class="salaly">
-                    ¥` +
-                data.price +
-                `/` +
-                data.time +
-                `
-                  </span>
-                  <span class="howto">
-                    ` +
-                data.howtotalk +
-                `
-                  </span>
-                </p>
-              </ons-card>
-            </div>
-      `;
-
-              $("#allProduct").append(product);
-              if (data.category1 == "キャリア") {
-                $("#careerProduct").append(product);
-              } else if (data.category1 == "学業") {
-                $("#studyProduct").append(product);
-              } else if (data.category1 == "ビジネス") {
-                $("#businessProduct").append(product);
-              }
-              if (nowDataCount == size) {
-                if (selfReload != "selfReload") {
-                  hideLoad();
-                } else {
-                  done();
+              .child("profilePicture/" + data.userId);
+            ref
+              .getDownloadURL()
+              .then(url => {
+                if (url == "") {
+                  url = "img / userSampleImageMan.png";
                 }
-              }
-            });
+                return url;
+              })
+              .then(function(url) {
+                var product =
+                  `
+              <div style="text-align: center;width:47.5%;padding:0.25em;">
+                <ons-card class="mainCard" onclick="giftDetailJump('` +
+                  docId +
+                  `')">
+                  <img class="user_icon_mainPage" src="` +
+                  url +
+                  `" alt="" />
+                  <p class="mainUserName">` +
+                  username +
+                  `</p>
+                  <p class="mainReview">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <!-- <span class="reviewAverage">3.0</span> -->
+                    <span>(10)</span>
+                  </p>
+                  <div style="display: flex;justify-content: center;align-items: center;height:38px;border: 1px solid;border-radius: 10px;">
+                  <p class="mainPageItemText">` +
+                  data.title +
+                  `</p></div>
+                  <p>
+                    <span class="salaly">
+                      ¥` +
+                  data.price +
+                  `/` +
+                  data.time +
+                  `
+                    </span>
+                    <span class="howto">
+                      ` +
+                  data.howtotalk +
+                  `
+                    </span>
+                  </p>
+                </ons-card>
+              </div>
+            `;
+
+                $("#allProduct").append(product);
+                if (data.category1 == "キャリア") {
+                  $("#careerProduct").append(product);
+                } else if (data.category1 == "学業") {
+                  $("#studyProduct").append(product);
+                } else if (data.category1 == "ビジネス") {
+                  $("#businessProduct").append(product);
+                }
+                if (nowDataCount == size) {
+                  if (selfReload != "selfReload") {
+                    hideLoad();
+                  } else {
+                    done();
+                  }
+                }
+              });
           } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
@@ -782,16 +785,11 @@
     function giftDetailJump(docId) {
       console.log(docId);
       myNavigator.bringPageTop("html/product/productDetail.html");
-      document.addEventListener(
-        "init",
-        function(event) {
-          if (event.target.matches("#productDetailPage")) {
-            // ons.notification.alert("ページ1が初期化されました");
-            productInfo(docId);
-          }
-        },
-        false
-      );
+      setTimeout(function() {
+        console.log("aiu");
+        // ons.notification.alert("ページ1が初期化されました");
+        productInfo(docId);
+      }, 100);
     }
   </script>
 </ons-page>

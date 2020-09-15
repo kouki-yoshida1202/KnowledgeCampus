@@ -23,9 +23,9 @@
       var category1 = $("#syuppinGenrePage3InputFirst").val();
       var category2 = $("#syuppinGenrePage3InputSecond").val();
 
-      myNavigator.popPage().then(function() {
-        myNavigator.popPage().then(function() {
-          myNavigator.popPage().then(function() {
+      myNavigator.popPage({ animation: "none" }).then(function() {
+        myNavigator.popPage({ animation: "none" }).then(function() {
+          myNavigator.popPage({ animation: "default" }).then(function() {
             // 新規か変更かの判断
             if (
               $("#productDocumentUid").val() == "" ||

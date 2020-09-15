@@ -238,12 +238,11 @@
       var howtotalkother = $("#howToTalkOther").val();
       var time = $("#syuppinTime").val();
       var price = $("#syuppinPrice").val();
-      var productUid = getCurrentTime();
 
       var user = firebase.auth().currentUser;
       var setProductData = {
-        productUid: productUid,
         createTime: new Date(),
+        updateTime: new Date(),
         category1: category1,
         category2: category2,
         category3: category3,
@@ -284,20 +283,6 @@
             message: "出品に失敗しました。"
           });
         });
-    }
-
-    //yyyymmddhhmmssでuid作成
-    function getCurrentTime() {
-      var now = new Date();
-      var res =
-        "" +
-        now.getFullYear() +
-        padZero(now.getMonth() + 1) +
-        padZero(now.getDate()) +
-        padZero(now.getHours()) +
-        padZero(now.getMinutes()) +
-        padZero(now.getSeconds());
-      return res;
     }
 
     //先頭ゼロ付加

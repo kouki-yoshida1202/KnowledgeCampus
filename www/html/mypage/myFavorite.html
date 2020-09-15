@@ -4,6 +4,7 @@
     #myFavoritePage .fa-comment-dots {
       margin-right: 0.5rem;
     }
+
     #myFavoritePage .fa-comment-dots {
       margin-left: 1rem;
     }
@@ -21,82 +22,127 @@
     </div>
   </ons-toolbar>
   <div class="content">
-    <ons-list
-      style="background-image: none;"
-      onclick="myNavigator.bringPageTop('html/other/womanPage.html');"
-    >
-      <ons-list-item>
-        <ons-row>
-          <ons-col width="20%" vertical-align="center">
-            <img
-              class="list-item__thumbnail"
-              src="img/image61.jpg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </ons-col>
-          <ons-col width="70%" vertical-align="center">
-            就活教えます<br />¥3000 <br />
-            <p style="margin-bottom:0px;">
-              <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
-            </p>
-          </ons-col>
-          <ons-col width="10%" vertical-align="center">＞</ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col width="20%" vertical-align="center">
-            <img
-              class="list-item__thumbnail"
-              src="img/image61.jpg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </ons-col>
-          <ons-col width="70%" vertical-align="center">
-            就活教えます<br />¥3000 <br />
-            <p style="margin-bottom:0px;">
-              <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
-            </p>
-          </ons-col>
-          <ons-col width="10%" vertical-align="center">＞</ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col width="20%" vertical-align="center">
-            <img
-              class="list-item__thumbnail"
-              src="img/image61.jpg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </ons-col>
-          <ons-col width="70%" vertical-align="center">
-            就活教えます<br />¥3000 <br />
-            <p style="margin-bottom:0px;">
-              <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
-            </p>
-          </ons-col>
-          <ons-col width="10%" vertical-align="center">＞</ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col width="20%" vertical-align="center">
-            <img
-              class="list-item__thumbnail"
-              src="img/image61.jpg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </ons-col>
-          <ons-col width="70%" vertical-align="center">
-            就活教えます<br />¥3000 <br />
-            <p style="margin-bottom:0px;">
-              <i class="far fa-heart"></i>3<i class="far fa-comment-dots"></i>4
-            </p>
-          </ons-col>
-          <ons-col width="10%" vertical-align="center">＞</ons-col>
-        </ons-row>
-      </ons-list-item>
-    </ons-list>
+    <ons-list id="myFavoriteList" style="background-image: none;"> </ons-list>
   </div>
+  <script>
+    favoriteGet();
+    function favoriteGet() {
+      showLoad();
+      var user = firebase.auth().currentUser;
+      var userId = user.uid;
+      $("#myFavoriteList").empty();
+      var nowDataCount = 0;
+      let favorite = db.collection("favorite");
+      favorite
+        .where("favoUserId", "==", userId)
+        .orderBy("createTime", "desc")
+        .get()
+        .then(results => {
+          if (results.size > 0) {
+            results.forEach(result => {
+              nowDataCount++;
+              favoriteIndicate(result.data(), nowDataCount, results.size);
+            });
+          } else {
+            hideLoad();
+          }
+        })
+        .catch(error => {
+          console.log(`データの取得に失敗しました (${error})`);
+          hideLoad();
+        });
+    }
+
+    function favoriteIndicate(favoResult, nowDataCount, size) {
+      console.log(nowDataCount, size);
+      console.log(favoResult.productId);
+      db.collection("favorite")
+        .where("productId", "==", favoResult.productId)
+        .get()
+        .then(function(result) {
+          return result.size;
+        })
+        .then(function(favoCount) {
+          db.collection("products")
+            .doc(favoResult.productId)
+            .get()
+            .then(function(productResult) {
+              ref = firebase
+                .storage()
+                .ref()
+                .child("profilePicture/" + productResult.data().userId);
+              ref
+                .getDownloadURL()
+                .then(url => {
+                  if (url == "") {
+                    url = "img / userSampleImageMan.png";
+                  }
+                  return url;
+                })
+                .then(function(url) {
+                  var dataSet = [favoCount, productResult, url];
+                  return dataSet;
+                })
+                .then(function(dataSet) {
+                  console.log(dataSet);
+                  var favoCount = dataSet[0];
+                  var data = dataSet[1];
+                  console.log(data.id);
+                  var url = dataSet[2];
+                  var favolist = "";
+                  favolist +=
+                    `
+              <ons-list-item onclick="giftDetailJump('` +
+                    data.id +
+                    `')">
+                <ons-row>
+                  <ons-col width="20%" vertical-align="center">
+                    <img
+                      class="shitagakiImage list-item__thumbnail"
+                      src="` +
+                    url +
+                    `"
+                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                    />
+                  </ons-col>
+                  <ons-col width="70%" vertical-align="center">
+                    <p style="margin-bottom:0px;margin-top:0px;">` +
+                    data.data().title +
+                    `<br />¥` +
+                    data.data().price +
+                    `</p>
+                    <p style="margin-bottom:0px;">
+                      <i class="far fa-heart"></i>` +
+                    favoCount +
+                    `<i class="far fa-comment-dots"></i>4
+                    </p>
+                  </ons-col>
+                  <ons-col width="10%" vertical-align="center">＞</ons-col>
+                </ons-row>
+              </ons-list-item>
+          `;
+                  $("#myFavoriteList").append(favolist);
+                  if (nowDataCount == size) {
+                    hideLoad();
+                    console.log("最後");
+                  } else {
+                    console.log("最後通らん");
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                  hideLoad();
+                });
+            })
+            .catch(function(error) {
+              console.log(error);
+              hideLoad();
+            });
+        })
+        .catch(function(error) {
+          console.log(error);
+          hideLoad();
+        });
+    }
+  </script>
 </ons-page>
