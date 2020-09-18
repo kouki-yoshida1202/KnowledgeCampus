@@ -27,14 +27,10 @@
       style="text-align: center;font-size:1.2em;margin-top:0.5rem;margin-bottom:0.5rem;"
     ></p>
     <div>
-      <p style="text-align: center;width:100%;">
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOff.png" alt="" style="height:18px;" />
-        <span>(39)</span>
-      </p>
+      <p
+        id="myPageReview"
+        style="width:100%;display:flex;justify-content: center;"
+      ></p>
     </div>
     <p id="myPageText" class="navy" style="font-size:0.8em;"></p>
   </div>
@@ -142,6 +138,8 @@
     >
   </div>
   <script>
+    var user = firebase.auth().currentUser;
+
     function logoutOpen() {
       ons.notification.confirm({
         message: "ログアウトしますか？",
@@ -198,13 +196,28 @@
           if (doc.exists) {
             $("#myPageUserName").html(doc.data().username);
             $("#myPageText").html(doc.data().text);
-            var user = firebase.auth().currentUser;
+
             ref = firebase
               .storage()
               .ref()
-              .child("profilePicture/" + user["uid"]);
+              .child("profilePicture/" + userId);
             ref.getDownloadURL().then(url => {
               document.getElementById("myPageImage").src = url;
+            });
+            // var reviewInFo =
+            reviewControl(userId).then(function(result) {
+              $("#myPageReview").empty();
+              for (var i = 1; i < 6; i++) {
+                if (i > result[1]) {
+                  var star =
+                    '<img src="img/starOff.png" alt="" style="height:18px;margin-right:5px;" />';
+                } else {
+                  var star =
+                    '<img src="img/starOn.png" alt="" style="height:18px;margin-right:5px;" />';
+                }
+                $("#myPageReview").append(star);
+              }
+              $("#myPageReview").append("(" + result[0] + ")");
             });
           } else {
             // doc.data() will be undefined in this case
@@ -214,6 +227,11 @@
         .catch(function(error) {
           console.log("Error getting document:", error);
         });
+    }
+    function getAge() {
+      setTimeout(function() {
+        return 37;
+      }, 2000);
     }
   </script>
 </ons-page>

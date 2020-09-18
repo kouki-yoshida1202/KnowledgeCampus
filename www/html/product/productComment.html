@@ -168,16 +168,40 @@
     </div>
   </ons-modal>
   <input type="hidden" id="commentPageProductId" />
+  <input type="hidden" id="commentPageNowDataCountInput" />
   <script>
+    document.addEventListener(
+      "destroy",
+      function(event) {
+        if (event.target.matches("#productCommentPage")) {
+          giftDetailJump($("#commentPageProductId").val());
+        }
+      },
+      false
+    );
     setTimeout(function() {
       $("#commentPageProductId").val($("#productDetailId").val());
       commentPageIndicate();
+      let productCommentPage = document.querySelector("#productCommentPage");
+      original_main_height = productCommentPage.clientHeight;
     }, 100);
-    $("ons-bottom-toolbar").focusin(function(e) {
-      $(this).animate({ height: "500px" }, 500);
+
+    //ソフトウェアキーボード表示処理
+    window.addEventListener("keyboardWillShow", event => {
+      //画面の高さをキーボードの高さを差し引いた値とする
+      $("#productCommentPage").animate(
+        { height: original_main_height - event.keyboardHeight + "px" },
+        250
+      );
     });
-    $("ons-bottom-toolbar").focusout(function(e) {
-      $(this).animate({ height: "80px" }, 500);
+
+    //ソフトウェアキーボード非表示処理
+    window.addEventListener("keyboardWillHide", () => {
+      //画面の高さを元の高さに戻す
+      $("#productCommentPage").animate(
+        { height: original_main_height + "px" },
+        250
+      );
     });
     function showModal() {
       var modal = document.querySelector("#productCommentModal");
@@ -190,28 +214,77 @@
     }
 
     function commentSubmit() {
-      showLoad();
       var commentInput = $("#productCommentInput").val();
-      var productId = $("#commentPageProductId").val();
-      var user = firebase.auth().currentUser;
-      var userId = user.uid;
-      var createTime = new Date();
-      db.collection("products")
-        .doc(productId)
-        .collection("comments")
-        .doc()
-        .set({
-          comment: commentInput,
-          createTime: createTime,
-          userId: userId
-        })
-        .then(function(result) {
-          commentIndicate(userId, commentInput, 1, 1, createTime);
-        })
-        .catch(function(error) {
-          console.log(error);
-          alert("コメント失敗");
+      if (commentInput == "") {
+        ons.notification.alert({
+          message: "コメントが未入力です"
         });
+      } else {
+        showLoad();
+
+        var productId = $("#commentPageProductId").val();
+        var user = firebase.auth().currentUser;
+        var userId = user.uid;
+        var createTime = new Date();
+        db.collection("products")
+          .doc(productId)
+          .collection("comments")
+          .doc()
+          .set(
+            {
+              comment: commentInput,
+              createTime: createTime,
+              userId: userId
+            },
+            { merge: true }
+          )
+          .then(docRef => {
+            var createTime = firebase.firestore.Timestamp.fromDate(new Date());
+            console.log(createTime);
+            commentIndicate(userId, commentInput, 1, 1, createTime);
+            $("#productCommentInput").val("");
+            var nowDataCount = $("#commentPageNowDataCountInput").val() + 1;
+            var commentlist = "";
+            commentlist =
+              `
+                <ons-list-item>
+                  <div class="left">
+                    <img
+                      id="commentImage_` +
+              nowDataCount +
+              `"
+                      class="list-item__thumbnail"
+                      src="img/userSampleImageMan.png"
+                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                    />
+                  </div>
+                  <div class="center" style="width:50%;">
+                    <span id="commentUserName_` +
+              nowDataCount +
+              `"class="list-item__title"></span>
+                    <span class="list-item__subtitle">
+                      <ons-card id="comment_` +
+              nowDataCount +
+              `">
+                      </ons-card>
+                    </span>
+                  </div>
+                </ons-list-item>
+              `;
+            $("#commentList").prepend(commentlist);
+            commentIndicate(
+              userId,
+              commentInput,
+              nowDataCount,
+              nowDataCount,
+              createTime
+            );
+          })
+          .catch(function(error) {
+            console.log(error);
+            alert("コメント失敗");
+          });
+      }
     }
 
     function commentPageIndicate() {
@@ -230,6 +303,34 @@
           if (commentGetResults.size > 0) {
             commentGetResults.forEach(commentGetResult => {
               nowDataCount++;
+              var commentlist = "";
+              commentlist =
+                `
+                <ons-list-item>
+                  <div class="left">
+                    <img
+                      id="commentImage_` +
+                nowDataCount +
+                `"
+                      class="list-item__thumbnail"
+                      src="img/userSampleImageMan.png"
+                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                    />
+                  </div>
+                  <div class="center" style="width:50%;">
+                    <span id="commentUserName_` +
+                nowDataCount +
+                `"class="list-item__title"></span>
+                    <span class="list-item__subtitle">
+                      <ons-card id="comment_` +
+                nowDataCount +
+                `">
+                      </ons-card>
+                    </span>
+                  </div>
+                </ons-list-item>
+              `;
+              $("#commentList").prepend(commentlist);
               commentIndicate(
                 commentGetResult.data().userId,
                 commentGetResult.data().comment,
@@ -277,41 +378,17 @@
             .child("profilePicture/" + commentUserId)
             .getDownloadURL()
             .then(function(url) {
-              if (url == "") {
-                url = "img / userSampleImageMan.png";
-              }
-              var commentlist = "";
-              commentlist =
-                `
-                <ons-list-item>
-                  <div class="left">
-                    <img
-                      class="list-item__thumbnail"
-                      src="` +
-                url +
-                `"
-                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-                    />
-                  </div>
-                  <div class="center" style="width:50%;">
-                    <span class="list-item__title">` +
-                commentUserName +
-                `</span>
-                    <span class="list-item__subtitle">
-                      <ons-card>
-                        ` +
+              $("#commentImage_" + nowDataCount).attr("src", url);
+              $("#commentUserName_" + nowDataCount).html(commentUserName);
+              $("#comment_" + nowDataCount).html(
                 comment +
-                `<br><br><span style="font-size:0.85em;margin-top:5px;"><i class="far fa-clock" style="margin-right:5px;"></i>` +
-                time +
-                `</span>
-                      </ons-card>
-                    </span>
-                  </div>
-                </ons-list-item>
-              `;
-              $("#commentList").prepend(commentlist);
+                  `<br><br><span style="font-size:0.85em;margin-top:5px;"><i class="far fa-clock" style="margin-right:5px;"></i>` +
+                  time +
+                  `</span>`
+              );
               if (nowDataCount == size) {
                 hideLoad();
+                $("#commentPageNowDataCountInput").val(nowDataCount);
               }
             })
             .catch(function(error) {

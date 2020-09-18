@@ -164,6 +164,25 @@
       var title = $("#syuppinTitle").val();
       console.log(title);
     }
+    setTimeout(function() {
+      let syuppinPage = document.querySelector("#syuppinPage");
+      original_main_height = syuppinPage.clientHeight;
+    }, 100);
+
+    //ソフトウェアキーボード表示処理
+    window.addEventListener("keyboardWillShow", event => {
+      //画面の高さをキーボードの高さを差し引いた値とする
+      $("#syuppinPage").animate(
+        { height: original_main_height - event.keyboardHeight + "px" },
+        250
+      );
+    });
+
+    //ソフトウェアキーボード非表示処理
+    window.addEventListener("keyboardWillHide", () => {
+      //画面の高さを元の高さに戻す
+      $("#syuppinPage").animate({ height: original_main_height + "px" }, 250);
+    });
     $("#howToTalkOther").hide();
     $(".howtoTalk").change(function() {
       // 選択されているvalue属性値を取り出す

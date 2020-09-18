@@ -10,6 +10,19 @@
     #searchAfterPage .content ons-col {
       padding: 20px 10px;
     }
+    #searchAfterPage ons-card {
+      text-align: center;
+      padding: 7px;
+      margin: 0px;
+      height: 190px;
+      padding-top: 15px;
+      padding-bottom: 10px;
+    }
+    #searchAfterPage .mainReview {
+      font-size: 0.8em;
+      display: flex;
+      justify-content: center;
+    }
   </style>
   <ons-toolbar>
     <div class="left">
@@ -17,10 +30,10 @@
     </div>
     <div
       class="center"
-      id="toolbar-title"
+      id="searchAfterToolbar"
       style="display:flex;align-items: center;justify-content: center;"
     >
-      学業で検索
+      検索
     </div>
     <div class="right">
       <i
@@ -30,146 +43,11 @@
       ></i>
     </div>
   </ons-toolbar>
-  <div class="content">
-    <ons-row>
-      <ons-col vertical-align="center" width="50%" style="text-align: center;">
-        <img class="user_icon_mainPage" src="img/manSample.jpeg" alt="" />
-        <p>田中太郎</p>
-        <p>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="far fa-star"></i>
-          <i class="far fa-star"></i>
-          <!-- <span class="reviewAverage">3.0</span> -->
-          <span>(10)</span>
-        </p>
-        <p class="mainPageItemText">就活の必勝法教えます！</p>
-        <p>
-          <span class="salaly">
-            ¥3000/30分
-          </span>
-          <span class="howto">
-            zoom
-          </span>
-        </p>
-      </ons-col>
-      <ons-col vertical-align="center" width="50%" style="text-align: center;">
-        <img class="user_icon_mainPage" src="img/manSample.jpeg" alt="" />
-        <p>田中太郎</p>
-        <p>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="far fa-star"></i>
-          <i class="far fa-star"></i>
-          <!-- <span class="reviewAverage">3.0</span> -->
-          <span>(10)</span>
-        </p>
-        <p class="mainPageItemText">就活の必勝法教えます！</p>
-        <p>
-          <span class="salaly">
-            ¥3000/30分
-          </span>
-          <span class="howto">
-            zoom
-          </span>
-        </p>
-      </ons-col>
-    </ons-row>
-    <ons-row>
-      <ons-col vertical-align="center" width="50%" style="text-align: center;">
-        <img class="user_icon_mainPage" src="img/manSample.jpeg" alt="" />
-        <p>田中太郎</p>
-        <p>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="far fa-star"></i>
-          <i class="far fa-star"></i>
-          <!-- <span class="reviewAverage">3.0</span> -->
-          <span>(10)</span>
-        </p>
-        <p class="mainPageItemText">就活の必勝法教えます！</p>
-        <p>
-          <span class="salaly">
-            ¥3000/30分
-          </span>
-          <span class="howto">
-            zoom
-          </span>
-        </p>
-      </ons-col>
-      <ons-col vertical-align="center" width="50%" style="text-align: center;">
-        <img class="user_icon_mainPage" src="img/manSample.jpeg" alt="" />
-        <p>田中太郎</p>
-        <p>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="far fa-star"></i>
-          <i class="far fa-star"></i>
-          <!-- <span class="reviewAverage">3.0</span> -->
-          <span>(10)</span>
-        </p>
-        <p class="mainPageItemText">就活の必勝法教えます！</p>
-        <p>
-          <span class="salaly">
-            ¥3000/30分
-          </span>
-          <span class="howto">
-            zoom
-          </span>
-        </p>
-      </ons-col>
-    </ons-row>
-    <ons-row>
-      <ons-col vertical-align="center" width="50%" style="text-align: center;">
-        <img class="user_icon_mainPage" src="img/manSample.jpeg" alt="" />
-        <p>田中太郎</p>
-        <p>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="far fa-star"></i>
-          <i class="far fa-star"></i>
-          <!-- <span class="reviewAverage">3.0</span> -->
-          <span>(10)</span>
-        </p>
-        <p class="mainPageItemText">就活の必勝法教えます！</p>
-        <p>
-          <span class="salaly">
-            ¥3000/30分
-          </span>
-          <span class="howto">
-            zoom
-          </span>
-        </p>
-      </ons-col>
-      <ons-col vertical-align="center" width="50%" style="text-align: center;">
-        <img class="user_icon_mainPage" src="img/manSample.jpeg" alt="" />
-        <p>田中太郎</p>
-        <p>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="far fa-star"></i>
-          <i class="far fa-star"></i>
-          <!-- <span class="reviewAverage">3.0</span> -->
-          <span>(10)</span>
-        </p>
-        <p class="mainPageItemText">就活の必勝法教えます！</p>
-        <p>
-          <span class="salaly">
-            ¥3000/30分
-          </span>
-          <span class="howto">
-            zoom
-          </span>
-        </p>
-      </ons-col>
-    </ons-row>
-  </div>
+  <div
+    id="searchProduct"
+    class="content"
+    style="display: flex;justify-content: space-between;flex-wrap: wrap;"
+  ></div>
   <ons-popover direction="down" id="searchPopover" cancelable>
     <div style="padding: 10px; text-align: center;">
       <ons-row>

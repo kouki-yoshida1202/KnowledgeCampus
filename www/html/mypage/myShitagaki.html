@@ -69,50 +69,72 @@
           return result.size;
         })
         .then(function(favoCount) {
-          var shitagaki = "";
-          shitagaki +=
-            `
-          <ons-list-item onclick="giftDetailJump('` +
-            productId +
-            `')">
-            <ons-row>
-              <ons-col width="20%" vertical-align="center">
-                <img
-                  class="shitagakiImage list-item__thumbnail"
-                  src="img/userSampleImageMan.png"
-                  style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-                />
-              </ons-col>
-              <ons-col width="70%" vertical-align="center">
-                <p style="margin-bottom:0px;margin-top:0px;">` +
-            data.title +
-            `<br />¥` +
-            data.price +
-            `</p>
-                <p style="margin-bottom:0px;">
-                  <i class="far fa-heart"></i>` +
-            favoCount +
-            `<i class="far fa-comment-dots"></i>4
-                </p>
-              </ons-col>
-              <ons-col width="10%" vertical-align="center">＞</ons-col>
-            </ons-row>
-          </ons-list-item>
-      `;
-          $("#myShitagakiList").append(shitagaki);
-          if (nowDataCount == size) {
-            ref = firebase
-              .storage()
-              .ref()
-              .child("profilePicture/" + user["uid"]);
-            ref.getDownloadURL().then(url => {
-              if (url == "") {
-                url = "img / userSampleImageMan.png";
+          return favoCount;
+        })
+        .then(function(favoCount) {
+          db.collection("products")
+            .doc(productId)
+            .collection("comments")
+            .get()
+            .then(function(commentResults) {
+              var commentCount = commentResults.size;
+              var shitagaki = "";
+              shitagaki +=
+                `
+                  <ons-list-item onclick="giftDetailJump('` +
+                productId +
+                `')">
+                    <ons-row>
+                      <ons-col width="20%" vertical-align="center">
+                        <img
+                          class="shitagakiImage list-item__thumbnail"
+                          src="img/userSampleImageMan.png"
+                          style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                        />
+                      </ons-col>
+                      <ons-col width="70%" vertical-align="center">
+                        <p style="margin-bottom:0px;margin-top:0px;">` +
+                data.title +
+                `<br />¥` +
+                data.price +
+                `</p>
+                        <p style="margin-bottom:0px;">
+                          <i class="far fa-heart"></i>` +
+                favoCount +
+                `<i class="far fa-comment-dots"></i>` +
+                commentCount +
+                `
+                        </p>
+                      </ons-col>
+                      <ons-col width="10%" vertical-align="center">＞</ons-col>
+                    </ons-row>
+                  </ons-list-item>
+              `;
+              $("#myShitagakiList").append(shitagaki);
+              if (nowDataCount == size) {
+                firebase
+                  .storage()
+                  .ref()
+                  .child("profilePicture/" + user.uid)
+                  .getDownloadURL()
+                  .then(function(url) {
+                    return url;
+                  })
+                  .catch(function() {
+                    return (url = "img/userSampleImageMan.png");
+                  })
+                  .then(function(url) {
+                    console.log(url);
+                    var shitagakiImage = document.getElementsByClassName(
+                      "shitagakiImage"
+                    );
+                    for (var i = 0; i < shitagakiImage.length; i++) {
+                      shitagakiImage[i].src = url;
+                    }
+                  });
+                hideLoad();
               }
-              document.getElementsByClassName("shitagakiImage").src = url;
             });
-            hideLoad();
-          }
         });
     }
   </script>

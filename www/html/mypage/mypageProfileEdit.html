@@ -15,7 +15,7 @@
         style="width:100px;height:100px;object-fit:cover;border-radius: 50%;"
       />
       <br />
-      <input id="myImageInput" type="file" hidden />
+      <input id="myImageInput" type="file" hidden accept="image/*" />
       <p style="color:#0799d7;" onclick="$('#myImageInput').click();">
         写真を変更する
       </p>
@@ -60,7 +60,29 @@
   <script>
     var userId = firebase.auth().currentUser["uid"];
     var docRef = db.collection("users").doc(userId);
+    var fileData;
+    setTimeout(function() {
+      let mypageProfileEdit = document.querySelector("#mypageProfileEdit-page");
+      original_main_height = mypageProfileEdit.clientHeight;
+    }, 100);
 
+    //ソフトウェアキーボード表示処理
+    window.addEventListener("keyboardWillShow", event => {
+      //画面の高さをキーボードの高さを差し引いた値とする
+      $("#mypageProfileEdit-page").animate(
+        { height: original_main_height - event.keyboardHeight + "px" },
+        250
+      );
+    });
+
+    //ソフトウェアキーボード非表示処理
+    window.addEventListener("keyboardWillHide", () => {
+      //画面の高さを元の高さに戻す
+      $("#mypageProfileEdit-page").animate(
+        { height: original_main_height + "px" },
+        250
+      );
+    });
     docRef
       .get()
       .then(function(doc) {
@@ -89,6 +111,7 @@
         $("#myImageEdit").attr("src", e.target.result);
       };
       reader.readAsDataURL(e.target.files[0]);
+      fileData = e.target.files[0];
     });
 
     function profileEdit() {
@@ -114,25 +137,47 @@
           )
           .then(function() {
             console.log("Document successfully written!");
-            var imgs = document.querySelector("#myImageInput");
-            var uploads = [];
-            for (var file of imgs.files) {
-              //選択したファイルのファイル名を使うが、場合によってはかぶるので注意
-              var storageRef = firebase
-                .storage()
-                .ref("profilePicture/" + user["uid"]);
-              uploads.push(storageRef.put(file));
-            }
-            //すべての画像のアップロード完了を待つ
-            Promise.all(uploads).then(function() {
-              ons.notification.alert({
-                title: "成功",
-                message: "プロフィールを編集しました。"
-              });
-              myNavigator.popPage();
-              userInfo(user["uid"]);
-              hideLoad();
+
+            var imgs = document.querySelector("#myImageInput").files[0];
+            new Compressor(fileData, {
+              quality: 0.6,
+              maxWidth: 500,
+              maxHeight: 500,
+              mimeType: "image",
+              success(result) {
+                firebase
+                  .storage()
+                  .ref("profilePicture/" + user["uid"])
+                  .put(result)
+                  .then(function() {
+                    ons.notification.alert({
+                      title: "成功",
+                      message: "プロフィールを編集しました。"
+                    });
+                    myNavigator.popPage();
+                    userInfo(user["uid"]);
+                    hideLoad();
+                  });
+              },
+              error(err) {
+                console.log(err.message);
+              }
             });
+
+            // var imgs = document.querySelector("#myImageInput").files[0];
+            // firebase
+            //   .storage()
+            //   .ref("profilePicture/" + user["uid"])
+            //   .put(imgs)
+            //   .then(function() {
+            //     ons.notification.alert({
+            //       title: "成功",
+            //       message: "プロフィールを編集しました。"
+            //     });
+            //     myNavigator.popPage();
+            //     userInfo(user["uid"]);
+            //     hideLoad();
+            //   });
           })
           .catch(function(error) {
             console.error("Error writing document: ", error);

@@ -86,6 +86,7 @@
 
     .mainUserName {
       font-size: 0.9em;
+      line-height: 22px;
     }
 
     #mainPage ons-card {
@@ -98,6 +99,8 @@
     }
     #mainPage .mainReview {
       font-size: 0.8em;
+      display: flex;
+      justify-content: center;
     }
   </style>
   <ons-toolbar>
@@ -145,19 +148,19 @@
       initial-index="2"
       style="height:28px;border-bottom:1px solid #f0f0f0;"
     >
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div class="item-label">キャリア</div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div class="item-label">学業</div>
       </ons-carousel-item>
-      <ons-carousel-item class="active_tabCarousel">
+      <ons-carousel-item class="active_tabCarousel" style="min-height: 500px;">
         <div class="item-label">全て</div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div class="item-label">ランキング</div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div class="item-label">ビジネス</div>
       </ons-carousel-item>
     </ons-carousel>
@@ -211,121 +214,10 @@
             auto-refresh
             swipeable
             overscrollable
-            item-width="150px"
-            id="carousel"
+            item-width="160px"
+            id="allCategoryCarousel"
             style="padding-right:50px;"
           >
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#ffd43b;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#AEB3B5;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#BA6E40;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
           </ons-carousel>
           <ons-row>
             <h4
@@ -339,120 +231,9 @@
             swipeable
             overscrollable
             item-width="150px"
-            id="carousel"
+            id="studyCategoryCarousel"
             style="padding-right:50px;"
           >
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#ffd43b;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#AEB3B5;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#BA6E40;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
           </ons-carousel>
           <ons-row>
             <h4 style="padding-left:0.5rem;font-weight: bold;margin-top:1rem;">
@@ -464,120 +245,25 @@
             swipeable
             overscrollable
             item-width="150px"
-            id="carousel"
+            id="businessCategoryCarousel"
             style="padding-right:50px;"
           >
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#ffd43b;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#AEB3B5;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
-            <ons-carousel-item style="margin:5px;">
-              <div
-                vertical-align="center"
-                width="50%"
-                style="text-align: center;height:170px;position: relative;"
-              >
-                <img
-                  class="user_icon_mainPage"
-                  src="img/manSample.jpeg"
-                  alt=""
-                />
-                <p class="mainUserName">田中太郎</p>
-                <p>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <!-- <span class="reviewAverage">3.0</span> -->
-                  <span>(10)</span>
-                </p>
-                <p class="mainPageItemText">就活の必勝法教えます！</p>
-                <p>
-                  <span class="salaly">
-                    ¥3000/30分
-                  </span>
-                  <span class="howto">
-                    zoom
-                  </span>
-                </p>
-                <div
-                  style="position: absolute;top:0px;left:0px;color:white;font-weight: bold;"
-                >
-                  <i class="fas fa-crown fa-lg" style="color:#BA6E40;"></i>
-                </div>
-              </div>
-            </ons-carousel-item>
+          </ons-carousel>
+          <ons-row>
+            <h4
+              style="padding-left:0.5rem;font-weight: bold;margin-top:1.0rem;"
+            >
+              キャリア
+            </h4>
+          </ons-row>
+          <ons-carousel
+            auto-refresh
+            swipeable
+            overscrollable
+            item-width="150px"
+            id="careerCategoryCarousel"
+            style="padding-right:50px;"
+          >
           </ons-carousel>
         </div>
       </ons-carousel-item>
@@ -593,6 +279,106 @@
   </div>
 
   <script>
+    for (var i = 0; i < 12; i++) {
+      if (i == 0 || i == 3 || i == 6 || i == 9) {
+        var color = "#ffd43b";
+      } else if (i == 1 || i == 4 || i == 7 || i == 10) {
+        var color = "#AEB3B5";
+      } else {
+        var color = "#BA6E40";
+      }
+      var content =
+        `
+                <ons-carousel-item id="rankingCard_` +
+        i +
+        `"style="margin:5px;">
+                  <ons-card
+                    vertical-align="center"
+                    width="50%"
+                    style="text-align: center;height:190px;position: relative;"
+                  >
+                    <img
+                      id="rankingImage_` +
+        i +
+        `"
+                      class="user_icon_mainPage"
+                      src="img/userSampleImageMan.png"
+                      alt=""
+                    />
+                    <p id="rankingUserName_` +
+        i +
+        `"class="mainUserName"></p>
+                    <p id="rankingReview_` +
+        i +
+        `"class="mainReview">
+                      <img
+                        src="img/starOff.png"
+                        alt=""
+                        style="height:14px;margin-right:3px;"
+                      />
+                      <img
+                        src="img/starOff.png"
+                        alt=""
+                        style="height:14px;margin-right:3px;"
+                      />
+                      <img
+                        src="img/starOff.png"
+                        alt=""
+                        style="height:14px;margin-right:3px;"
+                      />
+                      <img
+                        src="img/starOff.png"
+                        alt=""
+                        style="height:14px;margin-right:3px;"
+                      />
+                      <img
+                        src="img/starOff.png"
+                        alt=""
+                        style="height:14px;margin-right:3px;"
+                      />
+                      (0)
+                    </p>
+                    <div
+                      style="display: flex;justify-content: center;align-items: center;height:38px;border: 1px solid;border-radius: 10px;"
+                    >
+                      <p id="rankingText_` +
+        i +
+        `"class="mainPageItemText"></p>
+                    </div>
+
+                    <p>
+                      <span id="rankingSalalyTime_` +
+        i +
+        `"class="salaly">
+
+                      </span>
+                      <span id="rankingHowTo_` +
+        i +
+        `"class="howto">
+
+                      </span>
+                    </p>
+                    <div
+                      style="position: absolute;top:10px;left:10px;color:white;font-weight: bold;"
+                    >
+                      <i class="fas fa-crown fa-lg" style="color:` +
+        color +
+        `";></i>
+                    </div>
+                  </ons-card>
+                </ons-carousel-item>
+                `;
+      if (i < 3) {
+        $("#allCategoryCarousel").append(content);
+      } else if (i > 2 && i < 6) {
+        $("#studyCategoryCarousel").append(content);
+      } else if (5 < i && i < 9) {
+        $("#businessCategoryCarousel").append(content);
+      } else if (8 < i) {
+        $("#careerCategoryCarousel").append(content);
+      }
+    }
+    var rankingIndicateCount = 0;
     ons.ready(function() {
       var pullHook = document.getElementById("pull-hook");
       pullHook.onAction = function(done) {
@@ -619,14 +405,14 @@
     });
 
     ("use strict");
-    setTimeout(function(){
+    setTimeout(function() {
       productGet();
       var mainCarousel = document.getElementById("mainCarousel");
-      mainCarousel.addEventListener("postchange", function (e) {
+      mainCarousel.addEventListener("postchange", function(e) {
         // alert(e.activeIndex);
         tabCarouselChange(e.activeIndex);
       });
-    },100);
+    }, 100);
 
     function tabCarouselChange(carouselIndex) {
       var test = $("#tabCarousel ons-carousel-item").width();
@@ -634,6 +420,12 @@
       $("#tabCarousel ons-carousel-item")
         .eq(carouselIndex)
         .addClass("active_tabCarousel");
+      if (carouselIndex == 3) {
+        if (rankingIndicateCount == 0) {
+          rankingIndicate();
+        }
+        rankingIndicateCount++;
+      }
     }
 
     ons.ready(function() {
@@ -644,7 +436,172 @@
       header.style.top = toolbar.clientHeight + "px";
       content.style.marginTop = 28 + "px";
     });
+    function rankingIndicate() {
+      showLoad();
+      var negotiations = db.collection("negotiations");
+      negotiations.get().then(function(negotiation) {
+        rankingForEachPromise(negotiation)
+          .then(function(rankingArray) {
+            return rankingArray;
+          })
+          .then(function(rankingArray) {
+            rankingArray.sort(function(a, b) {
+              if (a.count > b.count) {
+                return -1;
+              } else {
+                return 1;
+              }
+            });
+            return rankingArray;
+          })
+          .then(function(rankingArray) {
+            var businessRankingArray = rankingArray.filter(
+              item => item.category1 == "ビジネス"
+            );
 
+            var studyRankingArray = rankingArray.filter(
+              item => item.category1 == "学業"
+            );
+
+            var careerRankingArray = rankingArray.filter(
+              item => item.category1 == "キャリア"
+            );
+
+            rankingBorn(rankingArray, "All");
+            rankingBorn(businessRankingArray, "business");
+            rankingBorn(careerRankingArray, "career");
+            rankingBorn(studyRankingArray, "study");
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      });
+    }
+
+    function rankingBorn(rankingArray, category) {
+      if (category == "All") {
+        var rankingArrayCount = 0;
+        if (rankingArray.length < 3) {
+          var deleteCount = 0 + rankingArray.length;
+          for (deleteCount; deleteCount < 3; deleteCount++) {
+            $("#rankingCard_" + deleteCount).remove();
+          }
+        }
+      } else if (category == "business") {
+        var rankingArrayCount = 6;
+        if (rankingArray.length < 3) {
+          var deleteCount = 6 + rankingArray.length;
+          for (deleteCount; deleteCount < 9; deleteCount++) {
+            $("#rankingCard_" + deleteCount).remove();
+          }
+        }
+      } else if (category == "career") {
+        var rankingArrayCount = 9;
+        if (rankingArray.length < 3) {
+          var deleteCount = 9 + rankingArray.length;
+          for (deleteCount; deleteCount < 12; deleteCount++) {
+            $("#rankingCard_" + deleteCount).remove();
+          }
+        }
+      } else if (category == "study") {
+        var rankingArrayCount = 3;
+        if (rankingArray.length < 3) {
+          var deleteCount = 3 + rankingArray.length;
+          for (deleteCount; deleteCount < 6; deleteCount++) {
+            $("#rankingCard_" + deleteCount).remove();
+          }
+        }
+      }
+
+      rankingArray.forEach(function(rank) {
+        if (rankingArrayCount < rankingArrayCount + 3) {
+          db.collection("products")
+            .doc(rank.productId)
+            .get()
+            .then(function(productInfo) {
+              var userId = productInfo.data().userId;
+              var howto = productInfo.data().howtotalk;
+              var price = productInfo.data().price;
+              var time = productInfo.data().time;
+              var title = productInfo.data().title;
+              var productArray = [
+                userId,
+                howto,
+                price,
+                time,
+                title,
+                rankingArrayCount,
+                rank.productId
+              ];
+              rankingArrayCount++;
+              return productArray;
+            })
+            .then(function(productArray) {
+              var userId = productArray[0];
+              var howto = productArray[1];
+              var price = productArray[2];
+              var time = productArray[3];
+              var title = productArray[4];
+              var rankingArrayCount = productArray[5];
+              var productId = productArray[6];
+
+              db.collection("users")
+                .doc(userId)
+                .get()
+                .then(function(userInfo) {
+                  var username = userInfo.data().username;
+                  ref = firebase
+                    .storage()
+                    .ref()
+                    .child("profilePicture/" + userId);
+                  ref
+                    .getDownloadURL()
+                    .then(url => {
+                      // 画像取得できた
+                      return url;
+                    })
+                    .catch(function() {
+                      // 画像取得できないとき
+                      url = "img/userSampleImageMan.png";
+                      return url;
+                    })
+                    .then(function(url) {
+                      document.getElementById(
+                        "rankingCard_" + rankingArrayCount
+                      ).onclick = new Function(
+                        "giftDetailJump('" + productId + "')"
+                      );
+                      $("#rankingImage_" + rankingArrayCount).attr("src", url);
+                      $("#rankingUserName_" + rankingArrayCount).html(username);
+                      $("#rankingText_" + rankingArrayCount).html(title);
+                      $("#rankingSalalyTime_" + rankingArrayCount).html(
+                        "¥" + price + "/" + time
+                      );
+                      $("#rankingHowTo_" + rankingArrayCount).html(howto);
+                      reviewControl(userId).then(function(result) {
+                        $("#rankingReview_" + rankingArrayCount).empty();
+                        for (var i = 1; i < 6; i++) {
+                          if (i > result[1]) {
+                            var star =
+                              '<img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>';
+                          } else {
+                            var star =
+                              '<img src="img/starOn.png" alt=""style="height:14px;margin-right:3px;"/>';
+                          }
+                          $("#rankingReview_" + rankingArrayCount).append(star);
+                        }
+                        $("#rankingReview_" + rankingArrayCount).append(
+                          "(" + result[0] + ")"
+                        );
+                      });
+                    });
+
+                  hideLoad();
+                });
+            });
+        }
+      });
+    }
     function productGet(selfReload, done) {
       if (selfReload != "selfReload") {
         showLoad();
@@ -664,6 +621,56 @@
           if (results.size > 0) {
             results.forEach(doc => {
               nowDataCount++;
+              var product =
+                `
+              <div style="text-align: center;width:47.5%;padding:0.25em;">
+                <ons-card class="mainCard mainCard_` +
+                nowDataCount +
+                `">
+                  <img class="user_icon_mainPage mainImage_` +
+                nowDataCount +
+                `"alt="" />
+                  <p class="mainUserName mainUserName_` +
+                nowDataCount +
+                `"></p>
+                  <p class="mainReview_` +
+                nowDataCount +
+                `"class="mainReview">
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  (0)
+                  </p>
+                  <div style="display: flex;justify-content: center;align-items: center;height:38px;border: 1px solid;border-radius: 10px;">
+                  <p class="mainPageItemText mainTitle_` +
+                nowDataCount +
+                `"></p></div>
+                  <p>
+                    <span class="salaly mainSalalyTime_` +
+                nowDataCount +
+                `"></span>
+                    <span class="howto mainHowTo_` +
+                nowDataCount +
+                `"></span>
+                  </p>
+                </ons-card>
+              </div>
+            `;
+              $("#allProduct").append(product);
+              console.log(doc.data().category1);
+              if (doc.data().category1 == "キャリア") {
+                $("#careerProduct").append(product);
+              } else if (doc.data().category1 == "学業") {
+                console.log("学業");
+                $("#studyProduct").append(product);
+              } else if (doc.data().category1 == "ビジネス") {
+                $("#businessProduct").append(product);
+              } else {
+                console.log(doc.data().category1);
+              }
+
               productIndicate(
                 doc.id,
                 doc.data(),
@@ -700,70 +707,52 @@
             var url = "";
             var user = firebase.auth().currentUser;
             var username = doc.data().username;
-            ref = firebase
+            firebase
               .storage()
               .ref()
-              .child("profilePicture/" + data.userId);
-            ref
+              .child("profilePicture/" + data.userId)
               .getDownloadURL()
               .then(url => {
-                if (url == "") {
-                  url = "img / userSampleImageMan.png";
-                }
+                // 画像取得できた
+                return url;
+              })
+              .catch(function() {
+                // 画像取得できないとき
+                url = "img/userSampleImageMan.png";
                 return url;
               })
               .then(function(url) {
-                var product =
-                  `
-              <div style="text-align: center;width:47.5%;padding:0.25em;">
-                <ons-card class="mainCard" onclick="giftDetailJump('` +
-                  docId +
-                  `')">
-                  <img class="user_icon_mainPage" src="` +
-                  url +
-                  `" alt="" />
-                  <p class="mainUserName">` +
-                  username +
-                  `</p>
-                  <p class="mainReview">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <!-- <span class="reviewAverage">3.0</span> -->
-                    <span>(10)</span>
-                  </p>
-                  <div style="display: flex;justify-content: center;align-items: center;height:38px;border: 1px solid;border-radius: 10px;">
-                  <p class="mainPageItemText">` +
-                  data.title +
-                  `</p></div>
-                  <p>
-                    <span class="salaly">
-                      ¥` +
-                  data.price +
-                  `/` +
-                  data.time +
-                  `
-                    </span>
-                    <span class="howto">
-                      ` +
-                  data.howtotalk +
-                  `
-                    </span>
-                  </p>
-                </ons-card>
-              </div>
-            `;
-
-                $("#allProduct").append(product);
-                if (data.category1 == "キャリア") {
-                  $("#careerProduct").append(product);
-                } else if (data.category1 == "学業") {
-                  $("#studyProduct").append(product);
-                } else if (data.category1 == "ビジネス") {
-                  $("#businessProduct").append(product);
+                var btn4 = document.getElementsByClassName(
+                  "mainCard_" + nowDataCount
+                );
+                for (var i = 0; i < btn4.length; i++) {
+                  btn4[i].onclick = function() {
+                    giftDetailJump(docId);
+                  };
                 }
+                $(".mainUserName_" + nowDataCount).html(doc.data().username);
+                $(".mainImage_" + nowDataCount).attr("src", url);
+                $(".mainTitle_" + nowDataCount).html(data.title);
+                $(".mainSalalyTime_" + nowDataCount).html(
+                  "¥" + data.price + "/" + data.time
+                );
+                $(".mainHowTo_" + nowDataCount).html(data.howtotalk);
+                reviewControl(data.userId).then(function(result) {
+                  $(".mainReview_" + nowDataCount).empty();
+                  for (var i = 1; i < 6; i++) {
+                    if (i > result[1]) {
+                      var star =
+                        '<img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>';
+                    } else {
+                      var star =
+                        '<img src="img/starOn.png" alt=""style="height:14px;margin-right:3px;"/>';
+                    }
+                    $(".mainReview_" + nowDataCount).append(star);
+                  }
+                  $(".mainReview_" + nowDataCount).append(
+                    "(" + result[0] + ")"
+                  );
+                });
                 if (nowDataCount == size) {
                   if (selfReload != "selfReload") {
                     hideLoad();
@@ -783,13 +772,75 @@
     }
 
     function giftDetailJump(docId) {
-      console.log(docId);
       myNavigator.bringPageTop("html/product/productDetail.html");
       setTimeout(function() {
-        console.log("aiu");
-        // ons.notification.alert("ページ1が初期化されました");
         productInfo(docId);
       }, 100);
+    }
+    function reviewControl(userId) {
+      return new Promise(resolve => {
+        db.collection("users")
+          .doc(userId)
+          .collection("reviews")
+          .get()
+          .then(function(reviews) {
+            var reviewArray = [];
+            reviews.forEach(review => {
+              reviewArray.push(review.data().reviewCount);
+            });
+            var sum = 0;
+            var reviewQuantity = reviewArray.push();
+            reviewArray.forEach(function(v) {
+              sum += Number(v);
+            });
+            if (reviewQuantity > 0) {
+              var reviewAverage = sum / reviewQuantity;
+            } else {
+              var reviewAverage = 0;
+            }
+            var reviewInfo = [reviewQuantity, Math.round(reviewAverage)];
+            resolve(reviewInfo);
+          });
+      });
+    }
+
+    function rankingForEachPromise(negotiation) {
+      var counter = 0;
+      var rankingArray = [];
+      return new Promise(resolve => {
+        negotiation.forEach(function(nego) {
+          var productId = nego.data().productId;
+
+          var products = db
+            .collection("products")
+            .doc(productId)
+            .get()
+            .then(function(product) {
+              var category1 = product.data().category1;
+              return category1;
+            })
+            .then(function(category1) {
+              if (
+                rankingArray.some(ranking => ranking.productId == productId)
+              ) {
+                var result = rankingArray.filter(
+                  ranking => ranking.productId === productId
+                );
+                result[0].count++;
+              } else {
+                rankingArray.push({
+                  productId: productId,
+                  count: 1,
+                  category1: category1
+                });
+              }
+              counter++;
+              if (counter == negotiation.size) {
+                resolve(rankingArray);
+              }
+            });
+        });
+      });
     }
   </script>
 </ons-page>

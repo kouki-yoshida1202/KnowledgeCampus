@@ -74,9 +74,10 @@
               ref
                 .getDownloadURL()
                 .then(url => {
-                  if (url == "") {
-                    url = "img / userSampleImageMan.png";
-                  }
+                  return url;
+                })
+                .catch(function() {
+                  url = "img/userSampleImageMan.png";
                   return url;
                 })
                 .then(function(url) {

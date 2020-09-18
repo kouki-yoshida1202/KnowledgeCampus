@@ -81,15 +81,9 @@
 
     <div>
       <p
-        style="text-align: center;width:100%;margin-top:5px;margin-bottom:5px;"
-      >
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOn.png" alt="" style="height:18px;" />
-        <img src="img/starOff.png" alt="" style="height:18px;" />
-        <span>(39)</span>
-      </p>
+        id="productDetailUserReview"
+        style="display:flex;justify-content: center; width:100%;margin-top:5px;margin-bottom:5px;"
+      ></p>
     </div>
     <p id="productDetailText" class="navy" style="font-size:0.8em;"></p>
   </div>
@@ -131,25 +125,7 @@
           </ons-col>
         </ons-row>
       </ons-list-header>
-      <div id="productDetailCommentZone">
-        <ons-list-item>
-          <div class="left">
-            <img
-              class="list-item__thumbnail"
-              src="img/manSample.jpeg"
-              style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-            />
-          </div>
-          <div class="center" style="width:50%;">
-            <span class="list-item__title">タナカタロウ</span>
-            <span class="list-item__subtitle">
-              <ons-card>
-                質問してもいいですよ
-              </ons-card>
-            </span>
-          </div>
-        </ons-list-item>
-      </div>
+      <div id="productDetailCommentZone"></div>
       <ons-list-item>
         <ons-row style="padding:1em;">
           <ons-button
@@ -272,7 +248,7 @@
                 <ons-button
                   class="large-button-orange"
                   style="padding-left:2em;padding-right:2em;"
-                  onclick="myNavigator.bringPageTop('html/productTorihiki.html');"
+                  onclick="negotiationCreate();hideProductDetailModal();"
                   >購入する</ons-button
                 >
               </ons-col>
@@ -284,6 +260,42 @@
   </ons-modal>
   <input type="hidden" id="productDetailId" />
   <script>
+    function negotiationCreate() {
+      showLoad();
+      var productId = $("#productDetailId").val();
+      var user = firebase.auth().currentUser;
+      var buyUserId = user.uid;
+      db.collection("products")
+        .doc(productId)
+        .get()
+        .then(function(result) {
+          var buyPrice = result.data().price;
+          var productUserId = result.data().userId;
+          db.collection("negotiations")
+            .doc()
+            .set({
+              productId: productId,
+              createTime: new Date(),
+              buyUserId: buyUserId,
+              buyPrice: buyPrice,
+              productUserId: productUserId,
+              status: "取引中"
+            })
+            .then(function() {
+              hideLoad();
+              myNavigator.bringPageTop("html/product/productTorihiki.html");
+            })
+            .catch(function(error) {
+              hideLoad();
+              console.log(error);
+            });
+        })
+        .catch(function(error) {
+          console.log(error);
+          alert("コメント取得失敗");
+          hideLoad();
+        });
+    }
     function favoCheck() {
       showLoad();
       var productId = $("#productDetailId").val();
@@ -320,7 +332,6 @@
                     .doc(favoDocId)
                     .delete()
                     .then(function() {
-                      console.log("Document successfully deleted!");
                       hideLoad();
                       $(".fa-heart").removeClass("favoOn");
                       var favoCount = Number($("#favoCount").html()) - 1;
@@ -425,8 +436,21 @@
         .then(function(productData) {
           var user = firebase.auth().currentUser;
           var myUserId = user.uid;
+          reviewControl(productData.userId).then(function(result) {
+            $("#productDetailUserReview").empty();
+            for (var i = 1; i < 6; i++) {
+              if (i > result[1]) {
+                var star =
+                  '<img src="img/starOff.png" alt="" style="height:18px;margin-right:3px;"/>';
+              } else {
+                var star =
+                  '<img src="img/starOn.png" alt=""style="height:18px;margin-right:3px;"/>';
+              }
+              $("#productDetailUserReview").append(star);
+            }
+            $("#productDetailUserReview").append("(" + result[0] + ")");
+          });
           if (myUserId == productData.userId) {
-            console.log("自分");
             $("#productDetailButton").html("変更");
             document.getElementById(
               "productDetailButton"
@@ -437,6 +461,29 @@
                 docId +
                 "');"
             );
+          } else {
+            db.collection("negotiations")
+              // .doc(docId)
+              .where("productId", "==", docId)
+              .where("buyUserId", "==", myUserId)
+              .where("productUserId", "==", productData.userId)
+              .get()
+              .then(function(negoNowResults) {
+                if (negoNowResults.size > 0) {
+                  negoNowResults.forEach(negoNowResult => {
+                    $("#productDetailButton").html(negoNowResult.data().status);
+                    document.getElementById(
+                      "productDetailButton"
+                    ).onclick = new Function(
+                      "myNavigator.bringPageTop('html/product/productTorihiki.html');"
+                    );
+                  });
+                }
+              })
+              .catch(function(error) {
+                hideLoad();
+                console.log(error);
+              });
           }
           return docId;
         })
@@ -492,10 +539,39 @@
               if (commentGetResults.size > 0) {
                 commentGetResults.forEach(commentGetResult => {
                   nowDataCount++;
+                  var commentlist = "";
+                  commentlist =
+                    `
+                    <ons-list-item>
+                      <div class="left">
+                        <img
+                          id="commentImageProduct_` +
+                    nowDataCount +
+                    `"
+                          class="list-item__thumbnail"
+                          src="img/userSampleImageMan.png"
+                          style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                        />
+                      </div>
+                      <div class="center" style="width:50%;">
+                        <span id="commentUserNameProduct_` +
+                    nowDataCount +
+                    `"class="list-item__title"></span>
+                        <span class="list-item__subtitle">
+                          <ons-card id="commentProduct_` +
+                    nowDataCount +
+                    `">
+                          </ons-card>
+                        </span>
+                      </div>
+                    </ons-list-item>
+                  `;
+                  $("#productDetailCommentZone").append(commentlist);
                   productDetailCommenIndicate(
                     commentGetResult.data().userId,
                     commentGetResult.data().comment,
-                    commentGetResult.data().createTime
+                    commentGetResult.data().createTime,
+                    nowDataCount
                   );
                 });
                 hideLoad();
@@ -514,7 +590,12 @@
           console.log("Error getting document:", error);
         });
     }
-    function productDetailCommenIndicate(commentUserId, comment, createTime) {
+    function productDetailCommenIndicate(
+      commentUserId,
+      comment,
+      createTime,
+      nowDataCount
+    ) {
       //「月」を取得する
       var createTime = new Date(createTime * 1000);
       var MM = createTime.getMonth() + 1;
@@ -525,6 +606,7 @@
       //「分」を取得する
       var mm = createTime.getMinutes();
       var time = MM + "月" + DD + "日 " + hh + ":" + mm;
+
       var docRef = db.collection("users").doc(commentUserId);
       docRef
         .get()
@@ -536,40 +618,22 @@
             .child("profilePicture/" + commentUserId)
             .getDownloadURL()
             .then(function(url) {
-              if (url == "") {
-                url = "img / userSampleImageMan.png";
-              }
-              var commentlist = "";
-              commentlist =
-                `
-                <ons-list-item>
-                  <div class="left">
-                    <img
-                      class="list-item__thumbnail"
-                      src="` +
-                url +
-                `"
-                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-                    />
-                  </div>
-                  <div class="center" style="width:50%;">
-                    <span class="list-item__title">` +
-                commentUserName +
-                `</span>
-                    <span class="list-item__subtitle">
-                      <ons-card>
-                        ` +
+              return url;
+            })
+            .catch(function() {
+              url = "img/userSampleImageMan.png";
+            })
+            .then(function(url) {
+              $("#commentImageProduct_" + nowDataCount).attr("src", url);
+              $("#commentUserNameProduct_" + nowDataCount).html(
+                commentUserName
+              );
+              $("#commentProduct_" + nowDataCount).html(
                 comment +
-                `<br><br>
-                        <span style="font-size:0.85em;margin-top:5px;"><i class="far fa-clock" style="margin-right:5px;"></i>` +
-                time +
-                `</span>
-                  </ons-card>
-                    </span>
-                  </div>
-                </ons-list-item>
-              `;
-              $("#productDetailCommentZone").append(commentlist);
+                  `<br><br><span style="font-size:0.85em;margin-top:5px;"><i class="far fa-clock" style="margin-right:5px;"></i>` +
+                  time +
+                  `</span>`
+              );
             })
             .catch(function(error) {
               console.log("Error getting document:", error);

@@ -8,7 +8,7 @@
     />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'"
+      content="default-src * data: gap: https://ssl.gstatic.com;img-src * 'self' blob: data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'"
     />
     <script src="components/loader.js"></script>
     <script src="lib/onsenui/js/onsenui.min.js"></script>
@@ -23,6 +23,7 @@
       rel="stylesheet"
     />
     <script src="lib/onsenui/js/loadingoverlay.min.js"></script>
+    <script src="../node_modules/compressorjs/dist/compressor.js"></script>
 
     <script></script>
     <style></style>
@@ -89,6 +90,9 @@
           image: "",
           fontawesome: "fa fa-spinner fa-spin fa-small"
         });
+        setTimeout(function() {
+          $("body").LoadingOverlay("hide");
+        }, 7000);
       }
 
       function hideLoad() {

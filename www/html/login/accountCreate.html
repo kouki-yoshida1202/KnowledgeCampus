@@ -108,8 +108,12 @@
     <p style="font-size:0.8em;padding:0.5em;">
       「新規登録」のボタンを押すことで、<span
         style="color:#0799d7;"
+        id="riyouKiyaku"
         onclick='cordova.InAppBrowser.open("https://knowledgecampus-test.web.app/riyouKiyaku.html", "_blank", "location=yes");'
         >利用規約</span
+      >および
+      <span style="color:#0799d7;" id="privacyPolicy" onclick=""
+        >プライバシーポリシー</span
       >に同意したものと判断します。
     </p>
   </div>
@@ -124,6 +128,30 @@
     </ons-button>
   </div>
   <script>
+    firebase
+      .storage()
+      .ref()
+      .child("riyoukiyaku.pdf")
+      .getDownloadURL()
+      .then(url => {
+        console.log(url);
+        document.getElementById("riyouKiyaku").onclick = new Function(
+          'cordova.InAppBrowser.open("' + url + '", "_blank", "location=yes");'
+        );
+      });
+
+    firebase
+      .storage()
+      .ref()
+      .child("privacypolicy.pdf")
+      .getDownloadURL()
+      .then(url => {
+        console.log(url);
+        document.getElementById("privacyPolicy").onclick = new Function(
+          'cordova.InAppBrowser.open("' + url + '", "_blank", "location=yes");'
+        );
+      });
+
     function newUserCreate() {
       var userName = $("#newUserName").val();
       var mailAddress = $("#newMailAddress").val();
@@ -164,34 +192,39 @@
                   // Email sent.
                   db.collection("users")
                     .doc(user.uid)
-                    .set({
-                      username: userName,
-                      point: 0,
-                      text: "",
-                      ginkoukind: "",
-                      ginkoumeigi: "",
-                      ginkouname: "",
-                      ginkounumber: "",
-                      ginkoushiten: "",
-                      invitecode: "",
-                      uriagenow: 0,
-                      invitedcode: ""
-                    })
+                    .set(
+                      {
+                        username: userName,
+                        point: 0,
+                        text: "",
+                        ginkoukind: "",
+                        ginkoumeigi: "",
+                        ginkouname: "",
+                        ginkounumber: "",
+                        ginkoushiten: "",
+                        invitecode: "",
+                        uriagenow: 0,
+                        invitedcode: ""
+                      },
+                      { merge: true }
+                    )
                     .then(function() {
-                      hideLoad();
                       ons.notification.alert({
                         title: "メール送信",
                         message:
                           "認証メールを送信しました。メールに記載のURLを押下することで登録が完了します。"
                       });
+                      hideLoad();
                     })
                     .catch(function(error) {
                       // An error happened.
+                      console.log(error);
                       hideLoad();
                     });
                 })
                 .catch(function(error) {
                   // An error happened.
+                  console.log(error);
                   hideLoad();
                 });
             })
