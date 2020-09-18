@@ -148,19 +148,19 @@
       initial-index="2"
       style="height:28px;border-bottom:1px solid #f0f0f0;"
     >
-      <ons-carousel-item style="min-height: 500px;">
+      <ons-carousel-item>
         <div class="item-label">キャリア</div>
       </ons-carousel-item>
-      <ons-carousel-item style="min-height: 500px;">
+      <ons-carousel-item>
         <div class="item-label">学業</div>
       </ons-carousel-item>
-      <ons-carousel-item class="active_tabCarousel" style="min-height: 500px;">
+      <ons-carousel-item class="active_tabCarousel">
         <div class="item-label">全て</div>
       </ons-carousel-item>
-      <ons-carousel-item style="min-height: 500px;">
+      <ons-carousel-item>
         <div class="item-label">ランキング</div>
       </ons-carousel-item>
-      <ons-carousel-item style="min-height: 500px;">
+      <ons-carousel-item>
         <div class="item-label">ビジネス</div>
       </ons-carousel-item>
     </ons-carousel>
@@ -180,7 +180,7 @@
       initial-index="2"
       reflesh="console.log('Changed to ' + $event.activeIndex)"
     >
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div
           class="item-label"
           id="careerProduct"
@@ -188,7 +188,7 @@
           style="display: flex;justify-content: space-between;flex-wrap: wrap;"
         ></div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div
           class="item-label"
           id="studyProduct"
@@ -196,14 +196,14 @@
           style="display: flex;justify-content: space-between;flex-wrap: wrap;"
         ></div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div
           id="allProduct"
           class="item-label"
           style="display: flex;justify-content: space-between;flex-wrap: wrap;"
         ></div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div class="item-label" style="padding:0.5rem;">
           <ons-row>
             <h4 style="padding-left:0.5rem;font-weight: bold;">
@@ -267,7 +267,7 @@
           </ons-carousel>
         </div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
         <div
           class="item-label"
           id="businessProduct"
@@ -659,16 +659,12 @@
               </div>
             `;
               $("#allProduct").append(product);
-              console.log(doc.data().category1);
               if (doc.data().category1 == "キャリア") {
                 $("#careerProduct").append(product);
               } else if (doc.data().category1 == "学業") {
-                console.log("学業");
                 $("#studyProduct").append(product);
               } else if (doc.data().category1 == "ビジネス") {
                 $("#businessProduct").append(product);
-              } else {
-                console.log(doc.data().category1);
               }
 
               productIndicate(
@@ -841,6 +837,17 @@
             });
         });
       });
+    }
+
+    function torihikiPageJump(productId, buyUserId, productUserId) {
+      myNavigator.bringPageTop("html/product/productTorihiki.html");
+      console.log(productId, buyUserId, productUserId);
+      setTimeout(function() {
+        $("#torihikiPageProductId").val(productId);
+        $("#torihikiPageProductUserId").val(productUserId);
+        $("#torihikiPagebuyUserId").val(buyUserId);
+        torihikiIndicate(productId, buyUserId, productUserId);
+      }, 100);
     }
   </script>
 </ons-page>

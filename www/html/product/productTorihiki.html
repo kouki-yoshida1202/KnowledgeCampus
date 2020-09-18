@@ -156,21 +156,11 @@
   </div>
   <input type="hidden" id="torihikiPageProductId" />
   <input type="hidden" id="torihikiPageProductUserId" />
+  <input type="hidden" id="torihikiPagebuyUserId" />
   <input type="hidden" id="torihikiPageNagotiationId" />
   <input type="hidden" id="nowDataCountInput" />
   <script>
-    document.addEventListener(
-      "destroy",
-      function(event) {
-        if (event.target.matches("#productTorihikiPage")) {
-          giftDetailJump($("#torihikiPageProductId").val());
-        }
-      },
-      false
-    );
     setTimeout(function() {
-      $("#torihikiPageProductId").val($("#productDetailId").val());
-      torihikiIndicate();
       let productTorihikiPage = document.querySelector("#productTorihikiPage");
       original_main_height = productTorihikiPage.clientHeight;
     }, 100);
@@ -202,12 +192,17 @@
       var productId = $("#torihikiPageProductId").val();
       var negotiationId = $("#torihikiPageNagotiationId").val();
       var productUserId = $("#torihikiPageProductUserId").val();
+      var buyUserId = $("#torihikiPagebuyUserId").val();
       var user = firebase.auth().currentUser;
-      var userId = user.uid;
+      var myUserId = user.uid;
       var createTime = new Date();
-
+      if (myUserId == productUserId) {
+        var reviewSentUserId = buyUserId;
+      } else if (myUserId == buyUserId) {
+        var reviewSentUserId = productUserId;
+      }
       db.collection("users")
-        .doc(productUserId)
+        .doc(reviewSentUserId)
         .collection("reviews")
         .doc()
         .set(
@@ -319,34 +314,28 @@
           });
       }
     }
-    function torihikiIndicate() {
+    function torihikiIndicate(productId, buyUserId, productUserId) {
       showLoad();
       var nowDataCount = 0;
       $("#torihikiCommentList").empty();
-      var productId = $("#torihikiPageProductId").val();
-      var user = firebase.auth().currentUser;
-      var buyUserId = user.uid;
 
       db.collection("negotiations")
         .where("productId", "==", productId)
         .where("buyUserId", "==", buyUserId)
+        .where("productUserId", "==", productUserId)
         .get()
         .then(function(negoResult) {
           if (negoResult.size > 0) {
             negoResult.forEach(nego => {
-              $("#torihikiPageNagotiationId").val(nego.id);
-              $("#torihikiPageProductUserId").val(nego.data().productUserId);
+              var negotiationId = nego.id;
+              $("#torihikiPageNagotiationId").val(negotiationId);
               if (nego.data().status == "取引完了") {
-                var productUserId = nego.data().productUserId;
-                var negotiationId = nego.id;
-                console.log(productUserId, negotiationId);
                 db.collection("users")
                   .doc(productUserId)
                   .collection("reviews")
                   .where("negotiationId", "==", negotiationId)
                   .get()
                   .then(function(reviewDetails) {
-                    console.log(reviewDetails);
                     reviewDetails.forEach(reviewDetail => {
                       var reviewComment = reviewDetail.data().reviewComment;
                       var reviewCount = reviewDetail.data().reviewCount;
@@ -360,55 +349,6 @@
                         .addClass("large-button-gray");
                       $("input[name=hoshi]").prop("disabled", true);
                     });
-                  });
-                db.collection("negotiations")
-                  .doc(negotiationId)
-                  .collection("comments")
-                  .orderBy("createTime", "asc")
-                  .get()
-                  .then(function(torihikiComments) {
-                    if (torihikiComments.size > 0) {
-                      torihikiComments.forEach(torihikiComment => {
-                        nowDataCount++;
-                        var commentlist = "";
-                        commentlist =
-                          `
-                          <ons-list-item>
-                            <div class="left">
-                              <img
-                                id="torihikiCommentImage_` +
-                          nowDataCount +
-                          `"
-                                class="list-item__thumbnail"
-                                src="img/userSampleImageMan.png"
-                                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-                              />
-                            </div>
-                            <div class="center" style="width:50%;">
-                              <span id="torihikiCommentUserName_` +
-                          nowDataCount +
-                          `"class="list-item__title"></span>
-                              <span class="list-item__subtitle">
-                                <ons-card id="torihikiComment_` +
-                          nowDataCount +
-                          `">
-                                </ons-card>
-                              </span>
-                            </div>
-                          </ons-list-item>
-                        `;
-                        $("#torihikiCommentList").prepend(commentlist);
-                        torihikiCommentIndicate(
-                          torihikiComment.data().userId,
-                          torihikiComment.data().comment,
-                          nowDataCount,
-                          torihikiComments.size,
-                          torihikiComment.data().createTime
-                        );
-                      });
-                    } else {
-                      hideLoad();
-                    }
                   })
                   .catch(function(error) {
                     console.log(error);
@@ -416,7 +356,58 @@
                     hideLoad();
                   });
               }
+              db.collection("negotiations")
+                .doc(negotiationId)
+                .collection("comments")
+                .orderBy("createTime", "asc")
+                .get()
+                .then(function(torihikiComments) {
+                  if (torihikiComments.size > 0) {
+                    torihikiComments.forEach(torihikiComment => {
+                      nowDataCount++;
+                      var commentlist = "";
+                      commentlist =
+                        `
+                          <ons-list-item>
+                            <div class="left">
+                              <img
+                                id="torihikiCommentImage_` +
+                        nowDataCount +
+                        `"
+                                class="list-item__thumbnail"
+                                src="img/userSampleImageMan.png"
+                                style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                              />
+                            </div>
+                            <div class="center" style="width:50%;">
+                              <span id="torihikiCommentUserName_` +
+                        nowDataCount +
+                        `"class="list-item__title"></span>
+                              <span class="list-item__subtitle">
+                                <ons-card id="torihikiComment_` +
+                        nowDataCount +
+                        `">
+                                </ons-card>
+                              </span>
+                            </div>
+                          </ons-list-item>
+                        `;
+                      $("#torihikiCommentList").prepend(commentlist);
+                      torihikiCommentIndicate(
+                        torihikiComment.data().userId,
+                        torihikiComment.data().comment,
+                        nowDataCount,
+                        torihikiComments.size,
+                        torihikiComment.data().createTime
+                      );
+                    });
+                  } else {
+                    hideLoad();
+                  }
+                });
             });
+          } else {
+            hideLoad();
           }
         });
     }
@@ -437,8 +428,8 @@
       //「分」を取得する
       var mm = createTime.getMinutes();
       var time = MM + "月" + DD + "日 " + hh + ":" + mm;
-      var docRef = db.collection("users").doc(commentUserId);
-      docRef
+      db.collection("users")
+        .doc(commentUserId)
         .get()
         .then(function(doc) {
           var commentUserName = doc.data().username;
@@ -448,9 +439,13 @@
             .child("profilePicture/" + commentUserId)
             .getDownloadURL()
             .then(function(url) {
-              if (url == "") {
-                url = "img/userSampleImageMan.png";
-              }
+              return url;
+            })
+            .catch(function(error) {
+              url = "img/userSampleImageMan.png";
+              return url;
+            })
+            .then(function(url) {
               $("#torihikiCommentImage_" + nowDataCount).attr("src", url);
               $("#torihikiCommentUserName_" + nowDataCount).html(
                 commentUserName

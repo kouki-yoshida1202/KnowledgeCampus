@@ -260,6 +260,15 @@
   </ons-modal>
   <input type="hidden" id="productDetailId" />
   <script>
+    document.addEventListener(
+      "show",
+      function(event) {
+        if (event.target.matches("#productDetailPage")) {
+          giftDetailJump($("#productDetailId").val());
+        }
+      },
+      false
+    );
     function negotiationCreate() {
       showLoad();
       var productId = $("#productDetailId").val();
@@ -425,11 +434,18 @@
               .storage()
               .ref()
               .child("profilePicture/" + productData.userId);
-            ref.getDownloadURL().then(url => {
-              if (url != "") {
+            ref
+              .getDownloadURL()
+              .then(url => {
+                return url;
+              })
+              .catch(function() {
+                var url = "img/userSampleImageMan.png";
+                return url;
+              })
+              .then(function(url) {
                 document.getElementById("productDetailUserImage").src = url;
-              }
-            });
+              });
           });
           return productData;
         })
@@ -475,7 +491,13 @@
                     document.getElementById(
                       "productDetailButton"
                     ).onclick = new Function(
-                      "myNavigator.bringPageTop('html/product/productTorihiki.html');"
+                      "torihikiPageJump('" +
+                        docId +
+                        "','" +
+                        myUserId +
+                        "','" +
+                        productData.userId +
+                        "')"
                     );
                   });
                 }
@@ -622,6 +644,7 @@
             })
             .catch(function() {
               url = "img/userSampleImageMan.png";
+              return url;
             })
             .then(function(url) {
               $("#commentImageProduct_" + nowDataCount).attr("src", url);

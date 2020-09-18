@@ -31,15 +31,15 @@
       initial-index="0"
       style="height:40px;"
     >
-      <ons-carousel-item class="active_tabCarousel">
+      <ons-carousel-item class="active_tabCarousel" style="min-height: 500px;">
         <div class="item-label" style="line-height: 35px;">
           出品中
         </div>
       </ons-carousel-item>
-      <ons-carousel-item style="line-height: 35px;">
+      <ons-carousel-item style="line-height: 35px;" style="min-height: 500px;">
         <div class="item-label">取引中</div>
       </ons-carousel-item>
-      <ons-carousel-item style="line-height: 35px;">
+      <ons-carousel-item style="line-height: 35px;" style="min-height: 500px;">
         <div class="item-label">取引完了</div>
       </ons-carousel-item>
     </ons-carousel>
@@ -130,7 +130,9 @@
                 nowDataCount,
                 results.size,
                 user,
-                targetList
+                targetList,
+                "",
+                ""
               );
             });
           } else {
@@ -149,82 +151,131 @@
       nowDataCount,
       size,
       user,
-      targetList
+      targetList,
+      buyUserId,
+      productUserId
     ) {
       console.log("kiteru");
-      db.collection("favorite")
-        .where("productId", "==", productId)
-        .get()
-        .then(function(result) {
-          return result.size;
-        })
-        .then(function(favoCount) {
-          return favoCount;
-        })
-        .then(function(favoCount) {
-          db.collection("products")
-            .doc(productId)
-            .collection("comments")
-            .get()
-            .then(function(commentResults) {
-              var commentCount = commentResults.size;
-              var mySyuppin = "";
-              mySyuppin +=
-                `
-                  <ons-list-item onclick="giftDetailJump('` +
-                productId +
-                `')">
-                    <ons-row>
-                      <ons-col width="20%" vertical-align="center">
-                        <img
-                          class="mySyuppinImage list-item__thumbnail"
-                          src="img/userSampleImageMan.png"
-                          style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-                        />
-                      </ons-col>
-                      <ons-col width="70%" vertical-align="center">
-                        <p style="margin-bottom:0px;margin-top:0px;">` +
-                data.title +
-                `<br />¥` +
-                data.price +
-                `</p>
-                        <p style="margin-bottom:0px;">
-                          <i class="far fa-heart"></i>` +
-                favoCount +
-                `<i class="far fa-comment-dots"></i>` +
-                commentCount +
-                `
-                        </p>
-                      </ons-col>
-                      <ons-col width="10%" vertical-align="center">＞</ons-col>
-                    </ons-row>
-                  </ons-list-item>
-              `;
-              $(targetList).append(mySyuppin);
-              if (nowDataCount == size) {
-                firebase
-                  .storage()
-                  .ref()
-                  .child("profilePicture/" + user.uid)
-                  .getDownloadURL()
-                  .then(function(url) {
-                    return url;
-                  })
-                  .catch(function() {
-                    return (url = "img/userSampleImageMan.png");
-                  })
-                  .then(function(url) {
-                    var mySyuppinImage = document.getElementsByClassName(
-                      "mySyuppinImage"
-                    );
-                    for (var i = 0; i < mySyuppinImage.length; i++) {
-                      mySyuppinImage[i].src = url;
-                    }
-                  });
-                hideLoad();
-              }
-            });
-        });
+      if (targetList == "#mySyuppinList") {
+        db.collection("favorite")
+          .where("productId", "==", productId)
+          .get()
+          .then(function(result) {
+            return result.size;
+          })
+          .then(function(favoCount) {
+            return favoCount;
+          })
+          .then(function(favoCount) {
+            db.collection("products")
+              .doc(productId)
+              .collection("comments")
+              .get()
+              .then(function(commentResults) {
+                var commentCount = commentResults.size;
+                var fotterInfo =
+                  `<i class="far fa-heart"></i>` +
+                  favoCount +
+                  `<i class="far fa-comment-dots"></i >` +
+                  commentCount;
+                var mySyuppin = "";
+                mySyuppin +=
+                  `
+                    <ons-list-item  onclick="torihikiPageJump('` +
+                  productId +
+                  `','` +
+                  buyUserId +
+                  `','` +
+                  productUserId +
+                  `')">
+                      <ons-row>
+                        <ons-col width="20%" vertical-align="center">
+                          <img
+                            class="mySyuppinImage list-item__thumbnail"
+                            src="img/userSampleImageMan.png"
+                            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                          />
+                        </ons-col>
+                        <ons-col width="70%" vertical-align="center">
+                          <p style="margin-bottom:0px;margin-top:0px;">` +
+                  data.title +
+                  `<br />¥` +
+                  data.price +
+                  `</p>
+                          <p style="margin-bottom:0px;">
+                            ` +
+                  fotterInfo +
+                  `
+                          </p>
+                        </ons-col>
+                        <ons-col width="10%" vertical-align="center">＞</ons-col>
+                      </ons-row>
+                    </ons-list-item>
+                `;
+                $(targetList).append(mySyuppin);
+              });
+          });
+      } else {
+        db.collection("users")
+          .doc(buyUserId)
+          .get()
+          .then(function(result) {
+            var buyUserName = result.data().username;
+            var fotterInfo = buyUserName + "さんが購入";
+            var mySyuppin = "";
+            mySyuppin +=
+              `
+                    <ons-list-item onclick="myNavigator.bringPageTop('html/product/productTorihiki.html');">
+                      <ons-row>
+                        <ons-col width="20%" vertical-align="center">
+                          <img
+                            class="mySyuppinImage list-item__thumbnail"
+                            src="img/userSampleImageMan.png"
+                            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                          />
+                        </ons-col>
+                        <ons-col width="70%" vertical-align="center">
+                          <p style="margin-bottom:0px;margin-top:0px;">` +
+              data.title +
+              `<br />¥` +
+              data.price +
+              `</p>
+                          <p style="margin-bottom:0px;">
+                            ` +
+              fotterInfo +
+              `
+                          </p>
+                        </ons-col>
+                        <ons-col width="10%" vertical-align="center">＞</ons-col>
+                      </ons-row>
+                    </ons-list-item>
+                `;
+            $(targetList).append(mySyuppin);
+          });
+      }
+
+      if (nowDataCount == size) {
+        firebase
+          .storage()
+          .ref()
+          .child("profilePicture/" + user.uid)
+          .getDownloadURL()
+          .then(function(url) {
+            return url;
+          })
+          .catch(function() {
+            return (url = "img/userSampleImageMan.png");
+          })
+          .then(function(url) {
+            var mySyuppinImage = document.getElementsByClassName(
+              "mySyuppinImage"
+            );
+            for (var i = 0; i < mySyuppinImage.length; i++) {
+              mySyuppinImage[i].src = url;
+            }
+          });
+        hideLoad();
+      }
     }
 
     function mySyuppinTorihikiGet(torihikiStatus) {
@@ -262,7 +313,9 @@
                       nowDataCount,
                       result.size,
                       user,
-                      targetList
+                      targetList,
+                      negotiation.data().buyUserId,
+                      negotiation.data().productUserId
                     );
                   } else {
                     hideLoad();
