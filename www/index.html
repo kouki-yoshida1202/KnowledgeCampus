@@ -8,7 +8,7 @@
     />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src * data: gap: https://ssl.gstatic.com;img-src * 'self' blob: data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'"
+      content="default-src * knowledgecampus data: gap: https://ssl.gstatic.com;img-src * 'self' blob: data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'"
     />
     <script src="components/loader.js"></script>
     <script src="lib/onsenui/js/onsenui.min.js"></script>
@@ -97,6 +97,21 @@
 
       function hideLoad() {
         $("body").LoadingOverlay("hide");
+      }
+
+      function handleOpenURL(url) {
+        setTimeout(function() {
+          var strValue = decodeURIComponent(url);
+          var urlPrm = [];
+          strValue = strValue.replace("knowledgecampus://", "");
+          var urlSearch = strValue.substring(1).split("&");
+          for (i = 0; urlSearch[i]; i++) {
+            var kv = urlSearch[i].split("=");
+            urlPrm[kv[0]] = kv[1];
+          }
+          var productId = urlPrm.productId;
+          giftDetailJump(productId);
+        }, 100);
       }
     </script>
   </body>

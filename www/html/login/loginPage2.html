@@ -104,6 +104,25 @@
   </ons-modal>
   <div id="recaptcha-container"></div>
   <script>
+    setTimeout(function() {
+      let loginPage2 = document.querySelector("#loginPage2");
+      original_main_height = loginPage2.clientHeight;
+    }, 100);
+
+    //ソフトウェアキーボード表示処理
+    window.addEventListener("keyboardWillShow", event => {
+      //画面の高さをキーボードの高さを差し引いた値とする
+      $("#loginPage2").animate(
+        { height: original_main_height - event.keyboardHeight + "px" },
+        250
+      );
+    });
+
+    //ソフトウェアキーボード非表示処理
+    window.addEventListener("keyboardWillHide", () => {
+      //画面の高さを元の高さに戻す
+      $("#loginPage2").animate({ height: original_main_height + "px" }, 250);
+    });
     function loginCheck(email, password) {
       showLoad();
       console.log(email, password);

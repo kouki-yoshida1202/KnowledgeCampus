@@ -170,15 +170,6 @@
   <input type="hidden" id="commentPageProductId" />
   <input type="hidden" id="commentPageNowDataCountInput" />
   <script>
-    document.addEventListener(
-      "destroy",
-      function(event) {
-        if (event.target.matches("#productCommentPage")) {
-          giftDetailJump($("#commentPageProductId").val());
-        }
-      },
-      false
-    );
     setTimeout(function() {
       $("#commentPageProductId").val($("#productDetailId").val());
       commentPageIndicate();

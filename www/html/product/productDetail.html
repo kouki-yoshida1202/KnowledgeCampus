@@ -116,7 +116,7 @@
       <ons-row id="productDetailHowToTalk"> </ons-row>
     </ons-list-item>
     <br />
-    <ons-list id="productDetailComment">
+    <ons-list id="productDetailComment" style="min-height: 200px;">
       <ons-list-header>
         <ons-row>
           <ons-col vertical-align="center">
@@ -264,45 +264,39 @@
       "show",
       function(event) {
         if (event.target.matches("#productDetailPage")) {
-          giftDetailJump($("#productDetailId").val());
+          productInfo($("#productDetailId").val());
         }
       },
       false
     );
     function negotiationCreate() {
-      showLoad();
       var productId = $("#productDetailId").val();
       var user = firebase.auth().currentUser;
       var buyUserId = user.uid;
+      var mailaddress = user.email;
       db.collection("products")
         .doc(productId)
         .get()
         .then(function(result) {
           var buyPrice = result.data().price;
           var productUserId = result.data().userId;
-          db.collection("negotiations")
-            .doc()
-            .set({
-              productId: productId,
-              createTime: new Date(),
-              buyUserId: buyUserId,
-              buyPrice: buyPrice,
-              productUserId: productUserId,
-              status: "取引中"
-            })
-            .then(function() {
-              hideLoad();
-              myNavigator.bringPageTop("html/product/productTorihiki.html");
-            })
-            .catch(function(error) {
-              hideLoad();
-              console.log(error);
-            });
-        })
-        .catch(function(error) {
-          console.log(error);
-          alert("コメント取得失敗");
-          hideLoad();
+          var createTime = new Date();
+          window.open(
+            "https://fanfun2020.xsrv.jp/KCpayButton.html?mailaddress=" +
+              mailaddress +
+              "&buyUserId=" +
+              buyUserId +
+              "&productId=" +
+              productId +
+              "&buyPrice=" +
+              buyPrice +
+              "&productUserId=" +
+              productUserId +
+              "&createTime=" +
+              createTime,
+            "_system",
+            "location=yes"
+          );
         });
     }
     function favoCheck() {

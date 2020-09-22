@@ -135,9 +135,9 @@
           buttonLabels: ["いいえ", "はい"],
           callback: function(buttonIndex) {
             if (buttonIndex == 1) {
-              cordova.InAppBrowser.open(
+              window.open(
                 "https://knowledgecampus-test.web.app/smsTest.html",
-                "_blank",
+                "_system",
                 "location=yes"
               );
             }

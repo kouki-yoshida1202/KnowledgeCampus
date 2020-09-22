@@ -128,13 +128,21 @@
     </ons-button>
   </div>
   <script>
+    var successCallback = function() {
+      //端末登録後の処理
+      alert("成功");
+    };
+    var errorCallback = function(err) {
+      //端末登録でエラーが発生した場合の処理
+      alert(err);
+    };
+
     firebase
       .storage()
       .ref()
       .child("riyoukiyaku.pdf")
       .getDownloadURL()
       .then(url => {
-        console.log(url);
         document.getElementById("riyouKiyaku").onclick = new Function(
           'cordova.InAppBrowser.open("' + url + '", "_blank", "location=yes");'
         );
@@ -146,7 +154,6 @@
       .child("privacypolicy.pdf")
       .getDownloadURL()
       .then(url => {
-        console.log(url);
         document.getElementById("privacyPolicy").onclick = new Function(
           'cordova.InAppBrowser.open("' + url + '", "_blank", "location=yes");'
         );
