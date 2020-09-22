@@ -113,6 +113,22 @@
           giftDetailJump(productId);
         }, 100);
       }
+
+      // dataURIをBlobに変換する関数
+      function toBlob(dataURI) {
+        const byteString = atob(dataURI.split(",")[1]);
+        const mimeType = dataURI.match(/(:)([a-z\/]+)(;)/)[2];
+        for (
+          var i = 0, l = byteString.length, content = new Uint8Array(l);
+          l > i;
+          i++
+        ) {
+          content[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([content], {
+          type: mimeType
+        });
+      }
     </script>
   </body>
 </html>

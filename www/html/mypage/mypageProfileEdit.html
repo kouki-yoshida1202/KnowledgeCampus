@@ -15,13 +15,8 @@
       />
       <br />
       <input id="myImageInput" type="file" />
-      <!-- <ons-button
-        style="color:white;background-color: #0799d7;line-height: 22px;font-size: 0.9em;margin:5px;"
-        onclick="$('#myImageInput').click();"
-      >
-        写真を変更する
-      </ons-button>
-      <input type="file" /> -->
+      <input type="hidden" id="profileImageEditStatus" val="0" />
+      <p style="color:#0799d7;" onclick="profileCamera();">写真を変更する</p>
     </ons-col>
   </ons-row>
   <ons-list>
@@ -61,6 +56,27 @@
     >
   </div>
   <script>
+    function profileCamera() {
+      window.navigator.camera.getPicture(
+        imageData => {
+          //成功時
+          document.getElementById("myImageEdit").src =
+            "data:image/jpeg;base64," + imageData;
+          $("#profileImageEditStatus").val("1");
+        },
+        error => {
+          // 失敗時
+          alertNew("写真取得に失敗しました", "", "");
+        },
+        {
+          // 各種設定
+          sourceType: window.navigator.camera.PictureSourceType.SAVEDPHOTOALBUM,
+          destinationType: window.navigator.camera.DestinationType.DATA_URL,
+          targetWidth: 800,
+          targetHeight: 800
+        }
+      );
+    }
     var userId = firebase.auth().currentUser["uid"];
     var docRef = db.collection("users").doc(userId);
     var fileData;
@@ -95,10 +111,15 @@
           ref = firebase
             .storage()
             .ref()
-            .child("profilePicture/" + userId);
-          ref.getDownloadURL().then(url => {
-            document.getElementById("myImageEdit").src = url;
-          });
+            .child("profilePicture/" + userId)
+            .getDownloadURL()
+            .then(url => {
+              document.getElementById("myImageEdit").src = url;
+            })
+            .catch(function() {
+              document.getElementById("myImageEdit").src =
+                "img/userSampleImageMan.png";
+            });
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -139,33 +160,29 @@
             { merge: true }
           )
           .then(function() {
-            console.log("Document successfully written!");
-
-            var imgs = document.querySelector("#myImageInput").files[0];
-            new Compressor(fileData, {
-              quality: 0.6,
-              maxWidth: 500,
-              maxHeight: 500,
-              mimeType: "image",
-              success(result) {
-                firebase
-                  .storage()
-                  .ref("profilePicture/" + user["uid"])
-                  .put(result)
-                  .then(function() {
-                    ons.notification.alert({
-                      title: "成功",
-                      message: "プロフィールを編集しました。"
-                    });
-                    myNavigator.popPage();
-                    userInfo(user["uid"]);
-                    hideLoad();
+            var profileImageEditStatus = $("#profileImageEditStatus").val();
+            if (profileImageEditStatus != 0) {
+              var img = document.getElementById("myImageEdit");
+              var dataURI = img.getAttribute("src");
+              // dataURIをBlobに変換する
+              var blob = toBlob(dataURI);
+              firebase
+                .storage()
+                .ref("profilePicture/" + user["uid"])
+                .put(blob)
+                .then(function() {
+                  ons.notification.alert({
+                    title: "成功",
+                    message: "プロフィールを編集しました。"
                   });
-              },
-              error(err) {
-                console.log(err.message);
-              }
-            });
+                  myNavigator.popPage();
+                  userInfo(user["uid"]);
+                  hideLoad();
+                })
+                .catch(function(error) {
+                  alert(error);
+                });
+            }
 
             // var imgs = document.querySelector("#myImageInput").files[0];
             // firebase
