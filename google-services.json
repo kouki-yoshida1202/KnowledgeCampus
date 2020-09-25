@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1036117855994",
+    "firebase_url": "https://knowledgecampus-test.firebaseio.com",
+    "project_id": "knowledgecampus-test",
+    "storage_bucket": "knowledgecampus-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036117855994:android:535311fa0ef1349a4b4343",
+        "android_client_info": {
+          "package_name": "com.monaca.knowledgecampus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036117855994-ruv0n7f2rcmd7gbrdbt2jh98s76f2ceh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMtkeXa62l1nJS3vggDC87ikmG3pnZlM4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036117855994-ruv0n7f2rcmd7gbrdbt2jh98s76f2ceh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1036117855994-62i8shiac4r97dt43k5a3s18qgiqasm4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.monaca.knowledgecampus"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

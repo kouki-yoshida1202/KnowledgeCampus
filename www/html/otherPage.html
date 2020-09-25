@@ -1,0 +1,244 @@
+<ons-page id="otherPage">
+  <style>
+    #otherPage ons-card p {
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+    #otherPage ons-card {
+      text-align: center;
+      padding: 7px;
+      margin: 0px;
+      height: 200px;
+      padding-top: 15px;
+      padding-bottom: 10px;
+    }
+  </style>
+  <ons-toolbar>
+    <div class="left" id="toolbar-title">
+      <ons-back-button></ons-back-button>
+    </div>
+    <div class="center" id="toolbar-title"></div>
+  </ons-toolbar>
+  <div
+    style="width:100%;background:white;padding-top:1rem;padding-bottom:0.5rem;margin-bottom:0.5rem;"
+  >
+    <div style="height:150px;text-align: center;">
+      <img
+        id="otherPageImage"
+        src="img/userSampleImageMan.png"
+        alt=""
+        style="width:150px;height:150px;object-fit:cover;border-radius: 50%;"
+      />
+    </div>
+    <div style="width:85%;margin:0 auto;margin-top:20px;">
+      <p
+        id="otherPageUserName"
+        style="text-align: center;font-size:1.2em;margin-top:0.5rem;margin-bottom:0.5rem;"
+      ></p>
+      <div>
+        <p
+          id="otherPageReview"
+          style="width:100%;display:flex;justify-content: center;"
+          onclick="reviewPageJump($('#otherUserId').val());"
+        ></p>
+      </div>
+      <p id="otherPageText" class="navy" style="font-size:0.8em;"></p>
+    </div>
+  </div>
+  <div
+    id="otherPageProduct"
+    class="item-label"
+    style="display: flex;justify-content: space-between;flex-wrap: wrap;margin-bottom:2rem;padding:5px;"
+  ></div>
+  <input type="hidden" id="otherUserId" />
+  <script>
+    function otherInfo(otherUserId) {
+      var docRef = db.collection("users").doc(otherUserId);
+
+      docRef
+        .get()
+        .then(function(doc) {
+          if (doc.exists) {
+            $("#otherPageUserName").html(doc.data().username);
+            $("#otherPageText").html(doc.data().text);
+
+            firebase
+              .storage()
+              .ref()
+              .child("profilePicture/" + otherUserId)
+              .getDownloadURL()
+              .then(url => {
+                document.getElementById("otherPageImage").src = url;
+              })
+              .catch(function() {
+                document.getElementById("otherPageImage").src =
+                  "img/userSampleImageMan.png";
+              });
+            // var reviewInFo =
+            reviewControl(otherUserId).then(function(result) {
+              $("#otherPageReview").empty();
+              for (var i = 1; i < 6; i++) {
+                if (i > result[1]) {
+                  var star =
+                    '<img src="img/starOff.png" alt="" style="height:18px;margin-right:5px;" />';
+                } else {
+                  var star =
+                    '<img src="img/starOn.png" alt="" style="height:18px;margin-right:5px;" />';
+                }
+                $("#otherPageReview").append(star);
+              }
+              $("#otherPageReview").append("(" + result[0] + ")");
+            });
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        })
+        .catch(function(error) {
+          console.log("Error getting document:", error);
+        });
+    }
+
+    function productOtherGet() {
+      showLoad();
+      var otherUserId = $("#otherUserId").val();
+      $("#otherPageProduct").empty();
+      var nowDataCount = 0;
+      var products = db.collection("products");
+      products
+        .where("releasestatus", "==", "syuppin")
+        .where("userId", "==", otherUserId)
+        .orderBy("createTime", "desc")
+        .get()
+        .then(results => {
+          // console.log(results.size);
+          if (results.size > 0) {
+            results.forEach(doc => {
+              nowDataCount++;
+              var product =
+                `
+              <div style="text-align: center;width:47.5%;padding:0.25em;">
+                <ons-card class="mainCard otherCard_` +
+                nowDataCount +
+                `">
+                  <img class="user_icon_mainPage otherImage"alt="" />
+                  <p class="mainUserName otherUserName_` +
+                nowDataCount +
+                `"></p>
+                  <p class="otherReview_` +
+                nowDataCount +
+                `">
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  (0)
+                  </p>
+                  <div style="display: flex;justify-content: center;align-items: center;height:38px;border-radius: 10px;padding-top:7px;padding-bottom:7px;">
+                  <p class="mainPageItemText otherTitle_` +
+                nowDataCount +
+                `"></p></div>
+                  <p>
+                    <span class="salaly otherSalalyTime_` +
+                nowDataCount +
+                `"></span>
+                    <span class="howto otherHowTo_` +
+                nowDataCount +
+                `"></span>
+                  </p>
+                </ons-card>
+              </div>
+            `;
+              $("#otherPageProduct").append(product);
+
+              productOtherIndicate(
+                doc.id,
+                doc.data(),
+                nowDataCount,
+                results.size
+              );
+            });
+          } else {
+            hideLoad();
+          }
+        })
+        .catch(error => {
+          console.log(`データの取得に失敗しました (${error})`);
+          hideLoad();
+        });
+    }
+
+    function productOtherIndicate(docId, data, nowDataCount, size) {
+      var userId = data.userId;
+      var docRef = db.collection("users").doc(userId);
+      docRef
+        .get()
+        .then(function(doc) {
+          if (doc.exists) {
+            var url = "";
+            var username = doc.data().username;
+
+            var btn4 = document.getElementsByClassName(
+              "otherCard_" + nowDataCount
+            );
+            for (var i = 0; i < btn4.length; i++) {
+              btn4[i].onclick = function() {
+                giftDetailJump(docId);
+              };
+            }
+            $(".otherUserName_" + nowDataCount).html(doc.data().username);
+
+            $(".otherTitle_" + nowDataCount).html(data.title);
+            $(".otherSalalyTime_" + nowDataCount).html(
+              "¥" + data.price + "/" + data.time
+            );
+            $(".otherHowTo_" + nowDataCount).html(data.howtotalk);
+            reviewControl(data.userId).then(function(result) {
+              $(".otherReview_" + nowDataCount).empty();
+              for (var i = 1; i < 6; i++) {
+                if (i > result[1]) {
+                  var star =
+                    '<img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>';
+                } else {
+                  var star =
+                    '<img src="img/starOn.png" alt=""style="height:14px;margin-right:3px;"/>';
+                }
+                $(".otherReview_" + nowDataCount).append(star);
+              }
+              $(".otherReview_" + nowDataCount).append("(" + result[0] + ")");
+              if (nowDataCount == size) {
+                hideLoad();
+                otherCount = 0;
+                firebase
+                  .storage()
+                  .ref()
+                  .child("profilePicture/" + data.userId)
+                  .getDownloadURL()
+                  .then(url => {
+                    // 画像取得できた
+                    return url;
+                  })
+                  .catch(function() {
+                    // 画像取得できないとき
+                    url = "img/userSampleImageMan.png";
+                    return url;
+                  })
+                  .then(function(url) {
+                    setTimeout(function() {
+                      $(".otherImage").attr("src", url);
+                    }, 1500);
+                  });
+              }
+            });
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        })
+        .catch(function(error) {
+          console.log("Error getting document:", error);
+        });
+    }
+  </script>
+</ons-page>

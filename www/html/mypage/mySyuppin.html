@@ -155,7 +155,6 @@
       buyUserId,
       productUserId
     ) {
-      console.log("kiteru");
       if (targetList == "#mySyuppinList") {
         db.collection("favorite")
           .where("productId", "==", productId)
@@ -181,12 +180,8 @@
                 var mySyuppin = "";
                 mySyuppin +=
                   `
-                    <ons-list-item  onclick="torihikiPageJump('` +
+                    <ons-list-item onclick="giftDetailJump('` +
                   productId +
-                  `','` +
-                  buyUserId +
-                  `','` +
-                  productUserId +
                   `')">
                       <ons-row>
                         <ons-col width="20%" vertical-align="center">
@@ -215,6 +210,25 @@
                 $(targetList).append(mySyuppin);
               });
           });
+        if (nowDataCount == size) {
+          firebase
+            .storage()
+            .ref()
+            .child("profilePicture/" + user.uid)
+            .getDownloadURL()
+            .then(function(url) {
+              return url;
+            })
+            .catch(function() {
+              return (url = "img/userSampleImageMan.png");
+            })
+            .then(function(url) {
+              setTimeout(function() {
+                $(".mySyuppinImage").attr("src", url);
+              }, 1500);
+            });
+          hideLoad();
+        }
       } else {
         db.collection("users")
           .doc(buyUserId)
@@ -225,7 +239,13 @@
             var mySyuppin = "";
             mySyuppin +=
               `
-                    <ons-list-item onclick="myNavigator.bringPageTop('html/product/productTorihiki.html');">
+                    <ons-list-item onclick="torihikiPageJump('` +
+              productId +
+              `','` +
+              buyUserId +
+              `','` +
+              productUserId +
+              `')">
                       <ons-row>
                         <ons-col width="20%" vertical-align="center">
                           <img
@@ -251,30 +271,27 @@
                     </ons-list-item>
                 `;
             $(targetList).append(mySyuppin);
-          });
-      }
-
-      if (nowDataCount == size) {
-        firebase
-          .storage()
-          .ref()
-          .child("profilePicture/" + user.uid)
-          .getDownloadURL()
-          .then(function(url) {
-            return url;
-          })
-          .catch(function() {
-            return (url = "img/userSampleImageMan.png");
-          })
-          .then(function(url) {
-            var mySyuppinImage = document.getElementsByClassName(
-              "mySyuppinImage"
-            );
-            for (var i = 0; i < mySyuppinImage.length; i++) {
-              mySyuppinImage[i].src = url;
+            console.log(nowDataCount, size);
+            if (nowDataCount == size) {
+              firebase
+                .storage()
+                .ref()
+                .child("profilePicture/" + user.uid)
+                .getDownloadURL()
+                .then(function(url) {
+                  return url;
+                })
+                .catch(function() {
+                  return (url = "img/userSampleImageMan.png");
+                })
+                .then(function(url) {
+                  setTimeout(function() {
+                    $(".mySyuppinImage").attr("src", url);
+                  }, 1500);
+                });
+              hideLoad();
             }
           });
-        hideLoad();
       }
     }
 
@@ -296,9 +313,7 @@
         .orderBy("createTime", "desc")
         .get()
         .then(function(negotiationsResult) {
-          console.log(negotiationsResult.size);
           if (negotiationsResult.size > 0) {
-            console.log("サイズが１以上");
             negotiationsResult.forEach(negotiation => {
               nowDataCount++;
               var products = db.collection("products");
@@ -311,7 +326,7 @@
                       negotiation.data().productId,
                       result.data(),
                       nowDataCount,
-                      result.size,
+                      negotiationsResult.size,
                       user,
                       targetList,
                       negotiation.data().buyUserId,
@@ -333,6 +348,7 @@
         .catch(function(error) {
           // テキストエリアの作成
           console.log(error);
+          hideLoad();
         });
     }
   </script>

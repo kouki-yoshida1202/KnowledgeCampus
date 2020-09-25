@@ -50,7 +50,6 @@
       var="carousel"
       item-width="100%"
       initial-index="0"
-      reflesh="console.log('Changed to ' + $event.activeIndex)"
     >
       <ons-carousel-item style="min-height: 500px;">
         <ons-list style="background-image: none;" id="myBoughtList"> </ons-list>
@@ -72,7 +71,6 @@
     }, 100);
 
     function tabMyBoughtCarouselChange(carouselIndex) {
-      console.log(carouselIndex);
       $("#tabMyBoughtCarousel ons-carousel-item").removeClass(
         "active_tabCarousel"
       );
@@ -146,7 +144,6 @@
       size,
       user
     ) {
-      console.log(nowDataCount, size);
       firebase
         .storage()
         .ref()
@@ -198,7 +195,6 @@
 
           if (nowDataCount == size) {
             hideLoad();
-            console.log("aiufadsfads");
           }
         });
     }

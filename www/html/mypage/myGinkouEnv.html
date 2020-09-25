@@ -127,11 +127,11 @@
       var ginkounumber = $("#myGinkouNumber").val();
       var ginkoumeigi = $("#myGinkouMeigi").val();
       if (
-        ginkouname == "" ||
-        ginkoukind == "" ||
-        ginkoushiten == "" ||
-        ginkounumber == "" ||
-        ginkoumeigi == ""
+        ginkouname.trim() == "" ||
+        ginkoukind.trim() == "" ||
+        ginkoushiten.trim() == "" ||
+        ginkounumber.trim() == "" ||
+        ginkoumeigi.trim() == ""
       ) {
         ons.notification.alert({
           title: "失敗",

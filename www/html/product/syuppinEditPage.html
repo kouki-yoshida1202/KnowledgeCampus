@@ -39,7 +39,12 @@
       <ons-row>
         <ons-col width="30%" vertical-align="center">タイトル</ons-col>
         <ons-col width="70%" vertical-align="center">
-          <ons-input id="syuppinTitleEdit" placeholder="(必須)"></ons-input>
+          <ons-input
+            id="syuppinTitleEdit"
+            placeholder="(必須)"
+            maxlength="20"
+            type="text"
+          ></ons-input>
         </ons-col>
       </ons-row>
     </ons-list-item>
@@ -75,7 +80,7 @@
             <option value="Google Meet">Google Meet</option>
             <option value="Skype">Skype</option>
             <option value="Facetime">Facetime</option>
-            <option value="その他">その他</option>
+            <option value="Google Duo">Google Duo</option>
           </ons-select>
           <ons-input
             id="howToTalkOtherEdit"
@@ -162,7 +167,7 @@
         >下書き保存</ons-button
       >
     </div>
-    <div style="padding:0.5rem;margin-bottom:50px;">
+    <div style="padding:0.5rem;">
       <ons-button
         modifier="large"
         class="large-button-gray"
@@ -171,6 +176,7 @@
         >商品削除
       </ons-button>
     </div>
+    <div id="testtest" style="height:50px;width:300px;"></div>
   </div>
   <script>
     setTimeout(function() {
@@ -183,7 +189,7 @@
       //画面の高さをキーボードの高さを差し引いた値とする
       $("#syuppinEditPage").animate(
         { height: original_main_height - event.keyboardHeight + "px" },
-        250
+        100
       );
     });
 
@@ -192,7 +198,7 @@
       //画面の高さを元の高さに戻す
       $("#syuppinEditPage").animate(
         { height: original_main_height + "px" },
-        250
+        100
       );
     });
     $("#howToTalkOtherEdit").hide();
@@ -227,6 +233,7 @@
       var category2 = $("#syuppinCategory2Edit").val();
       var title = $("#syuppinTitleEdit").val();
       var explanation = $("#syuppinExplanationEdit").val();
+
       var howtotalk = $("#howToTalkEdit").val();
       var howtotalkother = $("#howToTalkOtherEdit").val();
       var time = $("#syuppinTimeEdit").val();
@@ -257,6 +264,11 @@
           title: "失敗",
           message: "価格を入力してください"
         });
+      } else if (price < 300) {
+        ons.notification.alert({
+          title: "失敗",
+          message: "最低価格は300円から"
+        });
       } else {
         productSubmitEdit(releasestatus);
       }
@@ -267,7 +279,9 @@
       var category2 = $("#syuppinCategory2Edit").val();
       var category3 = $("#syuppinCategory3Edit").val();
       var title = $("#syuppinTitleEdit").val();
-      var explanation = $("#syuppinExplanationEdit").val();
+      var explanation = $("#syuppinExplanationEdit")
+        .val()
+        .replace(/\r?\n/g, "<5060>");
       var howtotalk = $("#howToTalkEdit").val();
       var howtotalkother = $("#howToTalkOtherEdit").val();
       var time = $("#syuppinTimeEdit").val();

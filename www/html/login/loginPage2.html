@@ -1,4 +1,9 @@
 <ons-page id="loginPage2">
+  <style>
+    #updateMailaddress > input {
+      border-bottom: none;
+    }
+  </style>
   <ons-toolbar>
     <div class="left">
       <ons-back-button> </ons-back-button>
@@ -85,7 +90,7 @@
               modifier="underbar"
               type="email"
               placeholder="メールアドレス"
-              style="padding:1.2em;width:65%;"
+              style="padding:0.5em;width:80%;"
               float
             ></ons-input>
           </p>
@@ -114,24 +119,24 @@
       //画面の高さをキーボードの高さを差し引いた値とする
       $("#loginPage2").animate(
         { height: original_main_height - event.keyboardHeight + "px" },
-        250
+        100
       );
     });
 
     //ソフトウェアキーボード非表示処理
     window.addEventListener("keyboardWillHide", () => {
       //画面の高さを元の高さに戻す
-      $("#loginPage2").animate({ height: original_main_height + "px" }, 250);
+      $("#loginPage2").animate({ height: original_main_height + "px" }, 100);
     });
     function loginCheck(email, password) {
       showLoad();
       console.log(email, password);
-      if (email == "" || email == null) {
+      if (email.trim() == "" || email.trim() == null) {
         hideLoad();
         ons.notification.alert({
           message: "メールアドレスが未入力です"
         });
-      } else if (password == "") {
+      } else if (password.trim() == "") {
         hideLoad();
         ons.notification.alert({
           message: "パスワードが未入力です。"

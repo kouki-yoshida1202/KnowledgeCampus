@@ -28,7 +28,6 @@
     function shitagakiGet() {
       showLoad();
       var user = firebase.auth().currentUser;
-      console.log(user);
       var userId = user.uid;
       $("#myShitagakiList").empty();
       var nowDataCount = 0;
@@ -39,7 +38,6 @@
         .orderBy("createTime", "desc")
         .get()
         .then(results => {
-          console.log(results.size);
           if (results.size > 0) {
             results.forEach(doc => {
               nowDataCount++;

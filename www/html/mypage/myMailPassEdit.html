@@ -107,7 +107,7 @@
       showLoad();
       var mailaddressedit = $("#myMailEdit").val();
       var password = $("#myMailEditPassword").val();
-      if (mailaddressedit == "" || password == "") {
+      if (mailaddressedit.trim() == "" || password.trim() == "") {
         hideLoad();
         ons.notification.alert({
           title: "失敗",

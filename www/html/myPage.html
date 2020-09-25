@@ -30,6 +30,7 @@
       <p
         id="myPageReview"
         style="width:100%;display:flex;justify-content: center;"
+        onclick="reviewPageJump(firebase.auth().currentUser.uid);"
       ></p>
     </div>
     <p id="myPageText" class="navy" style="font-size:0.8em;"></p>
@@ -138,6 +139,12 @@
     >
   </div>
   <script>
+    function reviewPageJump(userId) {
+      myNavigator.bringPageTop("html/reviewPage.html");
+      setTimeout(function() {
+        reviewInfomation(userId);
+      }, 500);
+    }
     var user = firebase.auth().currentUser;
 
     function logoutOpen() {
@@ -159,7 +166,7 @@
           .auth()
           .signOut()
           .then(() => {
-            myNavigator.resetToPage("html/loginPage.html");
+            window.location.href = "index.html";
           })
           .catch(error => {
             ons.notification.alert({
@@ -197,13 +204,18 @@
             $("#myPageUserName").html(doc.data().username);
             $("#myPageText").html(doc.data().text);
 
-            ref = firebase
+            firebase
               .storage()
               .ref()
-              .child("profilePicture/" + userId);
-            ref.getDownloadURL().then(url => {
-              document.getElementById("myPageImage").src = url;
-            });
+              .child("profilePicture/" + userId)
+              .getDownloadURL()
+              .then(url => {
+                document.getElementById("myPageImage").src = url;
+              })
+              .catch(function() {
+                document.getElementById("myPageImage").src =
+                  "img/userSampleImageMan.png";
+              });
             // var reviewInFo =
             reviewControl(userId).then(function(result) {
               $("#myPageReview").empty();
@@ -227,11 +239,6 @@
         .catch(function(error) {
           console.log("Error getting document:", error);
         });
-    }
-    function getAge() {
-      setTimeout(function() {
-        return 37;
-      }, 2000);
     }
   </script>
 </ons-page>

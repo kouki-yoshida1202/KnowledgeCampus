@@ -40,6 +40,12 @@
     <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-storage.js"></script>
     <script>
+      //ncmbのAPIキーの設定とSDKの初期化
+      var appKey =
+        "7e4e7a3c249ee77301994716f3a8830d1f713804cb2379a550e0814acb215ed1";
+      var clientKey =
+        "cba0bb9821169b593d88ebb8a7828f79638c911da3008212739e13b9189ff608";
+      var ncmb = new NCMB(appKey, clientKey);
       // Your web app's Firebase configuration
       var firebaseConfig = {
         apiKey: "AIzaSyA56OkCzhlaMNwunHOsxXbS5z7mJBzMSFM",
@@ -63,19 +69,36 @@
         // obj = false;
         // if (obj == false) {
         // ログインチェック
-        firebase.auth().onAuthStateChanged(user => {
-          if (user) {
-            if (!user.emailVerified) {
-              // メアド確認終わってない
+        db.collection("mentenance")
+          .doc("mente")
+          .get()
+          .then(function(mente) {
+            var text = mente.data().text;
+            if (text != "") {
               myNavigator.pushPage("html/loginPage.html");
+              setTimeout(function() {
+                ons.notification.alert({
+                  message: text
+                });
+                $("ons-button").attr("disabled", true);
+              }, 1000);
             } else {
-              // メアド確認終わってる
-              myNavigator.pushPage("html/homePage.html");
+              firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                  if (!user.emailVerified) {
+                    // メアド確認終わってない
+                    myNavigator.pushPage("html/loginPage.html");
+                  } else {
+                    // メアド確認終わってる
+                    myNavigator.pushPage("html/homePage.html");
+                  }
+                } else {
+                  myNavigator.pushPage("html/loginPage.html");
+                }
+              });
             }
-          } else {
-            myNavigator.pushPage("html/loginPage.html");
-          }
-        });
+          });
+
         // } else {
         //   myNavigator.pushPage("html/firstPage.html");
         // }
@@ -110,6 +133,52 @@
             urlPrm[kv[0]] = kv[1];
           }
           var productId = urlPrm.productId;
+          var productUserId = urlPrm.productUserId;
+          var buyUserId = urlPrm.buyUserId;
+
+          db.collection("users")
+            .doc(buyUserId)
+            .get()
+            .then(function(users) {
+              var userName = users.data().username;
+              var push = new ncmb.Push();
+              push
+                .set("immediateDeliveryFlag", true)
+                .set("message", userName + "さんが商品を購入しました。")
+                .set("target", ["ios", "android"])
+                .set("searchCondition", {
+                  userId: productUserId
+                });
+
+              push
+                .send()
+                .then(function(push) {
+                  // 送信後処理
+                  ncmb.Push.order("createDate", true)
+                    .fetch()
+                    .then(function(push) {
+                      var where = push.searchCondition;
+                      var targets = push.target;
+                      ncmb.Installation.where(where)
+                        .limit(1000)
+                        .in("deviceType", targets)
+                        .fetchAll()
+                        .then(function(installations) {
+                          for (let installation of installations) {
+                            if (!installation.pushes) {
+                              installation.set("pushes", [push.objectId]);
+                            } else {
+                              installation.add(push.objectId);
+                            }
+                            installation.update();
+                          }
+                        });
+                    });
+                })
+                .catch(function(err) {
+                  // エラー処理
+                });
+            });
           giftDetailJump(productId);
         }, 100);
       }
@@ -128,6 +197,32 @@
         return new Blob([content], {
           type: mimeType
         });
+      }
+
+      function jikanCulc(create_date) {
+        var datetime = create_date;
+        var from = new Date(datetime);
+
+        // 現在時刻との差分＝経過時間
+        var diff = new Date().getTime() - from.getTime();
+        // 経過時間をDateに変換
+        var elapsed = new Date(diff);
+
+        // 大きい単位から順に表示
+        if (elapsed.getUTCFullYear() - 1970) {
+          var time = elapsed.getUTCFullYear() - 1970 + "年前";
+        } else if (elapsed.getUTCMonth()) {
+          var time = elapsed.getUTCMonth() + "ヶ月前";
+        } else if (elapsed.getUTCDate() - 1) {
+          var time = elapsed.getUTCDate() - 1 + "日前";
+        } else if (elapsed.getUTCHours()) {
+          var time = elapsed.getUTCHours() + "時間前";
+        } else if (elapsed.getUTCMinutes()) {
+          var time = elapsed.getUTCMinutes() + "分前";
+        } else {
+          var time = "たった今";
+        }
+        return time;
       }
     </script>
   </body>

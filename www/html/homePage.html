@@ -1,12 +1,26 @@
 <ons-page>
-  <ons-tabbar position="auto">
+  <ons-tabbar position="bottom">
     <ons-tab label="ホーム" page="html/mainPage.html" icon="fa-home" active>
     </ons-tab>
-    <ons-tab label="トーク" page="html/chatPage.html" icon="fa-comment">
+    <ons-tab label="取引" page="html/chatPage.html" icon="fa-comment">
     </ons-tab>
     <ons-tab label="出品" page="html/syuppinPage.html" icon="fa-history">
     </ons-tab>
     <ons-tab label="マイページ" page="html/myPage.html" icon="fa-user">
     </ons-tab>
   </ons-tabbar>
+  <script>
+    var otherCount = 0;
+    function otherPageJump(otherUserId) {
+      myNavigator.bringPageTop("html/otherPage.html");
+      setTimeout(function() {
+        $("#otherUserId").val(otherUserId);
+        otherInfo(otherUserId);
+        if (otherCount == 0) {
+          productOtherGet(otherCount);
+          otherCount++;
+        }
+      }, 200);
+    }
+  </script>
 </ons-page>

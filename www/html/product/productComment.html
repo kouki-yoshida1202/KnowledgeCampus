@@ -38,14 +38,14 @@
       >
         <ons-input
           id="productCommentInput"
-          style="background-color: #efeff4;width:90%;"
+          style="background-color: #efeff4;width:90%;line-height: 31px;padding-top:0px;padding-bottom:0px;"
           placeholder="コメント入力欄"
         ></ons-input>
       </ons-col>
       <ons-col width="20%" style="text-align: center;" vertical-align="center">
         <ons-button
           class="large-button-orange"
-          style="font-size:1.0em;"
+          style="font-size:1.0em;padding-top:0px;padding-bottom:0px;height:33px;"
           onclick="commentSubmit()"
           >送信
         </ons-button>
@@ -159,7 +159,11 @@
                 vertical-align="center"
                 style="text-align: center;"
               >
-                <ons-button class="large-button-orange">購入する</ons-button>
+                <ons-button
+                  class="large-button-orange"
+                  onclick="negotiationCreate()"
+                  >購入する</ons-button
+                >
               </ons-col>
             </ons-row>
           </ons-list-item>
@@ -181,8 +185,8 @@
     window.addEventListener("keyboardWillShow", event => {
       //画面の高さをキーボードの高さを差し引いた値とする
       $("#productCommentPage").animate(
-        { height: original_main_height - event.keyboardHeight + "px" },
-        250
+        { height: original_main_height - event.keyboardHeight - 80 + "px" },
+        100
       );
     });
 
@@ -191,7 +195,7 @@
       //画面の高さを元の高さに戻す
       $("#productCommentPage").animate(
         { height: original_main_height + "px" },
-        250
+        100
       );
     });
     function showModal() {
@@ -206,13 +210,12 @@
 
     function commentSubmit() {
       var commentInput = $("#productCommentInput").val();
-      if (commentInput == "") {
+      if (commentInput.trim() == "") {
         ons.notification.alert({
           message: "コメントが未入力です"
         });
       } else {
         showLoad();
-
         var productId = $("#commentPageProductId").val();
         var user = firebase.auth().currentUser;
         var userId = user.uid;
@@ -231,7 +234,6 @@
           )
           .then(docRef => {
             var createTime = firebase.firestore.Timestamp.fromDate(new Date());
-            console.log(createTime);
             commentIndicate(userId, commentInput, 1, 1, createTime);
             $("#productCommentInput").val("");
             var nowDataCount = $("#commentPageNowDataCountInput").val() + 1;
@@ -270,6 +272,66 @@
               nowDataCount,
               createTime
             );
+          })
+          .then(function() {
+            var productId = $("#commentPageProductId").val();
+            productInfo(productId);
+            db.collection("products")
+              .doc(productId)
+              .get()
+              .then(function(product) {
+                var productUserId = product.data().userId;
+                var user = firebase.auth().currentUser;
+                if (user.uid != productUserId) {
+                  db.collection("users")
+                    .doc(user.uid)
+                    .get()
+                    .then(function(users) {
+                      var userName = users.data().username;
+                      var push = new ncmb.Push();
+                      console.log(productUserId);
+                      push
+                        .set("immediateDeliveryFlag", true)
+                        .set(
+                          "message",
+                          userName + "さんから商品コメントが届きました。"
+                        )
+                        .set("target", ["ios", "android"])
+                        .set("searchCondition", {
+                          userId: productUserId
+                        })
+                        .send()
+                        .then(function(sentResult) {
+                          // 送信後処理
+                          console.log(sentResult);
+                          ncmb.Push.order("createDate", true)
+                            .fetch()
+                            .then(function(pushResult) {
+                              console.log(pushResult);
+                              var objectId = pushResult.objectId;
+                              console.log(objectId);
+                              ncmb.Installation.equalTo("userId", productUserId)
+                                .fetch()
+                                .then(function(installation) {
+                                  console.log(installation);
+                                  if (!installation.pushes) {
+                                    installation
+                                      .set("pushes", [push.objectId])
+                                      .update();
+                                  } else {
+                                    installation
+                                      .add("pushes", push.objectId)
+                                      .update();
+                                  }
+                                });
+                            });
+                        })
+                        .catch(function(err) {
+                          // エラー処理
+                        });
+                    });
+                }
+              });
           })
           .catch(function(error) {
             console.log(error);
@@ -357,6 +419,13 @@
       var hh = createTime.getHours();
       //「分」を取得する
       var mm = createTime.getMinutes();
+      //「時」が10未満の場合時間に"0"を追加する
+      if (hh < 10) {
+        hh = "0" + hh;
+      }
+      if (mm < 10) {
+        mm = "0" + mm;
+      }
       var time = MM + "月" + DD + "日 " + hh + ":" + mm;
       var docRef = db.collection("users").doc(commentUserId);
       docRef
@@ -369,7 +438,17 @@
             .child("profilePicture/" + commentUserId)
             .getDownloadURL()
             .then(function(url) {
+              return url;
+            })
+            .catch(function() {
+              var url = "img/userSampleImageMan.png";
+              return url;
+            })
+            .then(function(url) {
               $("#commentImage_" + nowDataCount).attr("src", url);
+              $("#commentImage_" + nowDataCount).click(function() {
+                otherPageJump(commentUserId);
+              });
               $("#commentUserName_" + nowDataCount).html(commentUserName);
               $("#comment_" + nowDataCount).html(
                 comment +

@@ -14,7 +14,7 @@
           width="100%"
           style="text-align: left;padding:0px 3%;"
         >
-          ユーザーネーム
+          ユーザー名
         </ons-col>
         <ons-col
           vertical-align="center"
@@ -164,15 +164,15 @@
       var mailAddress = $("#newMailAddress").val();
       var password = $("#newPassword").val();
       var passwordCheck = $("#newPasswordCheck").val();
-      if (userName == "") {
+      if (userName.trim() == "") {
         ons.notification.alert({
-          message: "ユーザーネームが未入力です"
+          message: "ユーザー名が未入力です"
         });
-      } else if (mailAddress == "") {
+      } else if (mailAddress.trim() == "") {
         ons.notification.alert({
           message: "メールアドレスが未入力です"
         });
-      } else if (password == "") {
+      } else if (password.trim() == "") {
         ons.notification.alert({
           message: "パスワードが未入力です。"
         });
@@ -204,7 +204,7 @@
                         username: userName,
                         point: 0,
                         text: "",
-                        ginkoukind: "",
+                        ginkoukind: "普通",
                         ginkoumeigi: "",
                         ginkouname: "",
                         ginkounumber: "",

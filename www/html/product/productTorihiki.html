@@ -138,7 +138,7 @@
         <ons-row>
           <ons-button
             id="reviewSubmitButton"
-            onclick="reviewSubmit()"
+            onclick="reviewSubmitCheck()"
             modifier="large"
             class="large-button-orange"
             style="margin-top:1em;margin-bottom:1em;"
@@ -170,7 +170,7 @@
       //画面の高さをキーボードの高さを差し引いた値とする
       $("#productTorihikiPage").animate(
         { height: original_main_height - event.keyboardHeight + "px" },
-        250
+        100
       );
     });
 
@@ -179,15 +179,28 @@
       //画面の高さを元の高さに戻す
       $("#productTorihikiPage").animate(
         { height: original_main_height + "px" },
-        250
+        100
       );
     });
-
+    function reviewSubmitCheck() {
+      var productUserId = $("#torihikiPageProductUserId").val();
+      var buyUserId = $("#torihikiPagebuyUserId").val();
+      var user = firebase.auth().currentUser;
+      var myUserId = user.uid;
+      ons.notification.confirm({
+        message: "双方がレビューをすることで取引が完了します。よろしいですか？",
+        title: "確認",
+        buttonLabels: ["キャンセル", "OK"],
+        callback: function(buttonIndex) {
+          if (buttonIndex == 1) {
+            reviewSubmit();
+          }
+        }
+      });
+    }
     function reviewSubmit() {
       var reviewComment = $("#reviewComment").val();
       var reviewCount = $("input[name=hoshi]:checked").val();
-      console.log(reviewComment);
-      console.log(reviewCount);
       showLoad();
       var productId = $("#torihikiPageProductId").val();
       var negotiationId = $("#torihikiPageNagotiationId").val();
@@ -210,15 +223,16 @@
             createTime: new Date(),
             reviewComment: reviewComment,
             reviewCount: reviewCount,
-            negotiationId: negotiationId
+            negotiationId: negotiationId,
+            writeUserId: myUserId
           },
           { merge: true }
         )
         .then(function() {
-          console.log("success");
           hideLoad();
           $("#reviewComment").attr("readonly", true);
           $("#reviewSubmitButton").html("評価済み");
+          $("#reviewSubmitButton").get(0).onclick = "";
           $("#reviewSubmitButton")
             .removeClass("large-button-orange")
             .addClass("large-button-gray");
@@ -227,15 +241,37 @@
         .then(function() {
           db.collection("negotiations")
             .doc(negotiationId)
-            .set(
-              {
-                status: "取引完了"
-              },
-              { merge: true }
-            );
-          ons.notification.alert({
-            message: "取引評価が完了しました。"
-          });
+            .get()
+            .then(function(nego) {
+              var reviewStatusNow = nego.data().reviewStatus;
+              if (reviewStatusNow == "") {
+                if (myUserId == productUserId) {
+                  var reviewStatus = "productUserOk";
+                } else if (myUserId == buyUserId) {
+                  var reviewStatus = "buyUserOk";
+                }
+                var status = "取引中";
+              } else {
+                var reviewStatus = "complete";
+                var status = "取引完了";
+              }
+
+              db.collection("negotiations")
+                .doc(negotiationId)
+                .set(
+                  {
+                    reviewStatus: reviewStatus,
+                    status: status
+                  },
+                  { merge: true }
+                );
+              ons.notification.alert({
+                message: "取引評価が完了しました。"
+              });
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
         })
         .catch(function(error) {
           console.log(error);
@@ -245,12 +281,13 @@
 
     function torihikiSubmit() {
       var commentInput = $("#torihikiCommentInput").val();
-      if (commentInput == "") {
+      if (commentInput.trim() == "") {
         ons.notification.alert({
           message: "コメントが未入力です"
         });
       } else {
         showLoad();
+        console.log("a");
         var productId = $("#torihikiPageProductId").val();
         var negotiationId = $("#torihikiPageNagotiationId").val();
         var user = firebase.auth().currentUser;
@@ -268,7 +305,8 @@
             },
             { merge: true }
           )
-          .then(docRef => {
+          .then(function() {
+            console.log("b");
             var createTime = firebase.firestore.Timestamp.fromDate(new Date());
             $("#torihikiCommentInput").val("");
             var nowDataCount = $("#nowDataCountInput").val() + 1;
@@ -308,6 +346,60 @@
               createTime
             );
           })
+          .then(function() {
+            var productUserId = $("#torihikiPageProductUserId").val();
+            var buyUserId = $("#torihikiPagebuyUserId").val();
+            var user = firebase.auth().currentUser;
+            if (user.uid == buyUserId) {
+              var sendUserId = productUserId;
+            } else {
+              var sendUserId = buyUserId;
+            }
+            db.collection("users")
+              .doc(user.uid)
+              .get()
+              .then(function(users) {
+                var push = new ncmb.Push();
+                push
+                  .set("immediateDeliveryFlag", true)
+                  .set(
+                    "message",
+                    userName + "さんから取引メッセージが届きました。"
+                  )
+                  .set("target", ["ios", "android"])
+                  .set("searchCondition", {
+                    userId: sendUserId
+                  })
+                  .send()
+                  .then(function(sentResult) {
+                    // 送信後処理
+                    var userName = users.data().username;
+                    ncmb.Push.order("createDate", true)
+                      .fetch()
+                      .then(function(pushResult) {
+                        var objectId = pushResult.objectId;
+
+                        ncmb.Installation.equalTo("userId", sendUserId)
+                          .fetch()
+                          .then(function(installation) {
+                            console.log(installation);
+                            if (!installation.pushes) {
+                              installation
+                                .set("pushes", [push.objectId])
+                                .update();
+                            } else {
+                              installation
+                                .add("pushes", push.objectId)
+                                .update();
+                            }
+                          });
+                      });
+                  })
+                  .catch(function(err) {
+                    // エラー処理
+                  });
+              });
+          })
           .catch(function(error) {
             console.log(error);
             alert("コメント失敗");
@@ -328,33 +420,29 @@
           if (negoResult.size > 0) {
             negoResult.forEach(nego => {
               var negotiationId = nego.id;
+              var reviewStatus = nego.data().reviewStatus;
               $("#torihikiPageNagotiationId").val(negotiationId);
-              if (nego.data().status == "取引完了") {
-                db.collection("users")
-                  .doc(productUserId)
-                  .collection("reviews")
-                  .where("negotiationId", "==", negotiationId)
-                  .get()
-                  .then(function(reviewDetails) {
-                    reviewDetails.forEach(reviewDetail => {
-                      var reviewComment = reviewDetail.data().reviewComment;
-                      var reviewCount = reviewDetail.data().reviewCount;
-                      var reviewDate = reviewDetail.data().createTime;
-                      $("#reviewComment").val(reviewComment);
-                      $("input[name=hoshi]").val([reviewCount]);
-                      $("#reviewComment").attr("readonly", true);
-                      $("#reviewSubmitButton").html("評価済み");
-                      $("#reviewSubmitButton")
-                        .removeClass("large-button-orange")
-                        .addClass("large-button-gray");
-                      $("input[name=hoshi]").prop("disabled", true);
-                    });
-                  })
-                  .catch(function(error) {
-                    console.log(error);
-                    alert("コメント取得失敗");
-                    hideLoad();
-                  });
+
+              var userId = firebase.auth().currentUser.uid;
+              var productUserOk = "productUserOk";
+              var buyUserOk = "buyUserOk";
+              console.log(userId, buyUserId, productUserId, reviewStatus);
+              var reviewStatus = reviewStatus.normalize("NFC");
+              var buyUserOk = buyUserOk.normalize("NFC");
+              var productUserOk = productUserOk.normalize("NFC");
+              if (userId == buyUserId && reviewStatus == buyUserOk) {
+                reviewCompleteCheck(productUserId, negotiationId);
+              } else if (
+                userId == productUserId &&
+                reviewStatus == productUserOk
+              ) {
+                reviewCompleteCheck(buyUserId, negotiationId);
+              } else if (nego.data().status == "取引完了") {
+                if (userId == productUserId) {
+                  reviewCompleteCheck(buyUserId, negotiationId);
+                } else if (userId == buyUserId) {
+                  reviewCompleteCheck(productUserId, negotiationId);
+                }
               }
               db.collection("negotiations")
                 .doc(negotiationId)
@@ -427,6 +515,12 @@
       var hh = createTime.getHours();
       //「分」を取得する
       var mm = createTime.getMinutes();
+      if (hh < 10) {
+        hh = "0" + hh;
+      }
+      if (mm < 10) {
+        mm = "0" + mm;
+      }
       var time = MM + "月" + DD + "日 " + hh + ":" + mm;
       db.collection("users")
         .doc(commentUserId)
@@ -447,6 +541,9 @@
             })
             .then(function(url) {
               $("#torihikiCommentImage_" + nowDataCount).attr("src", url);
+              $("#torihikiCommentImage_" + nowDataCount).click(function() {
+                otherPageJump(commentUserId);
+              });
               $("#torihikiCommentUserName_" + nowDataCount).html(
                 commentUserName
               );
@@ -469,6 +566,36 @@
         })
         .catch(function(error) {
           console.log("Error getting document:", error);
+          hideLoad();
+        });
+    }
+
+    function reviewCompleteCheck(reviewGetUserId, negotiationId) {
+      console.log(negotiationId, reviewGetUserId);
+      db.collection("users")
+        .doc(reviewGetUserId)
+        .collection("reviews")
+        .where("negotiationId", "==", negotiationId)
+        .get()
+        .then(function(reviewDetails) {
+          reviewDetails.forEach(reviewDetail => {
+            var reviewComment = reviewDetail.data().reviewComment;
+            var reviewCount = reviewDetail.data().reviewCount;
+            var reviewDate = reviewDetail.data().createTime;
+            $("#reviewComment").val(reviewComment);
+            $("input[name=hoshi]").val([reviewCount]);
+            $("#reviewComment").attr("readonly", true);
+            $("#reviewSubmitButton").html("評価済み");
+            $("#reviewSubmitButton").get(0).onclick = "";
+            $("#reviewSubmitButton")
+              .removeClass("large-button-orange")
+              .addClass("large-button-gray");
+            $("input[name=hoshi]").prop("disabled", true);
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+          alert("コメント取得失敗");
           hideLoad();
         });
     }

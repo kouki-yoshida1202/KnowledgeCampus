@@ -29,6 +29,20 @@
     #productDetailComment .list-item__title {
       font-size: 0.8em;
     }
+
+    #productDetailModal ons-list-item {
+      border-bottom: 1px solid #ccc;
+      padding-top: 3px;
+      padding-bottom: 3px;
+    }
+    #productDetailModal ons-input {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+
+    #explanationList .center {
+      width: 100%;
+    }
   </style>
   <ons-toolbar>
     <div class="left" id="toolbar-title">
@@ -65,7 +79,10 @@
       </ons-col>
     </ons-row>
   </ons-bottom-toolbar>
-  <div style="width:85%;margin:0 auto;margin-top:0px;">
+  <div
+    id="productUserInfomation"
+    style="width:85%;margin:0 auto;margin-top:0px;"
+  >
     <div style="height:70px;text-align: center;margin-top:1.5rem;">
       <img
         id="productDetailUserImage"
@@ -104,11 +121,14 @@
       </ons-row>
     </ons-list-item>
     <ons-list-header>商品の説明</ons-list-header>
-    <ons-list-item>
+    <ons-list-item id="explanationList" style="width:100%;">
       <ons-row
-        id="productDetailExplanation"
-        style="font-size:0.8em;padding-right:0.25em;"
+        style="font-size:0.8em;padding-right:0.25em;width:100%;word-wrap:break-word;overflow-wrap : break-word;"
       >
+        <p
+          id="productDetailExplanation"
+          style="width:100%;margin-top:0px;margin-bottom:0px;"
+        ></p>
       </ons-row>
     </ons-list-item>
     <ons-list-header>通話手段</ons-list-header>
@@ -166,8 +186,9 @@
                 width="50%"
                 vertical-align="center"
                 style="text-align: right;padding-right:0.5em;"
-                >¥3000</ons-col
+                >¥</ons-col
               >
+              <input type="hidden" id="productDetailModalPriceHidden" />
             </ons-row>
           </ons-list-item>
           <ons-list-item>
@@ -176,12 +197,18 @@
                 ポイント使用
               </ons-col>
               <ons-col
-                id="productDetailModalMyPoint"
+                id=""
                 width="50%"
                 vertical-align="center"
                 style="text-align: right;padding-right:0.5em;"
-                >500P</ons-col
               >
+                <ons-input
+                  id="productDetailModalMyPoint"
+                  value=""
+                  type="tel"
+                  placeholder="0"
+                ></ons-input>
+              </ons-col>
             </ons-row>
           </ons-list-item>
           <ons-list-item>
@@ -194,7 +221,12 @@
                 vertical-align="center"
                 style="text-align: right;padding-right:0.5em;"
               >
-                売上があります >
+                <ons-input
+                  id="productDetailModalMyUriage"
+                  value=""
+                  type="tel"
+                  placeholder="0"
+                ></ons-input>
               </ons-col>
             </ons-row>
           </ons-list-item>
@@ -207,7 +239,7 @@
                 width="50%"
                 vertical-align="center"
                 style="text-align: right;padding-right:0.5em;"
-                >カード払い ></ons-col
+                >カード払い</ons-col
               >
             </ons-row>
           </ons-list-item>
@@ -217,11 +249,13 @@
                 支払い金額
               </ons-col>
               <ons-col
+                id="productDetailModalShiharai"
                 width="50%"
                 vertical-align="center"
                 style="font-size:1.2em;font-weight: bold;text-align: right;padding-right:0.5em;"
-                >¥2500</ons-col
+                >¥0</ons-col
               >
+              <input type="hidden" id="productDetailModalShiharaiHidden" />
             </ons-row>
           </ons-list-item>
           <ons-list-item>
@@ -260,44 +294,132 @@
   </ons-modal>
   <input type="hidden" id="productDetailId" />
   <script>
-    document.addEventListener(
-      "show",
-      function(event) {
-        if (event.target.matches("#productDetailPage")) {
-          productInfo($("#productDetailId").val());
-        }
-      },
-      false
-    );
+    setTimeout(function() {
+      let productDetailPage = document.querySelector("#productDetailPage");
+      original_main_height = productDetailPage.clientHeight;
+    }, 100);
+    setTimeout(function() {
+      productInfo($("#productDetailId").val());
+    }, 500);
+    //ソフトウェアキーボード表示処理
+    window.addEventListener("keyboardWillShow", event => {
+      //画面の高さをキーボードの高さを差し引いた値とする
+      $("#productDetailPage").animate(
+        { height: original_main_height - event.keyboardHeight + "px" },
+        100
+      );
+    });
+
+    //ソフトウェアキーボード非表示処理
+    window.addEventListener("keyboardWillHide", () => {
+      //画面の高さを元の高さに戻す
+      $("#productDetailPage").animate(
+        { height: original_main_height + "px" },
+        100
+      );
+    });
+    // document.addEventListener(
+    //   "show",
+    //   function(event) {
+    //     if (event.target.matches("#productDetailPage")) {
+
+    //     }
+    //   },
+    //   false
+    // );
+
+    $("#productDetailModalMyPoint").keyup(function() {
+      // 選択されているvalue属性値を取り出す
+      var point = $(this).val();
+      var price = $("#productDetailModalPriceHidden").val();
+      var uriage = $("#productDetailModalMyUriage").val();
+      var buyPrice = price - point - uriage;
+      $("#productDetailModalShiharaiHidden").val(buyPrice);
+      $("#productDetailModalShiharai").html("¥" + buyPrice);
+    });
+    $("#productDetailModalMyUriage").keyup(function() {
+      // 選択されているvalue属性値を取り出す
+      var uriage = $(this).val();
+      var price = $("#productDetailModalPriceHidden").val();
+      var point = $("#productDetailModalMyPoint").val();
+      var buyPrice = price - point - uriage;
+      $("#productDetailModalShiharaiHidden").val(buyPrice);
+      $("#productDetailModalShiharai").html("¥" + buyPrice);
+    });
     function negotiationCreate() {
-      var productId = $("#productDetailId").val();
-      var user = firebase.auth().currentUser;
-      var buyUserId = user.uid;
-      var mailaddress = user.email;
-      db.collection("products")
-        .doc(productId)
-        .get()
-        .then(function(result) {
-          var buyPrice = result.data().price;
-          var productUserId = result.data().userId;
-          var createTime = new Date();
-          window.open(
-            "https://knowledgecampus.info/KCpayButton.html?mailaddress=" +
-              mailaddress +
-              "&buyUserId=" +
-              buyUserId +
-              "&productId=" +
-              productId +
-              "&buyPrice=" +
-              buyPrice +
-              "&productUserId=" +
-              productUserId +
-              "&createTime=" +
-              createTime,
-            "_system",
-            "location=yes"
-          );
+      var uriage = $("#productDetailModalMyUriage").val();
+      var point = $("#productDetailModalMyPoint").val();
+      var shiharai = $("#productDetailModalShiharaiHidden").val();
+
+      if ($.isNumeric(uriage) && $.isNumeric(point) && $.isNumeric(shiharai)) {
+        if (uriage < 0 || point < 0) {
+          ons.notification.alert({
+            message: "0位上の数字を入力してください"
+          });
+        } else if (shiharai < 0) {
+          ons.notification.alert({
+            message: "支払い金額が50円以上になるよう設定してください。"
+          });
+        } else {
+          var user = firebase.auth().currentUser;
+          var buyUserId = user.uid;
+          db.collection("users")
+            .doc(buyUserId)
+            .get()
+            .then(function(userResult) {
+              var uriagenow = userResult.data().uriagenow;
+              var pointnow = userResult.data().point;
+
+              if (uriage > uriagenow) {
+                ons.notification.alert({
+                  message: "売上金を超える数字は設定できません"
+                });
+              } else if (point > pointnow) {
+                ons.notification.alert({
+                  message: "所持ポイントを超える数字は設定できません"
+                });
+              } else {
+                var productId = $("#productDetailId").val();
+                var mailaddress = user.email;
+                db.collection("products")
+                  .doc(productId)
+                  .get()
+                  .then(function(result) {
+                    var productUserId = result.data().userId;
+                    var createTime = new Date();
+
+                    window.open(
+                      "https://www.knowledgecampus.info/KCpayButton.html?mailaddress=" +
+                        mailaddress +
+                        "&buyUserId=" +
+                        buyUserId +
+                        "&productId=" +
+                        productId +
+                        "&buyPrice=" +
+                        shiharai +
+                        "&productUserId=" +
+                        productUserId +
+                        "&createTime=" +
+                        createTime +
+                        "&uriage=" +
+                        uriage +
+                        "&point=" +
+                        point,
+                      "_system",
+                      "location=yes"
+                    );
+                  });
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+        }
+      } else {
+        ons.notification.alert({
+          message: "数字を入力してください"
         });
+      }
     }
     function favoCheck() {
       showLoad();
@@ -399,8 +521,12 @@
         .get()
         .then(function(doc) {
           // 商品情報取得
+          var explanation = doc.data().explanation;
+          console.log(explanation.replace(/\\n/g, "<br>"));
           $("#productDetailTitle").html(doc.data().title);
-          $("#productDetailExplanation").html(doc.data().explanation);
+          $("#productDetailExplanation").html(
+            explanation.replace(/<5060>/g, "<br>")
+          );
           $("#productDetailHowToTalk").html(doc.data().howtotalk);
           $("#productDetailPriceTime").html(
             "¥" + doc.data().price + "/" + doc.data().time
@@ -409,20 +535,44 @@
           if (doc.data().howtotalk == "その他") {
             $("#productDetailModalHowToTalk").append(doc.data().howtotalkother);
           }
-          $("#productDetailModalPrice").html(doc.data().price);
+          $("#productDetailModalPrice").html("¥" + doc.data().price);
+          $("#productDetailModalPriceHidden").val(doc.data().price);
+          $("#productDetailModalHowToTalk").html(doc.data().howtotalk);
           var productData = doc.data();
           return productData;
         })
         .then(function(productData) {
           // ユーザー情報取得
           var docRef = db.collection("users").doc(productData.userId);
-
+          $("#productUserInfomation").click(function() {
+            otherPageJump(productData.userId);
+          });
+          var price = productData.price;
           docRef.get().then(function(doc) {
             $("#productDetailUserName").html(doc.data().username);
             $("#productDetailText").html(doc.data().text);
-            $("#productDetailMyPoint").html(
-              doc.data().point + "ポイント持っています"
-            );
+
+            var user = firebase.auth().currentUser;
+            var myUserId = user.uid;
+            db.collection("users")
+              .doc(myUserId)
+              .get()
+              .then(function(myResult) {
+                var uriagenow = myResult.data().uriagenow;
+                var pointnow = myResult.data().point;
+                $("#productDetailMyPoint").html(
+                  pointnow + "ポイント持っています"
+                );
+                $("#productDetailModalMyPoint").val(pointnow);
+                $("#productDetailModalMyUriage").val(uriagenow);
+
+                $("#productDetailModalShiharai").html(
+                  "¥" + (price - pointnow - uriagenow)
+                );
+                $("#productDetailModalShiharaiHidden").val(
+                  price - pointnow - uriagenow
+                );
+              });
             // ユーザー写真取得
             ref = firebase
               .storage()
@@ -582,13 +732,15 @@
                       </div>
                     </ons-list-item>
                   `;
-                  $("#productDetailCommentZone").append(commentlist);
-                  productDetailCommenIndicate(
-                    commentGetResult.data().userId,
-                    commentGetResult.data().comment,
-                    commentGetResult.data().createTime,
-                    nowDataCount
-                  );
+                  if (nowDataCount < 4) {
+                    $("#productDetailCommentZone").append(commentlist);
+                    productDetailCommenIndicate(
+                      commentGetResult.data().userId,
+                      commentGetResult.data().comment,
+                      commentGetResult.data().createTime,
+                      nowDataCount
+                    );
+                  }
                 });
                 hideLoad();
               } else {
@@ -621,6 +773,12 @@
       var hh = createTime.getHours();
       //「分」を取得する
       var mm = createTime.getMinutes();
+      if (hh < 10) {
+        hh = "0" + hh;
+      }
+      if (mm < 10) {
+        mm = "0" + mm;
+      }
       var time = MM + "月" + DD + "日 " + hh + ":" + mm;
 
       var docRef = db.collection("users").doc(commentUserId);
@@ -642,6 +800,9 @@
             })
             .then(function(url) {
               $("#commentImageProduct_" + nowDataCount).attr("src", url);
+              $("#commentImageProduct_" + nowDataCount).click(function() {
+                otherPageJump(commentUserId);
+              });
               $("#commentUserNameProduct_" + nowDataCount).html(
                 commentUserName
               );
@@ -671,13 +832,16 @@
         "init",
         function(event) {
           if (event.target.matches("#syuppinEditPage")) {
+            console.log(productData.explanation);
             $("#productDocumentUid").val(productDocumentUid);
             //初期値で入れておく
             $("#syuppinCategory1Edit").val(productData.category1);
             $("#syuppinCategory2Edit").val(productData.category2);
             $("#syuppinCategory3Edit").val(productData.category3);
             $("#syuppinTitleEdit").val(productData.title);
-            $("#syuppinExplanationEdit").val(productData.explanation);
+            $("#syuppinExplanationEdit").val(
+              productData.explanation.replace(/<5060>/g, "\n")
+            );
             $("#howToTalkEdit").val(productData.howtotalk);
             $("#howToTalkOtherEdit").val(productData.howtotalkother);
             $("#syuppinTimeEdit").val(productData.time);

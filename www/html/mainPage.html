@@ -93,7 +93,7 @@
       text-align: center;
       padding: 7px;
       margin: 0px;
-      height: 190px;
+      height: 200px;
       padding-top: 15px;
       padding-bottom: 10px;
     }
@@ -145,22 +145,23 @@
       auto-scroll
       var="carousel"
       item-width="20%"
+      centerd
       initial-index="2"
       style="height:28px;border-bottom:1px solid #f0f0f0;"
     >
-      <ons-carousel-item>
+      <ons-carousel-item id="carousel1">
         <div class="item-label">キャリア</div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item id="carousel2">
         <div class="item-label">学業</div>
       </ons-carousel-item>
-      <ons-carousel-item class="active_tabCarousel">
+      <ons-carousel-item class="active_tabCarousel" id="carousel3">
         <div class="item-label">全て</div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item id="carousel4">
         <div class="item-label">ランキング</div>
       </ons-carousel-item>
-      <ons-carousel-item>
+      <ons-carousel-item id="carousel5">
         <div class="item-label">ビジネス</div>
       </ons-carousel-item>
     </ons-carousel>
@@ -230,7 +231,7 @@
             auto-refresh
             swipeable
             overscrollable
-            item-width="150px"
+            item-width="160px"
             id="studyCategoryCarousel"
             style="padding-right:50px;"
           >
@@ -244,7 +245,7 @@
             auto-refresh
             swipeable
             overscrollable
-            item-width="150px"
+            item-width="160px"
             id="businessCategoryCarousel"
             style="padding-right:50px;"
           >
@@ -260,7 +261,7 @@
             auto-refresh
             swipeable
             overscrollable
-            item-width="150px"
+            item-width="160px"
             id="careerCategoryCarousel"
             style="padding-right:50px;"
           >
@@ -295,7 +296,7 @@
                   <ons-card
                     vertical-align="center"
                     width="50%"
-                    style="text-align: center;height:190px;position: relative;"
+                    style="text-align: center;height:200px;position: relative;"
                   >
                     <img
                       id="rankingImage_` +
@@ -339,7 +340,7 @@
                       (0)
                     </p>
                     <div
-                      style="display: flex;justify-content: center;align-items: center;height:38px;border: 1px solid;border-radius: 10px;"
+                      style="display: flex;justify-content: center;align-items: center;height:38px;border-radius: 10px;padding-top:7px;padding-bottom:7px;"
                     >
                       <p id="rankingText_` +
         i +
@@ -643,7 +644,7 @@
                   <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
                   (0)
                   </p>
-                  <div style="display: flex;justify-content: center;align-items: center;height:38px;border: 1px solid;border-radius: 10px;">
+                  <div style="display: flex;justify-content: center;align-items: center;height:38px;border-radius: 10px;padding-top:7px;padding-bottom:7px;">
                   <p class="mainPageItemText mainTitle_` +
                 nowDataCount +
                 `"></p></div>
@@ -841,13 +842,102 @@
 
     function torihikiPageJump(productId, buyUserId, productUserId) {
       myNavigator.bringPageTop("html/product/productTorihiki.html");
-      console.log(productId, buyUserId, productUserId);
       setTimeout(function() {
         $("#torihikiPageProductId").val(productId);
         $("#torihikiPageProductUserId").val(productUserId);
         $("#torihikiPagebuyUserId").val(buyUserId);
         torihikiIndicate(productId, buyUserId, productUserId);
       }, 100);
+    }
+
+    document.addEventListener("deviceready", function() {
+      window.NCMB.monaca.setDeviceToken(
+        appKey,
+        clientKey,
+        result => {
+          console.log(result);
+        },
+        err => console.log("通知設定エラー：" + JSON.stringify(err))
+      );
+
+      setTimeout(function() {
+        getInstallationId();
+      }, 5000);
+      setTimeout(function() {
+        getInstallationId();
+      }, 10000);
+    });
+
+    function getInstallationId() {
+      NCMB.monaca.getInstallationId(id => {
+        ncmb.Installation.equalTo("objectId", id)
+          .fetch()
+          .then(installation => {
+            var user = firebase.auth().currentUser;
+            installation.set("userId", user.uid).update();
+          })
+          .catch(err => console.log("通知設定エラー：" + JSON.stringify(err)));
+      });
+    }
+
+    function sendPush() {
+      var user = firebase.auth().currentUser;
+      var push = new ncmb.Push();
+      push
+        .set("immediateDeliveryFlag", true)
+        .set("message", "Hello, World!")
+        .set("target", ["ios", "android"])
+        .set("searchCondition", {
+          userId: user.uid
+        });
+
+      push
+        .send()
+        .then(function(push) {
+          // 送信後処理
+          ncmb.Push.order("createDate", true)
+            .fetch()
+            .then(function(push) {
+              var where = push.searchCondition;
+              var targets = push.target;
+              ncmb.Installation.where(where)
+                .limit(1000)
+                .in("deviceType", targets)
+                .fetchAll()
+                .then(function(installations) {
+                  for (let installation of installations) {
+                    if (!installation.pushes) {
+                      installation.set("pushes", [push.objectId]);
+                    } else {
+                      installation.add(push.objectId);
+                    }
+                    installation.update();
+                  }
+                });
+            });
+        })
+        .catch(function(err) {
+          // エラー処理
+        });
+    }
+
+    function firebaseTimeControl(time) {
+      var createTime = new Date(time * 1000);
+      var MM = createTime.getMonth() + 1;
+      //「日」を取得する
+      var DD = createTime.getDate();
+      //「時」を取得する
+      var hh = createTime.getHours();
+      //「分」を取得する
+      var mm = createTime.getMinutes();
+      if (hh < 10) {
+        hh = "0" + hh;
+      }
+      if (mm < 10) {
+        mm = "0" + mm;
+      }
+      var time = MM + "月" + DD + "日 " + hh + ":" + mm;
+      return time;
     }
   </script>
 </ons-page>

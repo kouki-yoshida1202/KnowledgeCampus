@@ -14,7 +14,6 @@
         style="width:100px;height:100px;object-fit:cover;border-radius: 50%;"
       />
       <br />
-      <input id="myImageInput" type="file" />
       <input type="hidden" id="profileImageEditStatus" val="0" />
       <p style="color:#0799d7;" onclick="profileCamera();">写真を変更する</p>
     </ons-col>
@@ -24,7 +23,7 @@
     <ons-list-item>
       <ons-row>
         <ons-col vertical-align="center" width="30%" style="text-align: left;">
-          表示名
+          ユーザー名
         </ons-col>
         <ons-col vertical-align="center" width="70%" style="text-align: right;">
           <ons-input id="myUserNameEdit" placeholder="(必須)"></ons-input>
@@ -90,7 +89,7 @@
       //画面の高さをキーボードの高さを差し引いた値とする
       $("#mypageProfileEdit-page").animate(
         { height: original_main_height - event.keyboardHeight + "px" },
-        250
+        100
       );
     });
 
@@ -99,7 +98,7 @@
       //画面の高さを元の高さに戻す
       $("#mypageProfileEdit-page").animate(
         { height: original_main_height + "px" },
-        250
+        100
       );
     });
     docRef
