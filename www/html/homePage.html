@@ -119,8 +119,8 @@
     function syoryaku(className) {
       $(className).each(function() {
         var txt = $(this).text();
-        if (txt.length > 19) {
-          txt = txt.substr(0, 19);
+        if (txt.length > 28) {
+          txt = txt.substr(0, 28);
           $(this).text(txt + "…");
         }
       });
