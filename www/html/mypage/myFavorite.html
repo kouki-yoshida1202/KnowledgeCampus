@@ -1,10 +1,12 @@
 <ons-page id="myFavoritePage">
   <style>
     #myFavoritePage .fa-heart,
-    #myFavoritePage .fa-comment-dots {
+    #myFavoritePage .fa-comment-dots,
+    #myFavoritePage .fa-cart-arrow-down {
       margin-right: 0.5rem;
     }
 
+    #myFavoritePage .fa-cart-arrow-down,
     #myFavoritePage .fa-comment-dots {
       margin-left: 1rem;
     }
@@ -81,58 +83,84 @@
                   return url;
                 })
                 .then(function(url) {
-                  var dataSet = [favoCount, productResult, url];
-                  return dataSet;
-                })
-                .then(function(dataSet) {
-                  console.log(dataSet);
-                  var favoCount = dataSet[0];
-                  var data = dataSet[1];
-                  console.log(data.id);
-                  var url = dataSet[2];
-                  var favolist = "";
-                  favolist +=
-                    `
-              <ons-list-item onclick="giftDetailJump('` +
-                    data.id +
-                    `')">
-                <ons-row>
-                  <ons-col width="20%" vertical-align="center">
-                    <img
-                      class="shitagakiImage list-item__thumbnail"
-                      src="` +
-                    url +
-                    `"
-                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-                    />
-                  </ons-col>
-                  <ons-col width="70%" vertical-align="center">
-                    <p style="margin-bottom:0px;margin-top:0px;">` +
-                    data.data().title +
-                    `<br />¥` +
-                    data.data().price +
-                    `</p>
-                    <p style="margin-bottom:0px;">
-                      <i class="far fa-heart"></i>` +
-                    favoCount +
-                    `<i class="far fa-comment-dots"></i>4
-                    </p>
-                  </ons-col>
-                  <ons-col width="10%" vertical-align="center">＞</ons-col>
-                </ons-row>
-              </ons-list-item>
-          `;
-                  $("#myFavoriteList").append(favolist);
-                  if (nowDataCount == size) {
-                    hideLoad();
-                    console.log("最後");
-                  } else {
-                    console.log("最後通らん");
-                  }
-                })
-                .catch(function(error) {
-                  console.log(error);
-                  hideLoad();
+                  db.collection("products")
+                    .doc(favoResult.productId)
+                    .collection("comments")
+                    .get()
+                    .then(function(result) {
+                      var commentCount = result.size;
+                      db.collection("negotiations")
+                        .where("productId", "==", favoResult.productId)
+                        .get()
+                        .then(function(buyCount) {
+                          var buyCount = buyCount.size;
+                          var dataSet = [
+                            favoCount,
+                            productResult,
+                            url,
+                            commentCount,
+                            buyCount
+                          ];
+                          return dataSet;
+                        })
+                        .then(function(dataSet) {
+                          console.log(dataSet);
+                          var favoCount = dataSet[0];
+                          var data = dataSet[1];
+                          console.log(data.id);
+                          var url = dataSet[2];
+                          var commentCount = dataSet[3];
+                          var buyCount = dataSet[4];
+                          var favolist = "";
+                          favolist +=
+                            `
+                              <ons-list-item onclick="giftDetailJump('` +
+                            data.id +
+                            `')">
+                                <ons-row>
+                                  <ons-col width="20%" vertical-align="center">
+                                    <img
+                                      class="shitagakiImage list-item__thumbnail"
+                                      src="` +
+                            url +
+                            `"
+                                      style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                                    />
+                                  </ons-col>
+                                  <ons-col width="70%" vertical-align="center">
+                                    <p style="margin-bottom:0px;margin-top:0px;">` +
+                            data.data().title +
+                            `<br />¥` +
+                            data.data().price +
+                            `</p>
+                                    <p style="margin-bottom:0px;">
+                                      <i class="far fa-heart"></i>` +
+                            favoCount +
+                            `<i class="far fa-comment-dots"></i>` +
+                            commentCount +
+                            `
+                            <i class="fas fa-cart-arrow-down"></i>` +
+                            buyCount +
+                            ` 
+                                    </p>
+                                  </ons-col>
+                                  <ons-col width="10%" vertical-align="center">＞</ons-col>
+                                </ons-row>
+                              </ons-list-item>
+                          `;
+                          $("#myFavoriteList").append(favolist);
+                          if (nowDataCount == size) {
+                            hideLoad();
+                            console.log("最後");
+                          } else {
+                            console.log("最後通らん");
+                          }
+                        })
+                        .catch(function(error) {
+                          console.log(error);
+                          hideLoad();
+                        });
+                    });
                 });
             })
             .catch(function(error) {

@@ -2,6 +2,14 @@
   <!-- <ons-toolbar>
     <div class="center" id="toolbar-title">マイページ</div>
   </ons-toolbar> -->
+  <style>
+    #myPage ons-list-item {
+      padding-left: 0px;
+    }
+    #myPage ons-list-item .center {
+      padding-left: 14px;
+    }
+  </style>
   <ons-fab
     modifier="mini"
     position="top right"
@@ -159,7 +167,17 @@
         }
       });
     }
-
+    setInterval(function() {
+      var user = firebase.auth().currentUser;
+      if (user === null) {
+        ons.notification.alert({
+          message: "ログイン情報が取得できません。ログアウトします。"
+        });
+        logout();
+      }
+      notificationGet();
+      torihikiGet();
+    }, 30000);
     function logout() {
       firebase.auth().onAuthStateChanged(user => {
         firebase
@@ -170,9 +188,9 @@
           })
           .catch(error => {
             ons.notification.alert({
-              title: "ログイン失敗",
               message: `ログアウト時にエラーが発生しました (${error})`
             });
+            window.location.href = "index.html";
           });
       });
     }

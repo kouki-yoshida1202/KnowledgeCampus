@@ -29,14 +29,21 @@
       var="carousel"
       item-width="50%"
       initial-index="0"
+      auto-scroll-ratio="0.2"
       style="height:40px;"
     >
-      <ons-carousel-item class="active_tabCarousel">
+      <ons-carousel-item
+        class="active_tabCarousel"
+        onclick="myBoughtTapCarouselChange(0)"
+      >
         <div class="item-label" style="line-height: 35px;">
           取引中
         </div>
       </ons-carousel-item>
-      <ons-carousel-item style="line-height: 35px;">
+      <ons-carousel-item
+        style="line-height: 35px;"
+        onclick="myBoughtTapCarouselChange(1)"
+      >
         <div class="item-label">取引完了</div>
       </ons-carousel-item>
     </ons-carousel>
@@ -50,6 +57,7 @@
       var="carousel"
       item-width="100%"
       initial-index="0"
+      auto-scroll-ratio="0.2"
     >
       <ons-carousel-item style="min-height: 500px;">
         <ons-list style="background-image: none;" id="myBoughtList"> </ons-list>
@@ -77,6 +85,16 @@
       $("#tabMyBoughtCarousel ons-carousel-item")
         .eq(carouselIndex)
         .addClass("active_tabCarousel");
+    }
+    function myBoughtTapCarouselChange(carouselIndex) {
+      $("#tabMyBoughtCarousel ons-carousel-item").removeClass(
+        "active_tabCarousel"
+      );
+      $("#tabMyBoughtCarousel ons-carousel-item")
+        .eq(carouselIndex)
+        .addClass("active_tabCarousel");
+      var myBoughtCarousel = document.getElementById("myBoughtCarousel");
+      myBoughtCarousel.setActiveIndex(carouselIndex);
     }
     ons.ready(function() {
       var page = document.getElementById("myBoughtPage");

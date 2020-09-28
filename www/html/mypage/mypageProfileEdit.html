@@ -1,4 +1,12 @@
 <ons-page id="mypageProfileEdit-page">
+  <style>
+    #mypageProfileEdit-page ons-list-item {
+      padding-left: 0px;
+    }
+    #mypageProfileEdit-page ons-list-item .center {
+      padding-left: 14px;
+    }
+  </style>
   <ons-toolbar>
     <div class="left">
       <ons-back-button> </ons-back-button>
@@ -26,7 +34,11 @@
           ユーザー名
         </ons-col>
         <ons-col vertical-align="center" width="70%" style="text-align: right;">
-          <ons-input id="myUserNameEdit" placeholder="(必須)"></ons-input>
+          <ons-input
+            id="myUserNameEdit"
+            placeholder="(20文字以内/必須)"
+            maxlength="20"
+          ></ons-input>
         </ons-col>
       </ons-row>
     </ons-list-item>
@@ -40,7 +52,8 @@
             id="myTextEdit"
             class="textarea textarea--transparent"
             rows="5"
-            placeholder=""
+            placeholder="(180文字以内)"
+            maxlength="180"
           ></textarea>
         </ons-col>
       </ons-row>
@@ -181,6 +194,14 @@
                 .catch(function(error) {
                   alert(error);
                 });
+            } else {
+              ons.notification.alert({
+                title: "成功",
+                message: "プロフィールを編集しました。"
+              });
+              myNavigator.popPage();
+              userInfo(user["uid"]);
+              hideLoad();
             }
 
             // var imgs = document.querySelector("#myImageInput").files[0];

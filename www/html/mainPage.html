@@ -130,10 +130,16 @@
     <div
       class="right"
       id="toolbar-title"
-      style="display:flex;align-items: center;justify-content: center;"
+      style="display:flex;align-items: center;justify-content: center;position: relative;"
       onclick="myNavigator.bringPageTop('html/top/notificationPage.html');"
     >
       <i class="far fa-bell fa-lg fa-fw"></i>
+      <span
+        id="mainPushBadge"
+        class="notification badgeToolbar"
+        style="position: absolute;top: 5px;right: 10px;font-size:0.8em;"
+        >0</span
+      >
     </div>
   </ons-toolbar>
 
@@ -149,19 +155,23 @@
       initial-index="2"
       style="height:28px;border-bottom:1px solid #f0f0f0;"
     >
-      <ons-carousel-item id="carousel1">
+      <ons-carousel-item id="carousel1" onclick="mainTapCarouselChange(0)">
         <div class="item-label">キャリア</div>
       </ons-carousel-item>
-      <ons-carousel-item id="carousel2">
+      <ons-carousel-item id="carousel2" onclick="mainTapCarouselChange(1)">
         <div class="item-label">学業</div>
       </ons-carousel-item>
-      <ons-carousel-item class="active_tabCarousel" id="carousel3">
+      <ons-carousel-item
+        class="active_tabCarousel"
+        id="carousel3"
+        onclick="mainTapCarouselChange(2)"
+      >
         <div class="item-label">全て</div>
       </ons-carousel-item>
-      <ons-carousel-item id="carousel4">
+      <ons-carousel-item id="carousel4" onclick="mainTapCarouselChange(3)">
         <div class="item-label">ランキング</div>
       </ons-carousel-item>
-      <ons-carousel-item id="carousel5">
+      <ons-carousel-item id="carousel5" onclick="mainTapCarouselChange(4)">
         <div class="item-label">ビジネス</div>
       </ons-carousel-item>
     </ons-carousel>
@@ -179,14 +189,16 @@
       var="carousel"
       item-width="100%"
       initial-index="2"
+      auto-scroll-ratio="0.2"
       reflesh="console.log('Changed to ' + $event.activeIndex)"
+      onclick="console.log('あいう')"
     >
       <ons-carousel-item style="min-height: 500px;">
         <div
           class="item-label"
           id="careerProduct"
           class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
         ></div>
       </ons-carousel-item>
       <ons-carousel-item style="min-height: 500px;">
@@ -194,14 +206,14 @@
           class="item-label"
           id="studyProduct"
           class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
         ></div>
       </ons-carousel-item>
       <ons-carousel-item style="min-height: 500px;">
         <div
           id="allProduct"
           class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
         ></div>
       </ons-carousel-item>
       <ons-carousel-item style="min-height: 500px;">
@@ -214,7 +226,6 @@
           <ons-carousel
             auto-refresh
             swipeable
-            overscrollable
             item-width="160px"
             id="allCategoryCarousel"
             style="padding-right:50px;"
@@ -230,7 +241,6 @@
           <ons-carousel
             auto-refresh
             swipeable
-            overscrollable
             item-width="160px"
             id="studyCategoryCarousel"
             style="padding-right:50px;"
@@ -244,7 +254,6 @@
           <ons-carousel
             auto-refresh
             swipeable
-            overscrollable
             item-width="160px"
             id="businessCategoryCarousel"
             style="padding-right:50px;"
@@ -260,7 +269,6 @@
           <ons-carousel
             auto-refresh
             swipeable
-            overscrollable
             item-width="160px"
             id="careerCategoryCarousel"
             style="padding-right:50px;"
@@ -273,7 +281,7 @@
           class="item-label"
           id="businessProduct"
           class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
         ></div>
       </ons-carousel-item>
     </ons-carousel>
@@ -340,7 +348,7 @@
                       (0)
                     </p>
                     <div
-                      style="display: flex;justify-content: center;align-items: center;height:38px;border-radius: 10px;padding-top:7px;padding-bottom:7px;"
+                      style="display: flex;justify-content: center;align-items: center;height:38px;margin-top:7px;margin-bottom:7px;border-left:3px solid #ff9831;"
                     >
                       <p id="rankingText_` +
         i +
@@ -404,10 +412,11 @@
         pullHook.innerHTML = message;
       });
     });
-
     ("use strict");
     setTimeout(function() {
       productGet();
+      notificationGet();
+      torihikiGet();
       var mainCarousel = document.getElementById("mainCarousel");
       mainCarousel.addEventListener("postchange", function(e) {
         // alert(e.activeIndex);
@@ -416,7 +425,6 @@
     }, 100);
 
     function tabCarouselChange(carouselIndex) {
-      var test = $("#tabCarousel ons-carousel-item").width();
       $("#tabCarousel ons-carousel-item").removeClass("active_tabCarousel");
       $("#tabCarousel ons-carousel-item")
         .eq(carouselIndex)
@@ -428,8 +436,23 @@
         rankingIndicateCount++;
       }
     }
+    function mainTapCarouselChange(carouselIndex) {
+      $("#tabCarousel ons-carousel-item").removeClass("active_tabCarousel");
+      $("#tabCarousel ons-carousel-item")
+        .eq(carouselIndex)
+        .addClass("active_tabCarousel");
+      var mainCarousel = document.getElementById("mainCarousel");
+      mainCarousel.setActiveIndex(carouselIndex);
+      if (carouselIndex == 3) {
+        if (rankingIndicateCount == 0) {
+          rankingIndicate();
+        }
+        rankingIndicateCount++;
+      }
+    }
 
     ons.ready(function() {
+      $("#mainPushBadge").hide();
       var page = document.getElementById("mainPage");
       var toolbar = page.querySelector(".toolbar");
       var header = page.querySelector(".mainHeader");
@@ -441,41 +464,49 @@
       showLoad();
       var negotiations = db.collection("negotiations");
       negotiations.get().then(function(negotiation) {
-        rankingForEachPromise(negotiation)
-          .then(function(rankingArray) {
-            return rankingArray;
-          })
-          .then(function(rankingArray) {
-            rankingArray.sort(function(a, b) {
-              if (a.count > b.count) {
-                return -1;
-              } else {
-                return 1;
-              }
+        if (negotiation.size > 0) {
+          rankingForEachPromise(negotiation)
+            .then(function(rankingArray) {
+              return rankingArray;
+            })
+            .then(function(rankingArray) {
+              rankingArray.sort(function(a, b) {
+                if (a.count > b.count) {
+                  return -1;
+                } else {
+                  return 1;
+                }
+              });
+              return rankingArray;
+            })
+            .then(function(rankingArray) {
+              var businessRankingArray = rankingArray.filter(
+                item => item.category1 == "ビジネス"
+              );
+
+              var studyRankingArray = rankingArray.filter(
+                item => item.category1 == "学業"
+              );
+
+              var careerRankingArray = rankingArray.filter(
+                item => item.category1 == "キャリア"
+              );
+
+              rankingBorn(rankingArray, "All");
+              rankingBorn(businessRankingArray, "business");
+              rankingBorn(careerRankingArray, "career");
+              rankingBorn(studyRankingArray, "study");
+            })
+            .catch(function(error) {
+              console.log(error);
             });
-            return rankingArray;
-          })
-          .then(function(rankingArray) {
-            var businessRankingArray = rankingArray.filter(
-              item => item.category1 == "ビジネス"
-            );
-
-            var studyRankingArray = rankingArray.filter(
-              item => item.category1 == "学業"
-            );
-
-            var careerRankingArray = rankingArray.filter(
-              item => item.category1 == "キャリア"
-            );
-
-            rankingBorn(rankingArray, "All");
-            rankingBorn(businessRankingArray, "business");
-            rankingBorn(careerRankingArray, "career");
-            rankingBorn(studyRankingArray, "study");
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
+        } else {
+          $("#allCategoryCarousel").empty();
+          $("#studyCategoryCarousel").empty();
+          $("#businessCategoryCarousel").empty();
+          $("#careerCategoryCarousel").empty();
+          hideLoad();
+        }
       });
     }
 
@@ -597,7 +628,11 @@
                       });
                     });
 
-                  hideLoad();
+                  setTimeout(function() {
+                    hideLoad();
+                    syoryaku(".mainPageItemText");
+                    syoryakuName(".mainUserName");
+                  }, 1000);
                 });
             });
         }
@@ -624,7 +659,7 @@
               nowDataCount++;
               var product =
                 `
-              <div style="text-align: center;width:47.5%;padding:0.25em;">
+              <div style="text-align: center;width:47%;padding:5px 1.5% 0px 1.5% !important;">
                 <ons-card class="mainCard mainCard_` +
                 nowDataCount +
                 `">
@@ -644,7 +679,7 @@
                   <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
                   (0)
                   </p>
-                  <div style="display: flex;justify-content: center;align-items: center;height:38px;border-radius: 10px;padding-top:7px;padding-bottom:7px;">
+                  <div style="display: flex;justify-content: center;align-items: center;height:38px;margin-top:7px;margin-bottom:7px;border-left:3px solid #ff9831;">
                   <p class="mainPageItemText mainTitle_` +
                 nowDataCount +
                 `"></p></div>
@@ -752,9 +787,17 @@
                 });
                 if (nowDataCount == size) {
                   if (selfReload != "selfReload") {
-                    hideLoad();
+                    setTimeout(function() {
+                      syoryaku(".mainPageItemText");
+                      syoryakuName(".mainUserName");
+                      hideLoad();
+                    }, 500);
                   } else {
-                    done();
+                    setTimeout(function() {
+                      syoryaku(".mainPageItemText");
+                      syoryakuName(".mainUserName");
+                      done();
+                    }, 500);
                   }
                 }
               });
@@ -859,7 +902,6 @@
         },
         err => console.log("通知設定エラー：" + JSON.stringify(err))
       );
-
       setTimeout(function() {
         getInstallationId();
       }, 5000);
@@ -880,64 +922,60 @@
       });
     }
 
-    function sendPush() {
+    function notificationGet() {
       var user = firebase.auth().currentUser;
-      var push = new ncmb.Push();
-      push
-        .set("immediateDeliveryFlag", true)
-        .set("message", "Hello, World!")
-        .set("target", ["ios", "android"])
-        .set("searchCondition", {
-          userId: user.uid
-        });
-
-      push
-        .send()
-        .then(function(push) {
-          // 送信後処理
-          ncmb.Push.order("createDate", true)
-            .fetch()
-            .then(function(push) {
-              var where = push.searchCondition;
-              var targets = push.target;
-              ncmb.Installation.where(where)
-                .limit(1000)
-                .in("deviceType", targets)
-                .fetchAll()
-                .then(function(installations) {
-                  for (let installation of installations) {
-                    if (!installation.pushes) {
-                      installation.set("pushes", [push.objectId]);
-                    } else {
-                      installation.add(push.objectId);
-                    }
-                    installation.update();
-                  }
-                });
-            });
-        })
-        .catch(function(err) {
-          // エラー処理
+      db.collection("notifications")
+        .where("catchUserId", "==", user.uid)
+        .where("readStatus", "==", "Unread")
+        .get()
+        .then(function(notifications) {
+          if (notifications.size > 0) {
+            $("#mainPushBadge").show();
+            var unReadCount = notifications.size;
+            $("#mainPushBadge").html(unReadCount);
+          } else {
+            $("#mainPushBadge").hide();
+          }
         });
     }
 
-    function firebaseTimeControl(time) {
-      var createTime = new Date(time * 1000);
-      var MM = createTime.getMonth() + 1;
-      //「日」を取得する
-      var DD = createTime.getDate();
-      //「時」を取得する
-      var hh = createTime.getHours();
-      //「分」を取得する
-      var mm = createTime.getMinutes();
-      if (hh < 10) {
-        hh = "0" + hh;
-      }
-      if (mm < 10) {
-        mm = "0" + mm;
-      }
-      var time = MM + "月" + DD + "日 " + hh + ":" + mm;
-      return time;
+    function torihikiGet() {
+      var user = firebase.auth().currentUser;
+      db.collection("negotiations")
+        .get()
+        .then(function(negoResults) {
+          negoResults.forEach(nego => {
+            db.collection("negotiations")
+              .doc(nego.id)
+              .collection("comments")
+              .where("catchUserId", "==", user.uid)
+              .where("readStatus", "==", "Unread")
+              .limit(20)
+              .orderBy("createTime", "desc")
+              .get()
+              .then(function(commentResults) {
+                if (commentResults.size > 0) {
+                  var unReadCount = commentResults.size;
+                  // document
+                  //   .getElementById("chatTab")
+                  //   .setAttribute("badge", unReadCount);
+                  //   $('.fa-null').delete();
+                  //   $('#chatTab .tabbar__button').append();
+                  $("#chatTab .notification").html(unReadCount);
+                } else {
+                  // document.getElementById("chatTab").setAttribute("badge", "");
+                  // $(".fa-null").delete();
+                  $("#chatTab .notification").html("");
+                }
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   </script>
 </ons-page>

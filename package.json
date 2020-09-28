@@ -11,7 +11,8 @@
         "monaca-plugin-monaca-core": "3.3.0",
         "cordova-plugin-customurlscheme": "file:res/custom_plugins/cordova-plugin-customurlscheme",
         "ncmb-push-monaca-plugin": "3.0.9",
-        "cordova-plugin-camera": "4.0.3"
+        "cordova-plugin-camera": "4.0.3",
+        "cordova-plugin-x-socialsharing": "file:res/custom_plugins/cordova-plugin-x-socialsharing"
     },
     "cordova": {
         "plugins": {
@@ -25,7 +26,8 @@
                 "URL_SCHEME": "knowledgecampus"
             },
             "ncmb-push-monaca-plugin": {},
-            "cordova-plugin-camera": {}
+            "cordova-plugin-camera": {},
+            "cordova-plugin-x-socialsharing": {}
         }
     },
     "scripts": {

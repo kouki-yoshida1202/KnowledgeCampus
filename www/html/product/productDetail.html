@@ -1,11 +1,13 @@
 <ons-page id="productDetailPage">
   <style>
     .productTitle .fa-heart,
-    .productTitle .fa-comment-dots {
+    .productTitle .fa-comment-dots,
+    .productTitle .fa-cart-arrow-down {
       margin-right: 0.5rem;
     }
-    .productTitle .fa-comment-dots {
-      margin-left: 1rem;
+    .productTitle .fa-comment-dots,
+    .productTitle .fa-cart-arrow-down {
+      margin-left: 0.5rem;
     }
     #productDetailPage ons-list p {
       margin-top: 0px;
@@ -45,26 +47,40 @@
     }
   </style>
   <ons-toolbar>
-    <div class="left" id="toolbar-title">
+    <div class="left" id="toolbar-title" style="width:15%;">
       <ons-back-button></ons-back-button>
     </div>
-    <div class="center" id="toolbar-title"></div>
+    <div class="center" id="toolbar-title" style="width:70%;"></div>
+    <div
+      class="right"
+      id="toolbar-title"
+      style="display:flex;align-items: center;justify-content: center;width:15%;"
+      onclick="showProductDetailReportModal();"
+    >
+      <i
+        id="reportButton"
+        class="fas fa-exclamation-triangle fa-fw fa-lg"
+        style="color:#515c6f;"
+      ></i>
+    </div>
   </ons-toolbar>
-  <ons-bottom-toolbar style="line-height: 35px;height:80px">
+  <ons-bottom-toolbar
+    style="line-height: 35px;height:80px;background: #0f5779;"
+  >
     <ons-row>
       <ons-col
         id="productDetailMyPoint"
         width="100%"
-        style="text-align: center;font-size:0.9em;color:white;font-weight: bold;background: #0799d7;line-height: 25px;margin-bottom:5px;"
+        style="text-align: center;font-size:0.9em;color:white;font-weight: bold;line-height: 25px;margin-bottom:5px;"
         vertical-align="center"
-        >0ポイント持っています</ons-col
+        >0P/¥0持っています</ons-col
       >
     </ons-row>
     <ons-row>
       <ons-col
         id="productDetailPriceTime"
         width="50%"
-        style="text-align: center;font-size:1.2em;"
+        style="text-align: center;font-size:1.2em;color:white;font-weight: bold;"
         vertical-align="center"
         >¥/分</ons-col
       >
@@ -117,6 +133,8 @@
             onclick="myNavigator.bringPageTop('html/product/productComment.html');"
           ></i
           ><span id="commentCount">0</span>
+          <i class="fas fa-cart-arrow-down"></i>
+          <span id="buyCount">0</span>
         </p>
       </ons-row>
     </ons-list-item>
@@ -131,15 +149,14 @@
         ></p>
       </ons-row>
     </ons-list-item>
-    <ons-list-header>通話手段</ons-list-header>
     <ons-list-item>
-      <ons-row id="productDetailHowToTalk"> </ons-row>
+      <ons-row id="productDetailHowToTalk" style="font-size:0.8em;"> </ons-row>
     </ons-list-item>
-    <br />
+
     <ons-list id="productDetailComment" style="min-height: 200px;">
       <ons-list-header>
         <ons-row>
-          <ons-col vertical-align="center">
+          <ons-col vertical-align="center" style="padding-top:10px;">
             <i class="far fa-comment-dots" style="margin-right:0.3em;"></i
             >コメント
           </ons-col>
@@ -292,7 +309,59 @@
       </ons-card>
     </div>
   </ons-modal>
+  <ons-modal id="productDetailReportModal" direction="up">
+    <div style="text-align: center">
+      <ons-card>
+        <ons-list style="background-image: none;">
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: center;font-size:1.2em;">
+                  <span
+                    style="float:right;padding-right:0.5em;"
+                    onclick="hideProductDetailReportModal()"
+                    ><i class="fas fa-times"></i
+                  ></span>
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: center;font-size:0.9em;">
+                  <textarea
+                    id="reportComment"
+                    class="textarea textarea--transparent"
+                    rows="10"
+                    placeholder="報告内容を出来るだけ細かく記入してください。"
+                  ></textarea>
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col
+                width="100%"
+                vertical-align="center"
+                style="text-align: center;"
+              >
+                <ons-button
+                  class="large-button-orange"
+                  style="padding-left:2em;padding-right:2em;margin-top:1rem;"
+                  onclick="productReport();"
+                  >通報する</ons-button
+                >
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+        </ons-list>
+      </ons-card>
+    </div>
+  </ons-modal>
   <input type="hidden" id="productDetailId" />
+  <input type="hidden" id="productDetailproductUserId" />
   <script>
     setTimeout(function() {
       let productDetailPage = document.querySelector("#productDetailPage");
@@ -318,15 +387,47 @@
         100
       );
     });
-    // document.addEventListener(
-    //   "show",
-    //   function(event) {
-    //     if (event.target.matches("#productDetailPage")) {
 
-    //     }
-    //   },
-    //   false
-    // );
+    function productReport() {
+      showLoad();
+      var productId = $("#productDetailId").val();
+      var reportComment = $("#reportComment").val();
+      if (reportComment.trim() == "") {
+        ons.notification.alert({
+          message: "報告内容が未入力です。"
+        });
+        hideLoad();
+      } else {
+        var user = firebase.auth().currentUser;
+        var buyUserId = user.uid;
+        db.collection("reports")
+          .doc()
+          .set(
+            {
+              productId: productId,
+              reportUserId: user.uid,
+              reportComment: reportComment,
+              createTime: new Date()
+            },
+            { merge: true }
+          )
+          .then(function(userResult) {
+            ons.notification.alert({
+              message: "送信しました。"
+            });
+            $("#reportComment").val("");
+            hideProductDetailReportModal();
+            hideLoad();
+          })
+          .catch(function(error) {
+            console.log(error);
+            ons.notification.alert({
+              message: "送信失敗しました。"
+            });
+            hideLoad();
+          });
+      }
+    }
 
     $("#productDetailModalMyPoint").keyup(function() {
       // 選択されているvalue属性値を取り出す
@@ -487,6 +588,34 @@
                     $(".fa-heart").addClass("favoOn");
                     var favoCount = Number($("#favoCount").html()) + 1;
                     $("#favoCount").html(favoCount);
+                    var userName = user.data().username;
+                    var productUserId = $("#productDetailproductUserId").val();
+                    var push = new ncmb.Push();
+
+                    push
+                      .set("immediateDeliveryFlag", true)
+                      .set("message", userName + "さんからいいねされました。")
+                      .set("target", ["ios", "android"])
+                      .set("searchCondition", {
+                        userId: productUserId
+                      })
+                      .send();
+                    db.collection("notifications")
+                      .doc()
+                      .set(
+                        {
+                          sendUserId: user.uid,
+                          catchUserId: productUserId,
+                          createTime: new Date(),
+                          message: userName + "さんからいいねされました。",
+                          readStatus: "Unread",
+                          pushKind: "comment",
+                          productId: productId,
+                          buyUserId: "",
+                          productUserId: ""
+                        },
+                        { merge: true }
+                      );
                     hideLoad();
                   })
                   .catch(function(error) {
@@ -512,6 +641,16 @@
       modal.hide();
     }
 
+    function showProductDetailReportModal() {
+      var modal = document.querySelector("#productDetailReportModal");
+      modal.show();
+    }
+
+    function hideProductDetailReportModal() {
+      var modal = document.querySelector("#productDetailReportModal");
+      modal.hide();
+    }
+
     function productInfo(docId) {
       showLoad();
 
@@ -522,12 +661,13 @@
         .then(function(doc) {
           // 商品情報取得
           var explanation = doc.data().explanation;
-          console.log(explanation.replace(/\\n/g, "<br>"));
           $("#productDetailTitle").html(doc.data().title);
           $("#productDetailExplanation").html(
             explanation.replace(/<5060>/g, "<br>")
           );
-          $("#productDetailHowToTalk").html(doc.data().howtotalk);
+          $("#productDetailHowToTalk").html(
+            "通話手段: " + doc.data().howtotalk
+          );
           $("#productDetailPriceTime").html(
             "¥" + doc.data().price + "/" + doc.data().time
           );
@@ -544,6 +684,7 @@
         .then(function(productData) {
           // ユーザー情報取得
           var docRef = db.collection("users").doc(productData.userId);
+          $("#productDetailproductUserId").val(productData.userId);
           $("#productUserInfomation").click(function() {
             otherPageJump(productData.userId);
           });
@@ -561,8 +702,13 @@
                 var uriagenow = myResult.data().uriagenow;
                 var pointnow = myResult.data().point;
                 $("#productDetailMyPoint").html(
-                  pointnow + "ポイント持っています"
+                  pointnow + "P/¥" + uriagenow + "持っています"
                 );
+                if (pointnow == 0 && uriagenow == 0) {
+                  $("#productDetailMyPoint").css("background", "red");
+                } else {
+                  $("#productDetailMyPoint").css("background", "#0799d7");
+                }
                 $("#productDetailModalMyPoint").val(pointnow);
                 $("#productDetailModalMyUriage").val(uriagenow);
 
@@ -611,6 +757,7 @@
             $("#productDetailUserReview").append("(" + result[0] + ")");
           });
           if (myUserId == productData.userId) {
+            $("#reportButton").hide();
             $("#productDetailButton").html("変更");
             document.getElementById(
               "productDetailButton"
@@ -690,6 +837,16 @@
               }
             });
 
+          db.collection("negotiations")
+            .where("productId", "==", productId)
+            .get()
+            .then(function(result) {
+              if (result.size > 0) {
+                $("#buyCount").html(result.size);
+              } else {
+                $("#buyCount").html("0");
+              }
+            });
           return productId;
         })
         .then(function(productId) {

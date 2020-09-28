@@ -159,6 +159,29 @@
                     // 永続性を持たせる
 
                     myNavigator.replacePage("html/homePage.html");
+                    var user = firebase.auth().currentUser;
+                    var userId = user.uid;
+                    db.collection("users")
+                      .doc(userId)
+                      .get()
+                      .then(function(userResult) {
+                        var firstLogin = userResult.data().firstLogin;
+                        if (firstLogin != "complete") {
+                          setTimeout(function() {
+                            showBanModal();
+                            db.collection("users")
+                              .doc(userId)
+                              .set(
+                                {
+                                  firstLogin: "complete"
+                                },
+                                { merge: true }
+                              )
+                              .then(function(userResult) {});
+                          }, 2000);
+                        }
+                      });
+
                     hideLoad();
                   } else {
                     // メルアド認証ができていない場合

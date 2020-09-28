@@ -8,7 +8,7 @@
       id="toolbar-title"
       style="display:flex;align-items: center;justify-content: center;"
     >
-      ジャンル検索
+      カテゴリー検索
     </div>
   </ons-toolbar>
   <div class="content">
@@ -58,7 +58,59 @@
         </div>
       </ons-list-item>
       <br />
-
+      <ons-list-item onclick="searchPageJump('キャリア','All');">
+        <div class="center" style="font-weight:bold;font-size:1.2em;">
+          <i
+            class="fas fa-level-up-alt fa-fw"
+            style="font-size:1.2em;margin-right:0.5em;"
+          ></i
+          >キャリア
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('キャリア','就活');">
+        <div class="center">
+          就活
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('キャリア','インターン');">
+        <div class="center">
+          インターン
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('キャリア','資格');">
+        <div class="center">
+          資格
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('キャリア','転職');">
+        <div class="center">
+          転職
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('キャリア','その他');">
+        <div class="center">
+          その他
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <br />
       <ons-list-item onclick="searchPageJump('ビジネス','All');">
         <div class="center" style="font-weight:bold;font-size:1.2em;">
           <i
@@ -151,70 +203,16 @@
           >
         </div>
       </ons-list-item>
-      <br />
-      <ons-list-item onclick="searchPageJump('キャリア','All');">
-        <div class="center" style="font-weight:bold;font-size:1.2em;">
-          <i
-            class="fas fa-level-up-alt fa-fw"
-            style="font-size:1.2em;margin-right:0.5em;"
-          ></i
-          >キャリア
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','就活');">
-        <div class="center">
-          就活
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','インターン');">
-        <div class="center">
-          インターン
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','資格');">
-        <div class="center">
-          資格
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','転職');">
-        <div class="center">
-          転職
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','その他');">
-        <div class="center">
-          その他
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
     </div>
   </div>
   <script>
     function searchPageJump(category1, category2) {
       showLoad();
-      console.log(category1, category2);
+
       myNavigator.bringPageTop("html/top/searchAfter.html");
       $("#searchProduct").empty();
       var nowDataCount = 0;
       if (category2 == "All") {
-        console.log("all");
         var products = db
           .collection("products")
           .where("category1", "==", category1);
@@ -230,24 +228,22 @@
           $("#searchAfterToolbar").html(category1 + " > " + category2);
         }, 500);
       }
-      console.log(products);
       products
         .where("releasestatus", "==", "syuppin")
         .orderBy("createTime", "desc")
         .get()
         .then(results => {
-          // console.log(results.size);
           if (results.size > 0) {
             results.forEach(doc => {
               nowDataCount++;
               var product =
                 `
-              <div style="text-align: center;width:47.5%;padding:0.25em;">
+              <div style="text-align: center;width:47%;padding:5px 1.5% 0px 1.5% !important;">
                 <ons-card class="mainCard searchCard_` +
                 nowDataCount +
                 `" onclick="giftDetailJump('` +
                 doc.id +
-                `')">
+                `')" style="padding-top:15px;padding-bottom:10px;height:200px;">
                   <img class="user_icon_mainPage searchImage_` +
                 nowDataCount +
                 `"alt="" />
@@ -264,7 +260,7 @@
                   <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
                   (0)
                   </p>
-                  <div style="display: flex;justify-content: center;align-items: center;height:38px;border: 1px solid;border-radius: 10px;">
+                  <div style="display: flex;justify-content: center;align-items: center;height:38px;margin-top:7px;margin-bottom:7px;border-left:3px solid #ff9831;">
                   <p class="mainPageItemText searchTitle_` +
                 nowDataCount +
                 `"></p></div>
@@ -323,15 +319,6 @@
                 return url;
               })
               .then(function(url) {
-                console.log(docId);
-                // var searchCard = document.getElementsByClassName(
-                //   "searchCard_" + nowDataCount
-                // );
-                // for (var i = 0; i < searchCard.length; i++) {
-                //   searchCard[i].onclick = function() {
-                //     giftDetailJump(docId);
-                //   };
-                // }
                 $(".searchUserName_" + nowDataCount).html(doc.data().username);
                 $(".searchImage_" + nowDataCount).attr("src", url);
                 $(".searchTitle_" + nowDataCount).html(data.title);
@@ -356,7 +343,12 @@
                   );
                 });
                 if (nowDataCount == size) {
-                  hideLoad();
+                  setTimeout(function() {
+                    hideLoad();
+                    syoryaku(".mainPageItemText");
+                    syoryakuName(".mainUserName");
+                  }, 1000);
+                  $("#searchProduct").height(210 * Math.ceil(nowDataCount / 2));
                 }
               });
           } else {

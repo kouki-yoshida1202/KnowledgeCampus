@@ -29,7 +29,7 @@
     </div>
     <div class="center" id="toolbar-title"></div>
   </ons-toolbar>
-  <ons-bottom-toolbar style="line-height: 35px;height:80px">
+  <ons-bottom-toolbar style="line-height: 35px;height:50px">
     <ons-row style="padding-top:5px;">
       <ons-col
         width="80%"
@@ -185,7 +185,7 @@
     window.addEventListener("keyboardWillShow", event => {
       //画面の高さをキーボードの高さを差し引いた値とする
       $("#productCommentPage").animate(
-        { height: original_main_height - event.keyboardHeight - 80 + "px" },
+        { height: original_main_height - event.keyboardHeight + 30 + "px" },
         100
       );
     });
@@ -236,7 +236,8 @@
             var createTime = firebase.firestore.Timestamp.fromDate(new Date());
             commentIndicate(userId, commentInput, 1, 1, createTime);
             $("#productCommentInput").val("");
-            var nowDataCount = $("#commentPageNowDataCountInput").val() + 1;
+            var nowDataCount =
+              Number($("#commentPageNowDataCountInput").val()) + 1;
             var commentlist = "";
             commentlist =
               `
@@ -289,7 +290,7 @@
                     .then(function(users) {
                       var userName = users.data().username;
                       var push = new ncmb.Push();
-                      console.log(productUserId);
+
                       push
                         .set("immediateDeliveryFlag", true)
                         .set(
@@ -300,35 +301,24 @@
                         .set("searchCondition", {
                           userId: productUserId
                         })
-                        .send()
-                        .then(function(sentResult) {
-                          // 送信後処理
-                          console.log(sentResult);
-                          ncmb.Push.order("createDate", true)
-                            .fetch()
-                            .then(function(pushResult) {
-                              console.log(pushResult);
-                              var objectId = pushResult.objectId;
-                              console.log(objectId);
-                              ncmb.Installation.equalTo("userId", productUserId)
-                                .fetch()
-                                .then(function(installation) {
-                                  console.log(installation);
-                                  if (!installation.pushes) {
-                                    installation
-                                      .set("pushes", [push.objectId])
-                                      .update();
-                                  } else {
-                                    installation
-                                      .add("pushes", push.objectId)
-                                      .update();
-                                  }
-                                });
-                            });
-                        })
-                        .catch(function(err) {
-                          // エラー処理
-                        });
+                        .send();
+                      db.collection("notifications")
+                        .doc()
+                        .set(
+                          {
+                            sendUserId: user.uid,
+                            catchUserId: productUserId,
+                            createTime: new Date(),
+                            message:
+                              userName + "さんから商品コメントが届きました。",
+                            readStatus: "Unread",
+                            pushKind: "comment",
+                            productId: productId,
+                            buyUserId: "",
+                            productUserId: ""
+                          },
+                          { merge: true }
+                        );
                     });
                 }
               });
@@ -342,7 +332,7 @@
 
     function commentPageIndicate() {
       showLoad();
-      var nowDataCount = 0;
+      var nowDataCount = 1;
       $("#commentList").empty();
       var productId = $("#commentPageProductId").val();
       var user = firebase.auth().currentUser;

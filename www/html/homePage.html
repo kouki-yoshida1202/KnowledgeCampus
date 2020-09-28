@@ -1,14 +1,107 @@
 <ons-page>
+  <style>
+    #BanModal .list-item__center{
+      background-image: none;
+    }
+
+    #BanModal p{
+      margin-top:0px;margin-bottom:0px;
+      color:white;
+    }
+  </style>
   <ons-tabbar position="bottom">
     <ons-tab label="ホーム" page="html/mainPage.html" icon="fa-home" active>
     </ons-tab>
-    <ons-tab label="取引" page="html/chatPage.html" icon="fa-comment">
+    <ons-tab id="chatTab"label="取引" page="html/chatPage.html"badge=""icon="fa-comment">
     </ons-tab>
     <ons-tab label="出品" page="html/syuppinPage.html" icon="fa-history">
     </ons-tab>
     <ons-tab label="マイページ" page="html/myPage.html" icon="fa-user">
     </ons-tab>
   </ons-tabbar>
+  </ons-modal>
+  <ons-modal id="BanModal" direction="up">
+    <div style="text-align: center;padding:20px;">
+      <ons-card style="background: linear-gradient(#E5575D,#F57730);">
+        <ons-list style="background-image: none;background: transparent;">
+          <ons-list-item style="border-bottom:2px solid white;">
+            <ons-row>
+              <ons-col>
+                <p style="text-align: center;font-size:1.2em;color:white;">
+                  禁止事項
+                  <span style="float:right;padding-right:0.5em;" onclick="hideBanModal()"><i
+                      class="fas fa-times"></i></span>
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: left;font-size:0.9em;">
+                  1.マルチ商法,情報商材、詐欺、自社商品(サービス)等への勧誘
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: left;font-size:0.9em;">
+                  2.経歴を偽装したサービスの出品
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: left;font-size:0.9em;">
+                  3.購入意思がないサービスの購入
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: left;font-size:0.9em;">
+                  4.対面によるサービスの提供および享受
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: left;font-size:0.9em;">
+                  5.SNSアカウントの交換および誘導
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: left;font-size:0.8em;">
+                  ※違反した場合、アカウントの停止/削除および利用規約に基づいた措置を検討します。
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: center;font-size:0.9em;">
+                  詳しくは<span style="border-bottom:1px solid white;"onclick='cordova.InAppBrowser.open("https://knowledgecampus-test.web.app/riyouKiyaku.html", "_blank", "location=yes");'>利用規約</span>をご覧ください。
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+        </ons-list>
+      </ons-card>
+    </div>
+  </ons-modal>
   <script>
     var otherCount = 0;
     function otherPageJump(otherUserId) {
@@ -22,5 +115,36 @@
         }
       }, 200);
     }
+
+    function syoryaku(className) {
+      $(className).each(function() {
+        var txt = $(this).text();
+        if (txt.length > 19) {
+          txt = txt.substr(0, 19);
+          $(this).text(txt + "…");
+        }
+      });
+    }
+    function syoryakuName(className) {
+        $(className).each(function () {
+          var txt = $(this).text();
+          if (txt.length > 9) {
+            txt = txt.substr(0, 9);
+            $(this).text(txt + "…");
+          }
+        });
+      }
+
+    function showBanModal() {
+        var modal = document.querySelector("#BanModal");
+        modal.show();
+      }
+
+      function hideBanModal() {
+        var modal = document.querySelector("#BanModal");
+        modal.hide();
+      }
+
+      
   </script>
 </ons-page>

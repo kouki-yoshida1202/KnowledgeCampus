@@ -1,9 +1,12 @@
 <ons-page id="mySyuppinPage">
   <style>
     #mySyuppinPage .fa-heart,
-    #mySyuppinPage .fa-comment-dots {
+    #mySyuppinPage .fa-comment-dots,
+    #mySyuppinPage .fa-cart-arrow-down {
       margin-right: 0.5rem;
     }
+
+    #mySyuppinPage .fa-cart-arrow-down,
     #mySyuppinPage .fa-comment-dots {
       margin-left: 1rem;
     }
@@ -29,17 +32,28 @@
       var="carousel"
       item-width="33%"
       initial-index="0"
+      auto-scroll-ratio="0.2"
       style="height:40px;"
     >
-      <ons-carousel-item class="active_tabCarousel" style="min-height: 500px;">
-        <div class="item-label" style="line-height: 35px;">
+      <ons-carousel-item
+        class="active_tabCarousel"
+        style="line-height: 35px;"
+        onclick="mySyuppinTapCarouselChange(0)"
+      >
+        <div class="item-label">
           出品中
         </div>
       </ons-carousel-item>
-      <ons-carousel-item style="line-height: 35px;" style="min-height: 500px;">
+      <ons-carousel-item
+        style="line-height: 35px;"
+        onclick="mySyuppinTapCarouselChange(1)"
+      >
         <div class="item-label">取引中</div>
       </ons-carousel-item>
-      <ons-carousel-item style="line-height: 35px;" style="min-height: 500px;">
+      <ons-carousel-item
+        style="line-height: 35px;"
+        onclick="mySyuppinTapCarouselChange(2)"
+      >
         <div class="item-label">取引完了</div>
       </ons-carousel-item>
     </ons-carousel>
@@ -53,6 +67,7 @@
       var="carousel"
       item-width="100%"
       initial-index="0"
+      auto-scroll-ratio="0.2"
       reflesh="console.log('Changed to ' + $event.activeIndex)"
     >
       <ons-carousel-item style="min-height: 500px;">
@@ -79,6 +94,23 @@
     }, 100);
     var torihikiCounter = 0;
     var completeCounter = 0;
+    function mySyuppinTapCarouselChange(carouselIndex) {
+      $("#tabMySyuppinCarousel ons-carousel-item").removeClass(
+        "active_tabCarousel"
+      );
+      $("#tabMySyuppinCarousel ons-carousel-item")
+        .eq(carouselIndex)
+        .addClass("active_tabCarousel");
+      var mySyuppinCarousel = document.getElementById("mySyuppinCarousel");
+      mySyuppinCarousel.setActiveIndex(carouselIndex);
+      if (carouselIndex == 1 && torihikiCounter == 0) {
+        mySyuppinTorihikiGet("取引中");
+        torihikiCounter++;
+      } else if (carouselIndex == 2 && completeCounter == 0) {
+        mySyuppinTorihikiGet("取引完了");
+        completeCounter++;
+      }
+    }
     function tabMySyuppinCarouselChange(carouselIndex) {
       $("#tabMySyuppinCarousel ons-carousel-item").removeClass(
         "active_tabCarousel"
@@ -172,17 +204,24 @@
               .get()
               .then(function(commentResults) {
                 var commentCount = commentResults.size;
-                var fotterInfo =
-                  `<i class="far fa-heart"></i>` +
-                  favoCount +
-                  `<i class="far fa-comment-dots"></i >` +
-                  commentCount;
-                var mySyuppin = "";
-                mySyuppin +=
-                  `
+                db.collection("negotiations")
+                  .where("productId", "==", productId)
+                  .get()
+                  .then(function(buyCount) {
+                    var buyCount = buyCount.size;
+                    var fotterInfo =
+                      `<i class="far fa-heart"></i>` +
+                      favoCount +
+                      `<i class="far fa-comment-dots"></i >` +
+                      commentCount +
+                      `<i class="fas fa-cart-arrow-down"></i >` +
+                      buyCount;
+                    var mySyuppin = "";
+                    mySyuppin +=
+                      `
                     <ons-list-item onclick="giftDetailJump('` +
-                  productId +
-                  `')">
+                      productId +
+                      `')">
                       <ons-row>
                         <ons-col width="20%" vertical-align="center">
                           <img
@@ -192,22 +231,23 @@
                           />
                         </ons-col>
                         <ons-col width="70%" vertical-align="center">
-                          <p style="margin-bottom:0px;margin-top:0px;">` +
-                  data.title +
-                  `<br />¥` +
-                  data.price +
-                  `</p>
+                          <p style="margin-bottom:0px;margin-top:0px;font-size:0.9em;">` +
+                      data.title +
+                      `<br />¥` +
+                      data.price +
+                      `</p>
                           <p style="margin-bottom:0px;">
                             ` +
-                  fotterInfo +
-                  `
+                      fotterInfo +
+                      `
                           </p>
                         </ons-col>
                         <ons-col width="10%" vertical-align="center">＞</ons-col>
                       </ons-row>
                     </ons-list-item>
                 `;
-                $(targetList).append(mySyuppin);
+                    $(targetList).append(mySyuppin);
+                  });
               });
           });
         if (nowDataCount == size) {
@@ -254,7 +294,7 @@
                             style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
                           />
                         </ons-col>
-                        <ons-col width="70%" vertical-align="center">
+                        <ons-col width="70%" vertical-align="center" style="font-size:0.9em;">
                           <p style="margin-bottom:0px;margin-top:0px;">` +
               data.title +
               `<br />¥` +

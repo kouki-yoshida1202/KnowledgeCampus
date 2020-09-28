@@ -1,4 +1,4 @@
-<ons-page id="chatPage">
+<ons-page id="notificationPage">
   <ons-toolbar>
     <div class="left">
       <ons-back-button> </ons-back-button>
@@ -16,30 +16,35 @@
     </ons-list>
   </div>
   <script>
-    notificationSearch();
+    setTimeout(function() {
+      notificationSearch();
+    }, 500);
+
     function notificationSearch() {
       $("#myNotificationList").empty();
       var user = firebase.auth().currentUser;
       var myUserId = user.uid;
-      console.log(myUserId);
 
-      ncmb.Installation.equalTo("userId", myUserId)
-        .fetch()
-        .then(function(installation) {
-          ncmb.Push.in("objectId", installation.pushes)
-            .order("createDate", true)
-            .limit(10)
-            .fetchAll()
-            .then(function(pushes) {
-              for (var i = 0; i < pushes.length; i++) {
-                console.log(pushes[i].message);
-                var pushList =
-                  `
-                <ons-list-item>
+      db.collection("notifications")
+        .where("catchUserId", "==", myUserId)
+        .orderBy("createTime", "desc")
+        .get()
+        .then(function(notifications) {
+          if (notifications.size > 0) {
+            var nowDataCount = 1;
+            notifications.forEach(notification => {
+              var pushList =
+                `
+                <ons-list-item id="notification_` +
+                nowDataCount +
+                `"style="border-bottom:1px solid #efeff4;">
                   <div
-                    class="left"
+                    class="left""
                   >
                     <img
+                    id="notificationImage_` +
+                nowDataCount +
+                `"
                       class="list-item__thumbnail"
                       src="img/knowledgeLogo.png"
                       style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
@@ -47,30 +52,104 @@
                   </div>
                   <div
                     class="center"
-                    style="width:50%;"
+                    style="width:50%;background-image:none;"
                   >
-                    <span
-                      class="list-item__subtitle light-navy-font"
-                      style="height:55px;overflow: hidden;"
-                      >` +
-                  pushes[i].message +
-                  `</span
-                    >
-                  </div>
-                  <div class="right">
-                    <span class="list-item__subtitle light-navy-font">` +
-                  jikanCulc(pushes[i].createDate) +
-                  `</span>
+
+                    <p id="notificationMessage_` +
+                nowDataCount +
+                `"
+                            class="list-item__subtitle light-navy-font"
+                            style="overflow: hidden;margin-bottom:3px;"
+                            ></p
+                          >
+                          <p id="notificationCreateTime_` +
+                nowDataCount +
+                `" class="list-item__subtitle light-navy-font"style="margin-top:3px;text-align:right;margin-bottom:5px;"></p>
+
                   </div>
                 </ons-list-item>
                 `;
-                $("#myNotificationList").append(pushList);
-              }
-            })
-            .catch(function(error) {
-              console.log(error);
+              $("#myNotificationList").append(pushList);
+              notificationIndicate(notification, nowDataCount);
+              nowDataCount++;
+            });
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
+
+    function notificationIndicate(notificationData, nowDataCount) {
+      // ユーザー写真取得
+      firebase
+        .storage()
+        .ref()
+        .child("profilePicture/" + notificationData.data().sendUserId)
+        .getDownloadURL()
+        .then(url => {
+          return url;
+        })
+        .catch(function() {
+          var url = "img/userSampleImageMan.png";
+          return url;
+        })
+        .then(function(url) {
+          document.getElementById(
+            "notificationImage_" + nowDataCount
+          ).src = url;
+        });
+      $("#notificationMessage_" + nowDataCount).html(
+        notificationData.data().message
+      );
+      $("#notificationCreateTime_" + nowDataCount).html(
+        jikanCulc(notificationData.data().createTime)
+      );
+      if (notificationData.data().pushKind == "negotiation") {
+        $("#notification_" + nowDataCount).click(function() {
+          torihikiPageJump(
+            notificationData.data().productId,
+            notificationData.data().buyUserId,
+            notificationData.data().productUserId
+          );
+          db.collection("notifications")
+            .doc(notificationData.id)
+            .set(
+              {
+                readStatus: "read"
+              },
+              { merge: true }
+            )
+            .then(function() {
+              notificationSearch();
+              notificationGet();
             });
         });
+      }
+
+      if (notificationData.data().pushKind == "comment") {
+        $("#notification_" + nowDataCount).click(function() {
+          giftDetailJump(notificationData.data().productId);
+          db.collection("notifications")
+            .doc(notificationData.id)
+            .set(
+              {
+                readStatus: "read"
+              },
+              { merge: true }
+            )
+            .then(function() {
+              notificationSearch();
+              notificationGet();
+            });
+        });
+      }
+      if (notificationData.data().readStatus == "Unread") {
+        $("#notification_" + nowDataCount + " .list-item__subtitle").css({
+          "font-weight": "bold",
+          color: "black"
+        });
+      }
     }
   </script>
 </ons-page>

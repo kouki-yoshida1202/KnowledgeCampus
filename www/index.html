@@ -148,36 +148,59 @@
                 .set("target", ["ios", "android"])
                 .set("searchCondition", {
                   userId: productUserId
-                });
-
-              push
-                .send()
-                .then(function(push) {
-                  // 送信後処理
-                  ncmb.Push.order("createDate", true)
-                    .fetch()
-                    .then(function(push) {
-                      var where = push.searchCondition;
-                      var targets = push.target;
-                      ncmb.Installation.where(where)
-                        .limit(1000)
-                        .in("deviceType", targets)
-                        .fetchAll()
-                        .then(function(installations) {
-                          for (let installation of installations) {
-                            if (!installation.pushes) {
-                              installation.set("pushes", [push.objectId]);
-                            } else {
-                              installation.add(push.objectId);
-                            }
-                            installation.update();
-                          }
-                        });
-                    });
                 })
-                .catch(function(err) {
-                  // エラー処理
-                });
+                .send();
+              // 通知Firebase
+
+              db.collection("notifications")
+                .doc()
+                .set(
+                  {
+                    sendUserId: buyUserId,
+                    catchUserId: productUserId,
+                    createTime: new Date(),
+                    message: userName + "さんが商品を購入しました。",
+                    readStatus: "Unread",
+                    pushKind: "negotiation",
+                    productId: productId,
+                    buyUserId: buyUserId,
+                    productUserId: productUserId
+                  },
+                  { merge: true }
+                );
+            });
+          db.collection("users")
+            .doc(productUserId)
+            .get()
+            .then(function(users) {
+              var userName = users.data().username;
+              var push = new ncmb.Push();
+              push
+                .set("immediateDeliveryFlag", true)
+                .set("message", userName + "さんの商品を購入しました。")
+                .set("target", ["ios", "android"])
+                .set("searchCondition", {
+                  userId: buyUserId
+                })
+                .send();
+              // 通知Firebase
+
+              db.collection("notifications")
+                .doc()
+                .set(
+                  {
+                    sendUserId: buyUserId,
+                    catchUserId: buyUserId,
+                    createTime: new Date(),
+                    message: userName + "さんの商品を購入しました。",
+                    readStatus: "Unread",
+                    pushKind: "negotiation",
+                    productId: productId,
+                    buyUserId: buyUserId,
+                    productUserId: productUserId
+                  },
+                  { merge: true }
+                );
             });
           giftDetailJump(productId);
         }, 100);
@@ -200,28 +223,22 @@
       }
 
       function jikanCulc(create_date) {
-        var datetime = create_date;
-        var from = new Date(datetime);
-
-        // 現在時刻との差分＝経過時間
-        var diff = new Date().getTime() - from.getTime();
-        // 経過時間をDateに変換
-        var elapsed = new Date(diff);
-
-        // 大きい単位から順に表示
-        if (elapsed.getUTCFullYear() - 1970) {
-          var time = elapsed.getUTCFullYear() - 1970 + "年前";
-        } else if (elapsed.getUTCMonth()) {
-          var time = elapsed.getUTCMonth() + "ヶ月前";
-        } else if (elapsed.getUTCDate() - 1) {
-          var time = elapsed.getUTCDate() - 1 + "日前";
-        } else if (elapsed.getUTCHours()) {
-          var time = elapsed.getUTCHours() + "時間前";
-        } else if (elapsed.getUTCMinutes()) {
-          var time = elapsed.getUTCMinutes() + "分前";
-        } else {
-          var time = "たった今";
+        //「月」を取得する
+        var createTime = new Date(create_date * 1000);
+        var MM = createTime.getMonth() + 1;
+        //「日」を取得する
+        var DD = createTime.getDate();
+        //「時」を取得する
+        var hh = createTime.getHours();
+        //「分」を取得する
+        var mm = createTime.getMinutes();
+        if (hh < 10) {
+          hh = "0" + hh;
         }
+        if (mm < 10) {
+          mm = "0" + mm;
+        }
+        var time = MM + "月" + DD + "日 " + hh + ":" + mm;
         return time;
       }
     </script>
