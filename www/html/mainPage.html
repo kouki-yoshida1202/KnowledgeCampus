@@ -700,6 +700,14 @@
       });
     }
     function productGet(selfReload, done) {
+      var user = firebase.auth().currentUser;
+      if (user === null) {
+        ons.notification.alert({
+          message: "ログイン情報が取得できません。ログアウトします。"
+        });
+        logout();
+        return;
+      }
       if (selfReload != "selfReload") {
         showLoad();
       }
