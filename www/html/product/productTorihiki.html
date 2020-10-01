@@ -255,8 +255,8 @@
       db.collection("users")
         .doc(reviewSentUserId)
         .collection("reviews")
-        .where("negotiationId", negotiationId)
-        .where("writeUserId", myUserId)
+        .where("negotiationId", "==", negotiationId)
+        .where("writeUserId", "==", myUserId)
         .get()
         .then(function(reviewExistCheck) {
           if (reviewExistCheck.size > 0) {
