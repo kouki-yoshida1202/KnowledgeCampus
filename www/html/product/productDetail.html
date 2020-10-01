@@ -457,9 +457,9 @@
           ons.notification.alert({
             message: "0位上の数字を入力してください"
           });
-        } else if (shiharai < 0) {
+        } else if (shiharai < 50) {
           ons.notification.alert({
-            message: "支払い金額が50円以上になるよう設定してください。"
+            message: "決済システムの仕様上50円以上の決済が必要になります。"
           });
         } else {
           var user = firebase.auth().currentUser;
@@ -709,15 +709,27 @@
                 } else {
                   $("#productDetailMyPoint").css("background", "#0799d7");
                 }
-                $("#productDetailModalMyPoint").val(pointnow);
-                $("#productDetailModalMyUriage").val(uriagenow);
-
-                $("#productDetailModalShiharai").html(
-                  "¥" + (price - pointnow - uriagenow)
-                );
-                $("#productDetailModalShiharaiHidden").val(
-                  price - pointnow - uriagenow
-                );
+                if (price - pointnow < 50) {
+                  $("#productDetailModalMyPoint").val(price - 50);
+                  $("#productDetailModalMyUriage").val(0);
+                  $("#productDetailModalShiharai").html("¥50");
+                  $("#productDetailModalShiharaiHidden").val(50);
+                } else {
+                  $("#productDetailModalMyPoint").val(pointnow);
+                  if (price - pointnow - uriagenow < 50) {
+                    $("#productDetailModalMyUriage").val(price - pointnow - 50);
+                    $("#productDetailModalShiharai").html("¥50");
+                    $("#productDetailModalShiharaiHidden").val(50);
+                  } else {
+                    $("#productDetailModalMyUriage").val(uriagenow);
+                    $("#productDetailModalShiharai").html(
+                      "¥" + (price - pointnow - uriagenow)
+                    );
+                    $("#productDetailModalShiharaiHidden").val(
+                      price - pointnow - uriagenow
+                    );
+                  }
+                }
               });
             // ユーザー写真取得
             ref = firebase

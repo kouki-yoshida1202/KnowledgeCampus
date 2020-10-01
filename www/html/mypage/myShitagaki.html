@@ -1,9 +1,12 @@
 <ons-page id="myShitagakiPage">
   <style>
     #myShitagakiPage .fa-heart,
-    #myShitagakiPage .fa-comment-dots {
+    #myShitagakiPage .fa-comment-dots,
+    #myShitagakiPage .fa-cart-arrow-down {
       margin-right: 0.5rem;
     }
+
+    #myShitagakiPage .fa-cart-arrow-down,
     #myShitagakiPage .fa-comment-dots {
       margin-left: 1rem;
     }
@@ -75,13 +78,18 @@
             .collection("comments")
             .get()
             .then(function(commentResults) {
-              var commentCount = commentResults.size;
-              var shitagaki = "";
-              shitagaki +=
-                `
+              db.collection("negotiations")
+                .where("productId", "==", productId)
+                .get()
+                .then(function(buyCount) {
+                  var buyCount = buyCount.size;
+                  var commentCount = commentResults.size;
+                  var shitagaki = "";
+                  shitagaki +=
+                    `
                   <ons-list-item onclick="giftDetailJump('` +
-                productId +
-                `')">
+                    productId +
+                    `')">
                     <ons-row>
                       <ons-col width="20%" vertical-align="center">
                         <img
@@ -92,47 +100,62 @@
                       </ons-col>
                       <ons-col width="70%" vertical-align="center">
                         <p style="margin-bottom:0px;margin-top:0px;">` +
-                data.title +
-                `<br />¥` +
-                data.price +
-                `</p>
+                    data.title +
+                    `<br />¥` +
+                    data.price +
+                    `</p>
                         <p style="margin-bottom:0px;">
                           <i class="far fa-heart"></i>` +
-                favoCount +
-                `<i class="far fa-comment-dots"></i>` +
-                commentCount +
-                `
+                    favoCount +
+                    `<i class="far fa-comment-dots"></i>` +
+                    commentCount +
+                    `<i class="fas fa-cart-arrow-down"></i >` +
+                    buyCount +
+                    `
                         </p>
                       </ons-col>
                       <ons-col width="10%" vertical-align="center">＞</ons-col>
                     </ons-row>
                   </ons-list-item>
               `;
-              $("#myShitagakiList").append(shitagaki);
-              if (nowDataCount == size) {
-                firebase
-                  .storage()
-                  .ref()
-                  .child("profilePicture/" + user.uid)
-                  .getDownloadURL()
-                  .then(function(url) {
-                    return url;
-                  })
-                  .catch(function() {
-                    return (url = "img/userSampleImageMan.png");
-                  })
-                  .then(function(url) {
-                    console.log(url);
-                    var shitagakiImage = document.getElementsByClassName(
-                      "shitagakiImage"
-                    );
-                    for (var i = 0; i < shitagakiImage.length; i++) {
-                      shitagakiImage[i].src = url;
-                    }
-                  });
-                hideLoad();
-              }
+                  $("#myShitagakiList").append(shitagaki);
+                  if (nowDataCount == size) {
+                    firebase
+                      .storage()
+                      .ref()
+                      .child("profilePicture/" + user.uid)
+                      .getDownloadURL()
+                      .then(function(url) {
+                        return url;
+                      })
+                      .catch(function() {
+                        return (url = "img/userSampleImageMan.png");
+                      })
+                      .then(function(url) {
+                        console.log(url);
+                        var shitagakiImage = document.getElementsByClassName(
+                          "shitagakiImage"
+                        );
+                        for (var i = 0; i < shitagakiImage.length; i++) {
+                          shitagakiImage[i].src = url;
+                        }
+                      });
+                    hideLoad();
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                  hideLoad();
+                });
+            })
+            .catch(function(error) {
+              console.log(error);
+              hideLoad();
             });
+        })
+        .catch(function(error) {
+          console.log(error);
+          hideLoad();
         });
     }
   </script>
