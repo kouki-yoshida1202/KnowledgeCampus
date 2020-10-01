@@ -234,3 +234,24 @@ h6,
 .favoOn {
   color: #ff9831;
 }
+
+.list-item__expand-chevron {
+  border-right: 1px solid #515c6f;
+  border-bottom: 1px solid #515c6f;
+}
+
+.searchBeforeDiv > ons-list-item {
+  padding-left: 0px;
+}
+.left-14 {
+  padding-left: 14px;
+}
+.expandable-content > ons-list-item {
+  padding-left: 28px;
+}
+.expandable-content {
+  padding: 0px;
+}
+/* .searchBeforeDiv > ons-list-item > .center {
+  padding-left: 14px;
+} */

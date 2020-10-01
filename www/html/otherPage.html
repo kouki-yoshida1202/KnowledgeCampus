@@ -9,7 +9,7 @@
       padding: 7px;
       margin: 0px;
       height: 230px;
-      padding-top: 20px;
+      padding-top: 10px;
       padding-bottom: 10px;
     }
   </style>
@@ -121,6 +121,11 @@
                 <ons-card class="mainCard otherCard_` +
                 nowDataCount +
                 `">
+                <ons-row >
+                    <ons-col class="productTime otherProductTime_` +
+                nowDataCount +
+                `"></ons-col>
+                  </ons-row>
                   <img class="user_icon_mainPage otherImage"alt="" />
                   <p class="mainUserName otherUserName_` +
                 nowDataCount +
@@ -139,14 +144,15 @@
                   <p class="mainPageItemText otherTitle_` +
                 nowDataCount +
                 `"></p></div>
-                  <p>
-                    <span class="salaly otherSalalyTime_` +
+                  <ons-row style="width:100%;line-height:24px;">
+                    <ons-col class="salaly otherSalalyTime_` +
                 nowDataCount +
-                `"></span>
-                    <span class="howto otherHowTo_` +
+                `" style="text-align:left;"></ons-col>
+                    <ons-col class="howto otherHowTo_` +
                 nowDataCount +
-                `"></span>
-                  </p>
+                `" style="text-align:right;"></ons-col>
+                  </ons-row>
+                  
                 </ons-card>
               </div>
             `;
@@ -194,6 +200,8 @@
               "¥" + data.price + "/" + data.time
             );
             $(".otherHowTo_" + nowDataCount).html(data.howtotalk);
+            var createTime = jikanCulc2(data.createTime);
+            $(".otherProductTime_" + nowDataCount).html(createTime);
             reviewControl(data.userId).then(function(result) {
               $(".otherReview_" + nowDataCount).empty();
               for (var i = 1; i < 6; i++) {
@@ -208,7 +216,11 @@
               }
               $(".otherReview_" + nowDataCount).append("(" + result[0] + ")");
               if (nowDataCount == size) {
-                hideLoad();
+                setTimeout(function() {
+                  syoryaku(".mainPageItemText");
+                  syoryakuName(".mainUserName");
+                  hideLoad();
+                }, 1500);
                 otherCount = 0;
                 firebase
                   .storage()

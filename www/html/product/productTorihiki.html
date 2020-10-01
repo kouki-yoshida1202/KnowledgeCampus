@@ -155,13 +155,33 @@
         <ons-list-header>
           トーク画面
           <span style="margin-left:0.5em;font-size: 0.8em;"
-            >(挨拶、通話日時の日程調整をしましょう。)</span
+            >(挨拶、通話日時の日程調整、通話URLなど)</span
           >
         </ons-list-header>
         <div id="torihikiCommentList"></div>
       </ons-list>
     </ons-list>
   </div>
+  <ons-modal
+    id="reviewCompleteModal"
+    direction="up"
+    style="background-color: rgba(0,0,0,0.9);"
+  >
+    <div style="text-align: center">
+      <p style="color:white;font-weight: bold;">
+        取引完了しました。<br />
+        またのご利用をお待ちしております。
+      </p>
+      <div style="padding:0.5rem;margin-top:1rem;">
+        <ons-button
+          modifier="large"
+          class="large-button-orange"
+          onclick="window.location.href = 'index.html';"
+          >ホーム画面へ</ons-button
+        >
+      </div>
+    </div>
+  </ons-modal>
   <input type="hidden" id="torihikiPageProductId" />
   <input type="hidden" id="torihikiPageProductUserId" />
   <input type="hidden" id="torihikiPagebuyUserId" />
@@ -171,7 +191,15 @@
     setTimeout(function() {
       let productTorihikiPage = document.querySelector("#productTorihikiPage");
       original_main_height = productTorihikiPage.clientHeight;
+      $("input[name=hoshi]").val([3]);
     }, 100);
+    $("#reviewComment")
+      .focusin(function(e) {
+        $("#torihikiBottomBar").hide();
+      })
+      .focusout(function(e) {
+        $("#torihikiBottomBar").show();
+      });
 
     //ソフトウェアキーボード表示処理
     window.addEventListener("keyboardWillShow", event => {
@@ -180,7 +208,6 @@
         { height: original_main_height - event.keyboardHeight + 30 + "px" },
         100
       );
-      $("#torihikiBottomBar").hide();
     });
 
     //ソフトウェアキーボード非表示処理
@@ -190,8 +217,8 @@
         { height: original_main_height + "px" },
         100
       );
-      $("#torihikiBottomBar").show();
     });
+    var reviewSubmitCounter = 0;
     function reviewSubmitCheck() {
       var productUserId = $("#torihikiPageProductUserId").val();
       var buyUserId = $("#torihikiPagebuyUserId").val();
@@ -202,8 +229,9 @@
         title: "確認",
         buttonLabels: ["キャンセル", "OK"],
         callback: function(buttonIndex) {
-          if (buttonIndex == 1) {
+          if (buttonIndex == 1 && reviewSubmitCounter == 0) {
             reviewSubmit();
+            reviewSubmitCounter++;
           }
         }
       });
@@ -227,99 +255,118 @@
       db.collection("users")
         .doc(reviewSentUserId)
         .collection("reviews")
-        .doc()
-        .set(
-          {
-            createTime: new Date(),
-            reviewComment: reviewComment,
-            reviewCount: reviewCount,
-            negotiationId: negotiationId,
-            writeUserId: myUserId
-          },
-          { merge: true }
-        )
-        .then(function() {
-          hideLoad();
-          $("#reviewComment").attr("readonly", true);
-          $("#reviewSubmitButton").html("評価済み");
-          $("#reviewSubmitButton").get(0).onclick = "";
-          $("#reviewSubmitButton")
-            .removeClass("large-button-orange")
-            .addClass("large-button-gray");
-          $("input[name=hoshi]").prop("disabled", true);
-        })
-        .then(function() {
-          db.collection("negotiations")
-            .doc(negotiationId)
-            .get()
-            .then(function(nego) {
-              var reviewStatusNow = nego.data().reviewStatus;
-              if (reviewStatusNow == "") {
-                if (myUserId == productUserId) {
-                  var reviewStatus = "productUserOk";
-                } else if (myUserId == buyUserId) {
-                  var reviewStatus = "buyUserOk";
-                }
-                var status = "取引中";
-              } else {
-                var reviewStatus = "complete";
-                var status = "取引完了";
-              }
-
-              db.collection("negotiations")
-                .doc(negotiationId)
-                .set(
-                  {
-                    reviewStatus: reviewStatus,
-                    status: status
-                  },
-                  { merge: true }
-                )
-                .then(function() {
-                  db.collection("users")
-                    .doc(myUserId)
-                    .get()
-                    .then(function(users) {
-                      var userName = users.data().username;
-                      var push = new ncmb.Push();
-                      push
-                        .set("immediateDeliveryFlag", true)
-                        .set("message", userName + "さんから評価されました。")
-                        .set("target", ["ios", "android"])
-                        .set("searchCondition", {
-                          userId: reviewSentUserId
-                        })
-                        .send();
-                      // 通知Firebase
-
-                      db.collection("notifications")
-                        .doc()
-                        .set(
-                          {
-                            sendUserId: myUserId,
-                            catchUserId: reviewSentUserId,
-                            createTime: new Date(),
-                            message: userName + "さんから評価されました。",
-                            readStatus: "Unread",
-                            pushKind: "negotiation",
-                            productId: productId,
-                            buyUserId: buyUserId,
-                            productUserId: productUserId
-                          },
-                          { merge: true }
-                        );
-                    });
-                });
-              ons.notification.alert({
-                message: "取引評価が完了しました。",
-                callback: function() {
-                  window.location.href = "index.html";
-                }
-              });
-            })
-            .catch(function(error) {
-              console.log(error);
+        .where("negotiationId", negotiationId)
+        .where("writeUserId", myUserId)
+        .get()
+        .then(function(reviewExistCheck) {
+          if (reviewExistCheck.size > 0) {
+            ons.notification.alert({
+              message: "同一商品に対して複数回評価をすることはできません"
             });
+          } else {
+            db.collection("users")
+              .doc(reviewSentUserId)
+              .collection("reviews")
+              .doc()
+              .set(
+                {
+                  createTime: new Date(),
+                  reviewComment: reviewComment,
+                  reviewCount: reviewCount,
+                  negotiationId: negotiationId,
+                  writeUserId: myUserId
+                },
+                { merge: true }
+              )
+              .then(function() {
+                hideLoad();
+                $("#reviewComment").attr("readonly", true);
+                $("#reviewSubmitButton").html("評価済み");
+                $("#reviewSubmitButton").get(0).onclick = "";
+                $("#reviewSubmitButton")
+                  .removeClass("large-button-orange")
+                  .addClass("large-button-gray");
+                $("input[name=hoshi]").prop("disabled", true);
+              })
+              .then(function() {
+                db.collection("negotiations")
+                  .doc(negotiationId)
+                  .get()
+                  .then(function(nego) {
+                    var reviewStatusNow = nego.data().reviewStatus;
+                    if (reviewStatusNow == "") {
+                      if (myUserId == productUserId) {
+                        var reviewStatus = "productUserOk";
+                      } else if (myUserId == buyUserId) {
+                        var reviewStatus = "buyUserOk";
+                      }
+                      var status = "取引中";
+                    } else {
+                      var reviewStatus = "complete";
+                      var status = "取引完了";
+                    }
+
+                    db.collection("negotiations")
+                      .doc(negotiationId)
+                      .set(
+                        {
+                          reviewStatus: reviewStatus,
+                          status: status
+                        },
+                        { merge: true }
+                      )
+                      .then(function() {
+                        db.collection("users")
+                          .doc(myUserId)
+                          .get()
+                          .then(function(users) {
+                            var userName = users.data().username;
+                            var push = new ncmb.Push();
+                            push
+                              .set("immediateDeliveryFlag", true)
+                              .set(
+                                "message",
+                                userName + "さんから評価されました。"
+                              )
+                              .set("target", ["ios", "android"])
+                              .set("searchCondition", {
+                                userId: reviewSentUserId
+                              })
+                              .send();
+                            // 通知Firebase
+
+                            db.collection("notifications")
+                              .doc()
+                              .set(
+                                {
+                                  sendUserId: myUserId,
+                                  catchUserId: reviewSentUserId,
+                                  createTime: new Date(),
+                                  message:
+                                    userName + "さんから評価されました。",
+                                  readStatus: "Unread",
+                                  pushKind: "negotiation",
+                                  productId: productId,
+                                  buyUserId: buyUserId,
+                                  productUserId: productUserId
+                                },
+                                { merge: true }
+                              )
+                              .then(function() {
+                                $("#reviewCompleteModal").show();
+                              });
+                          });
+                      });
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                  });
+              })
+              .catch(function(error) {
+                console.log(error);
+                hideLoad();
+              });
+          }
         })
         .catch(function(error) {
           console.log(error);
@@ -604,7 +651,6 @@
     }
 
     function reviewCompleteCheck(reviewGetUserId, negotiationId) {
-      console.log(negotiationId, reviewGetUserId);
       db.collection("users")
         .doc(reviewGetUserId)
         .collection("reviews")

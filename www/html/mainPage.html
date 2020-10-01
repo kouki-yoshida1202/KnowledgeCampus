@@ -47,9 +47,6 @@
       margin-top: 3px;
       margin-bottom: 3px;
     }
-    #mainCarousel ons-col {
-      padding: 5px 7px;
-    }
 
     .mainPageItemText {
       padding: 5px 7px;
@@ -60,16 +57,27 @@
 
     .salaly {
       float: left;
-      padding-left: 5px;
+      padding: 0px;
+      padding-left: 3px;
       line-height: 24px;
-      font-size: 0.8em;
+      font-size: 0.7em;
     }
 
     .howto {
       float: right;
-      padding-right: 5px;
-      font-size: 0.8em;
+      padding: 0px;
+      padding-right: 3px;
+      font-size: 0.7em;
       line-height: 24px;
+    }
+    .productTime {
+      width: 100%;
+      text-align: right;
+      padding-right: 3px;
+      font-size: 0.7em;
+      line-height: 20px;
+      margin-top: 0px;
+      margin-bottom: 0px;
     }
 
     .mainHeader {
@@ -94,13 +102,17 @@
       padding: 7px;
       margin: 0px;
       height: 230px;
-      padding-top: 20px;
+      padding-top: 10px;
       padding-bottom: 10px;
     }
     #mainPage .mainReview {
       font-size: 0.8em;
       display: flex;
       justify-content: center;
+    }
+
+    #tabCarousel > .ons-swiper-target {
+      justify-content: space-between;
     }
   </style>
   <ons-toolbar>
@@ -111,7 +123,7 @@
       onclick="window.location.href = 'index.html';"
     >
       <img
-        src="img/knowledgeLogo.png"
+        src="img/appstore.png"
         alt=""
         style="height:30px;width:30px;margin:0 auto;"
       />
@@ -150,35 +162,38 @@
       overscrollable
       auto-scroll
       var="carousel"
-      item-width="20%"
+      item-width="16%"
       centerd
       initial-index="2"
-      style="height:28px;border-bottom:1px solid #f0f0f0;"
+      style="height:33px;border-bottom:1px solid #f0f0f0;padding-top:5px;font-size:0.8em;"
     >
-      <ons-carousel-item id="carousel1" onclick="mainTapCarouselChange(0)">
-        <div class="item-label">キャリア</div>
-      </ons-carousel-item>
-      <ons-carousel-item id="carousel2" onclick="mainTapCarouselChange(1)">
-        <div class="item-label">学業</div>
-      </ons-carousel-item>
       <ons-carousel-item
         class="active_tabCarousel"
-        id="carousel3"
-        onclick="mainTapCarouselChange(2)"
+        id="carousel1"
+        onclick="mainTapCarouselChange(0)"
       >
         <div class="item-label">全て</div>
       </ons-carousel-item>
-      <ons-carousel-item id="carousel4" onclick="mainTapCarouselChange(3)">
+      <ons-carousel-item id="carousel2" onclick="mainTapCarouselChange(1)">
         <div class="item-label">ランキング</div>
+      </ons-carousel-item>
+      <ons-carousel-item id="carousel3" onclick="mainTapCarouselChange(2)">
+        <div class="item-label">学業</div>
+      </ons-carousel-item>
+      <ons-carousel-item id="carousel4" onclick="mainTapCarouselChange(3)">
+        <div class="item-label">キャリア</div>
       </ons-carousel-item>
       <ons-carousel-item id="carousel5" onclick="mainTapCarouselChange(4)">
         <div class="item-label">ビジネス</div>
+      </ons-carousel-item>
+      <ons-carousel-item id="carousel6" onclick="mainTapCarouselChange(5)">
+        <div class="item-label">生活</div>
       </ons-carousel-item>
     </ons-carousel>
   </div>
 
   <div class="content page__content">
-    <ons-pull-hook id="pull-hook" style="margin-top:28px;" height="100px">
+    <ons-pull-hook id="pull-hook" style="margin-top:33px;" height="105px">
       <i class="fas fa-spinner" style="font-size:1.3em;"></i>
     </ons-pull-hook>
     <ons-carousel
@@ -188,27 +203,10 @@
       auto-scroll
       var="carousel"
       item-width="100%"
-      initial-index="2"
+      initial-index="0"
       auto-scroll-ratio="0.2"
       reflesh="console.log('Changed to ' + $event.activeIndex)"
-      onclick="console.log('あいう')"
     >
-      <ons-carousel-item style="min-height: 500px;">
-        <div
-          class="item-label"
-          id="careerProduct"
-          class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
-        ></div>
-      </ons-carousel-item>
-      <ons-carousel-item style="min-height: 500px;">
-        <div
-          class="item-label"
-          id="studyProduct"
-          class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
-        ></div>
-      </ons-carousel-item>
       <ons-carousel-item style="min-height: 500px;">
         <div
           id="allProduct"
@@ -274,8 +272,40 @@
             style="padding-right:50px;"
           >
           </ons-carousel>
+          <ons-row>
+            <h4
+              style="padding-left:0.5rem;font-weight: bold;margin-top:1.0rem;"
+            >
+              生活
+            </h4>
+          </ons-row>
+          <ons-carousel
+            auto-refresh
+            swipeable
+            item-width="160px"
+            id="lifeCategoryCarousel"
+            style="padding-right:50px;"
+          >
+          </ons-carousel>
         </div>
       </ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
+        <div
+          class="item-label"
+          id="studyProduct"
+          class="item-label"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
+        ></div>
+      </ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
+        <div
+          class="item-label"
+          id="careerProduct"
+          class="item-label"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
+        ></div>
+      </ons-carousel-item>
+
       <ons-carousel-item style="min-height: 500px;">
         <div
           class="item-label"
@@ -284,14 +314,22 @@
           style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
         ></div>
       </ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
+        <div
+          class="item-label"
+          id="lifeProduct"
+          class="item-label"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
+        ></div>
+      </ons-carousel-item>
     </ons-carousel>
   </div>
 
   <script>
-    for (var i = 0; i < 12; i++) {
-      if (i == 0 || i == 3 || i == 6 || i == 9) {
+    for (var i = 0; i < 15; i++) {
+      if (i == 0 || i == 3 || i == 6 || i == 9 || i == 12) {
         var color = "#ffd43b";
-      } else if (i == 1 || i == 4 || i == 7 || i == 10) {
+      } else if (i == 1 || i == 4 || i == 7 || i == 10 || i == 13) {
         var color = "#AEB3B5";
       } else {
         var color = "#BA6E40";
@@ -306,6 +344,11 @@
                     width="50%"
                     style="text-align: center;height:230px;position: relative;"
                   >
+                  <ons-row >
+                    <ons-col id="rankingProductTime_` +
+        i +
+        `"class="productTime"></ons-col>
+                  </ons-row>
                     <img
                       id="rankingImage_` +
         i +
@@ -354,19 +397,15 @@
         i +
         `"class="mainPageItemText"></p>
                     </div>
-
-                    <p>
-                      <span id="rankingSalalyTime_` +
+                    <ons-row style="width:100%;line-height:24px;">
+                    <ons-col id="rankingSalalyTime_` +
         i +
-        `"class="salaly">
-
-                      </span>
-                      <span id="rankingHowTo_` +
+        `"class="salaly" style="text-align:left;"></ons-col>
+                    <ons-col id="rankingHowTo_` +
         i +
-        `"class="howto">
-
-                      </span>
-                    </p>
+        `"class="howto"style="text-align:right;"></ons-col>
+                  </ons-row>
+                  
                     <div
                       style="position: absolute;top:10px;left:10px;color:white;font-weight: bold;"
                     >
@@ -383,8 +422,10 @@
         $("#studyCategoryCarousel").append(content);
       } else if (5 < i && i < 9) {
         $("#businessCategoryCarousel").append(content);
-      } else if (8 < i) {
+      } else if (8 < i && i < 12) {
         $("#careerCategoryCarousel").append(content);
+      } else if (11 < i) {
+        $("#lifeCategoryCarousel").append(content);
       }
     }
     var rankingIndicateCount = 0;
@@ -429,7 +470,7 @@
       $("#tabCarousel ons-carousel-item")
         .eq(carouselIndex)
         .addClass("active_tabCarousel");
-      if (carouselIndex == 3) {
+      if (carouselIndex == 1) {
         if (rankingIndicateCount == 0) {
           rankingIndicate();
         }
@@ -443,7 +484,7 @@
         .addClass("active_tabCarousel");
       var mainCarousel = document.getElementById("mainCarousel");
       mainCarousel.setActiveIndex(carouselIndex);
-      if (carouselIndex == 3) {
+      if (carouselIndex == 1) {
         if (rankingIndicateCount == 0) {
           rankingIndicate();
         }
@@ -458,7 +499,7 @@
       var header = page.querySelector(".mainHeader");
       var content = page.querySelector(".content");
       header.style.top = toolbar.clientHeight + "px";
-      content.style.marginTop = 28 + "px";
+      content.style.marginTop = 33 + "px";
     });
     function rankingIndicate() {
       showLoad();
@@ -491,11 +532,15 @@
               var careerRankingArray = rankingArray.filter(
                 item => item.category1 == "キャリア"
               );
+              var lifeRankingArray = rankingArray.filter(
+                item => item.category1 == "生活"
+              );
 
               rankingBorn(rankingArray, "All");
               rankingBorn(businessRankingArray, "business");
               rankingBorn(careerRankingArray, "career");
               rankingBorn(studyRankingArray, "study");
+              rankingBorn(lifeRankingArray, "life");
             })
             .catch(function(error) {
               console.log(error);
@@ -505,6 +550,7 @@
           $("#studyCategoryCarousel").empty();
           $("#businessCategoryCarousel").empty();
           $("#careerCategoryCarousel").empty();
+          $("#lifeCategoryCarousel").empty();
           hideLoad();
         }
       });
@@ -516,6 +562,14 @@
         if (rankingArray.length < 3) {
           var deleteCount = 0 + rankingArray.length;
           for (deleteCount; deleteCount < 3; deleteCount++) {
+            $("#rankingCard_" + deleteCount).remove();
+          }
+        }
+      } else if (category == "study") {
+        var rankingArrayCount = 3;
+        if (rankingArray.length < 3) {
+          var deleteCount = 3 + rankingArray.length;
+          for (deleteCount; deleteCount < 6; deleteCount++) {
             $("#rankingCard_" + deleteCount).remove();
           }
         }
@@ -535,11 +589,11 @@
             $("#rankingCard_" + deleteCount).remove();
           }
         }
-      } else if (category == "study") {
-        var rankingArrayCount = 3;
+      } else if (category == "life") {
+        var rankingArrayCount = 12;
         if (rankingArray.length < 3) {
-          var deleteCount = 3 + rankingArray.length;
-          for (deleteCount; deleteCount < 6; deleteCount++) {
+          var deleteCount = 12 + rankingArray.length;
+          for (deleteCount; deleteCount < 15; deleteCount++) {
             $("#rankingCard_" + deleteCount).remove();
           }
         }
@@ -556,6 +610,7 @@
               var price = productInfo.data().price;
               var time = productInfo.data().time;
               var title = productInfo.data().title;
+              var createTime = productInfo.data().createTime;
               var productArray = [
                 userId,
                 howto,
@@ -563,7 +618,8 @@
                 time,
                 title,
                 rankingArrayCount,
-                rank.productId
+                rank.productId,
+                createTime
               ];
               rankingArrayCount++;
               return productArray;
@@ -576,6 +632,7 @@
               var title = productArray[4];
               var rankingArrayCount = productArray[5];
               var productId = productArray[6];
+              var createTime = productArray[7];
 
               db.collection("users")
                 .doc(userId)
@@ -609,7 +666,11 @@
                       $("#rankingSalalyTime_" + rankingArrayCount).html(
                         "¥" + price + "/" + time
                       );
+
                       $("#rankingHowTo_" + rankingArrayCount).html(howto);
+                      $("#rankingProductTime_" + rankingArrayCount).html(
+                        jikanCulc2(createTime)
+                      );
                       reviewControl(userId).then(function(result) {
                         $("#rankingReview_" + rankingArrayCount).empty();
                         for (var i = 1; i < 6; i++) {
@@ -653,7 +714,6 @@
         .orderBy("createTime", "desc")
         .get()
         .then(results => {
-          // console.log(results.size);
           if (results.size > 0) {
             results.forEach(doc => {
               nowDataCount++;
@@ -663,6 +723,11 @@
                 <ons-card class="mainCard mainCard_` +
                 nowDataCount +
                 `">
+                <ons-row >
+                    <ons-col class="productTime mainProductTime_` +
+                nowDataCount +
+                `"></ons-col>
+                  </ons-row>
                   <img class="user_icon_mainPage mainImage_` +
                 nowDataCount +
                 `"alt="" />
@@ -683,14 +748,15 @@
                   <p class="mainPageItemText mainTitle_` +
                 nowDataCount +
                 `"></p></div>
-                  <p>
-                    <span class="salaly mainSalalyTime_` +
+                  <ons-row style="width:100%;line-height:24px;">
+                    <ons-col class="salaly mainSalalyTime_` +
                 nowDataCount +
-                `"></span>
-                    <span class="howto mainHowTo_` +
+                `" style="text-align:left;"></ons-col>
+                    <ons-col class="howto mainHowTo_` +
                 nowDataCount +
-                `"></span>
-                  </p>
+                `" style="text-align:right;"></ons-col>
+                  </ons-row>
+                  
                 </ons-card>
               </div>
             `;
@@ -769,6 +835,8 @@
                   "¥" + data.price + "/" + data.time
                 );
                 $(".mainHowTo_" + nowDataCount).html(data.howtotalk);
+                var createTime = jikanCulc2(data.createTime);
+                $(".mainProductTime_" + nowDataCount).html(createTime);
                 reviewControl(data.userId).then(function(result) {
                   $(".mainReview_" + nowDataCount).empty();
                   for (var i = 1; i < 6; i++) {
@@ -976,6 +1044,50 @@
         .catch(function(error) {
           console.log(error);
         });
+    }
+
+    function jikanCulc2(create_date) {
+      var create_date = new Date(create_date.seconds * 1000);
+      var YY = create_date.getFullYear();
+      var MM = create_date.getMonth() + 1;
+      //「日」を取得する
+      var DD = create_date.getDate();
+      //「時」を取得する
+      var hh = create_date.getHours();
+      //「分」を取得する
+      var mm = create_date.getMinutes();
+      if (hh < 10) {
+        hh = "0" + hh;
+      }
+      if (mm < 10) {
+        mm = "0" + mm;
+      }
+      var create_date = YY + "/" + MM + "/" + DD + " " + hh + ":" + mm;
+
+      var time = new Date();
+      var from = new Date(create_date);
+
+      // 現在時刻との差分＝経過時間
+      var diff = new Date().getTime() - from.getTime();
+      // 経過時間をDateに変換
+
+      var elapsed = new Date(diff);
+
+      // 大きい単位から順に表示
+      if (elapsed.getUTCFullYear() - 1970) {
+        var time = elapsed.getUTCFullYear() - 1970 + "年前";
+      } else if (elapsed.getUTCMonth()) {
+        var time = elapsed.getUTCMonth() + "ヶ月前";
+      } else if (elapsed.getUTCDate() - 1) {
+        var time = elapsed.getUTCDate() - 1 + "日前";
+      } else if (elapsed.getUTCHours()) {
+        var time = elapsed.getUTCHours() + "時間前";
+      } else if (elapsed.getUTCMinutes()) {
+        var time = elapsed.getUTCMinutes() + "分前";
+      } else {
+        var time = "たった今";
+      }
+      return time;
     }
   </script>
 </ons-page>

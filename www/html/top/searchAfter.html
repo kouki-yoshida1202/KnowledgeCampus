@@ -7,15 +7,12 @@
       margin-top: 3px;
       margin-bottom: 3px;
     }
-    #searchAfterPage .content ons-col {
-      padding: 20px 10px;
-    }
     #searchAfterPage ons-card {
       text-align: center;
       padding: 7px;
       margin: 0px;
-      height: 190px;
-      padding-top: 15px;
+      height: 230px;
+      padding-top: 10px;
       padding-bottom: 10px;
     }
     #searchAfterPage .mainReview {
@@ -35,13 +32,13 @@
     >
       検索
     </div>
-    <!-- <div class="right">
+    <div class="right">
       <i
         class="fas fa-filter fa-2x"
-        style="margin: 0 auto;border-radius: 35px;padding:0px 18%;color:#ff9831;font-size:1.0em;"
+        style="margin: 0 auto;border-radius: 35px;padding:0px 18%;color:#515c6f;font-size:1.0em;"
         onclick="showSearchPopover(this);"
       ></i>
-    </div> -->
+    </div>
   </ons-toolbar>
   <div
     id="searchProduct"
@@ -62,7 +59,7 @@
           ></ons-icon>
         </ons-col>
       </ons-row>
-      <ons-row style="padding:20px 10px;">
+      <!-- <ons-row style="padding:20px 10px;">
         <ons-col vertical-align="center" width="40%">
           ジャンル
         </ons-col>
@@ -75,13 +72,18 @@
             <option value="underbar">〜</option>
           </ons-select>
         </ons-col>
-      </ons-row>
+      </ons-row> -->
       <ons-row style="padding:20px 10px;">
         <ons-col vertical-align="center" width="40%">
           最低価格
         </ons-col>
         <ons-col vertical-align="center" width="60%" style="text-align: right;">
-          <ons-input placeholder="Min" type="tel"></ons-input>
+          <ons-input
+            id="minPrice"
+            placeholder="Min"
+            maxlength="5"
+            type="tel"
+          ></ons-input>
         </ons-col>
       </ons-row>
       <ons-row style="padding:20px 10px;">
@@ -89,7 +91,12 @@
           最高価格
         </ons-col>
         <ons-col vertical-align="center" width="60%" style="text-align: right;">
-          <ons-input placeholder="Max" type="tel"></ons-input>
+          <ons-input
+            id="maxPrice"
+            placeholder="Max"
+            maxlength="5"
+            type="tel"
+          ></ons-input>
         </ons-col>
       </ons-row>
       <ons-row style="padding:20px 10px;">
@@ -97,11 +104,10 @@
           並び順
         </ons-col>
         <ons-col vertical-align="center" width="60%" style="text-align: right;">
-          <ons-select id="choose-sel" onchange="editSelects(event)">
-            <option value="basic">新しい順</option>
-            <option value="material">安い順</option>
-            <option value="underbar">高い順</option>
-            <option value="underbar">いいねが多い順</option>
+          <ons-select id="searchSort">
+            <option value="newSort">新着順</option>
+            <option value="rowSort">価格が安い順</option>
+            <option value="highSort">価格が高い順</option>
           </ons-select>
         </ons-col>
       </ons-row>
@@ -110,11 +116,15 @@
           modifier="large"
           style="border-radius: 10px;background-color:#ff9831;font-size: 0.9em;"
           ripple
+          onclick="searchReflesh();"
           >検索する
         </ons-button>
       </p>
     </div>
   </ons-popover>
+  <input type="hidden" id="searchAfterPageCategory1" />
+  <input type="hidden" id="searchAfterPageCategory2" />
+  <input type="hidden" id="searchAfterPageCategory3" />
   <script>
     var showSearchPopover = function(target) {
       document.getElementById("searchPopover").show(target);
@@ -123,5 +133,84 @@
     var hideSearchPopover = function() {
       document.getElementById("searchPopover").hide();
     };
+
+    function searchReflesh() {
+      showLoad();
+      $("#searchProduct").empty();
+      var minPrice = Number($("#minPrice").val());
+      var maxPrice = Number($("#maxPrice").val());
+      var searchSort = $("#searchSort").val();
+
+      if (minPrice != "" && maxPrice != "" && minPrice > maxPrice) {
+        ons.notification.alert({
+          message: "最低価格が最高価格を上回っています。"
+        });
+        hideLoad();
+      } else {
+        if (minPrice == "") {
+          minPrice = 0;
+        }
+        if (maxPrice == "") {
+          maxPrice = 99999;
+        }
+
+        var category1 = $("#searchAfterPageCategory1").val();
+        var category2 = $("#searchAfterPageCategory2").val();
+        var category3 = $("#searchAfterPageCategory3").val();
+        if (category2 == "All") {
+          var productSearch = db
+            .collection("products")
+            .where("category1", "==", category1);
+        } else if (category2 != "All" && category3 == "All") {
+          var productSearch = db
+            .collection("products")
+            .where("category1", "==", category1)
+            .where("category2", "==", category2);
+        } else {
+          var productSearch = db
+            .collection("products")
+            .where("category1", "==", category1)
+            .where("category2", "==", category2)
+            .where("category3", "==", category3);
+        }
+        if (searchSort == "newSort") {
+          var productSearch = productSearch
+            .orderBy("price")
+            .orderBy("createTime", "desc")
+            .startAt(minPrice)
+            .endAt(maxPrice);
+        } else if (searchSort == "rowSort") {
+          var productSearch = productSearch
+            .orderBy("price", "asc")
+            .startAt(minPrice)
+            .endAt(maxPrice);
+        } else if (searchSort == "highSort") {
+          var productSearch = productSearch
+            .orderBy("price", "desc")
+            .startAt(maxPrice)
+            .endAt(minPrice);
+        }
+        productSearch
+          .get()
+          .then(function(productResults) {
+            var nowDataCount = 0;
+            if (productResults.size > 0) {
+              hideSearchPopover();
+              productResults.forEach(productResult => {
+                nowDataCount++;
+                productSearchGet(productResult, nowDataCount, productResults);
+              });
+            } else {
+              ons.notification.alert({
+                message: "1件も見つかりませんでした"
+              });
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+            hideLoad();
+          });
+      }
+    }
   </script>
 </ons-page>

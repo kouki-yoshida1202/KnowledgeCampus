@@ -12,9 +12,12 @@
     </div>
   </ons-toolbar>
   <div class="content">
-    <div style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:30px;">
-      <ons-list-item onclick="searchPageJump('学業','All');">
-        <div class="center" style="font-weight:bold;font-size:1.2em;">
+    <div
+      class="searchBeforeDiv"
+      style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:30px;"
+    >
+      <ons-list-item onclick="searchPageJump('学業','All','All');">
+        <div class="center left-14" style="font-weight:bold;font-size:1.2em;">
           <i
             class="fas fa-user-graduate fa-fw"
             style="font-size:1.2em;margin-right:0.5em;"
@@ -25,32 +28,178 @@
           >
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('学業','講義');">
-        <div class="center">
-          講義
+      <ons-list-item expandable>
+        <div class="center left-14">
+          授業
         </div>
-        <div class="right">
-          >
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('学業','授業','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','授業','共通');">
+            <div class="center">
+              共通
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','授業','文系');">
+            <div class="center">
+              文系
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','授業','理系');">
+            <div class="center">
+              理系
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('学業','受験');">
-        <div class="center">
+      <ons-list-item expandable>
+        <div class="center left-14">
+          定期試験
+        </div>
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('学業','定期試験','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','定期試験','高校');">
+            <div class="center">
+              高校
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','定期試験','大学');">
+            <div class="center">
+              大学
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','定期試験','その他');">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        </div>
+      </ons-list-item>
+      <ons-list-item expandable>
+        <div class="center left-14">
+          ゼミ/研究室
+        </div>
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('学業','ゼミ/研究室','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('学業','ゼミ/研究室','研究内容');"
+          >
+            <div class="center">
+              研究内容
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('学業','ゼミ/研究室','ゼミ試験');"
+          >
+            <div class="center">
+              ゼミ試験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('学業','ゼミ/研究室','その他');"
+          >
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        </div>
+      </ons-list-item>
+      <ons-list-item expandable>
+        <div class="center left-14">
           受験
         </div>
-        <div class="right">
-          >
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('学業','受験','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','受験','高校受験');">
+            <div class="center">
+              高校受験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','受験','大学受験');">
+            <div class="center">
+              大学受験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','受験','大学院試験');">
+            <div class="center">
+              大学院試験
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('学業','受験','その他');">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('学業','語学');">
-        <div class="center">
-          語学
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('学業','その他');">
-        <div class="center">
+      <ons-list-item onclick="searchPageJump('学業','その他','All');">
+        <div class="center left-14">
           その他
         </div>
         <div class="right">
@@ -58,8 +207,8 @@
         </div>
       </ons-list-item>
       <br />
-      <ons-list-item onclick="searchPageJump('キャリア','All');">
-        <div class="center" style="font-weight:bold;font-size:1.2em;">
+      <ons-list-item onclick="searchPageJump('キャリア','All','All');">
+        <div class="center left-14" style="font-weight:bold;font-size:1.2em;">
           <i
             class="fas fa-level-up-alt fa-fw"
             style="font-size:1.2em;margin-right:0.5em;"
@@ -70,40 +219,229 @@
           >
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','就活');">
-        <div class="center">
+      <ons-list-item expandable>
+        <div class="center left-14">
           就活
         </div>
-        <div class="right">
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('キャリア','就活','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','就活','ES添削');">
+            <div class="center">
+              ES添削
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('キャリア','就活','面接対策');"
           >
+            <div class="center">
+              面接対策
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('キャリア','就活','自己分析');"
+          >
+            <div class="center">
+              自己分析
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('キャリア','就活','webテスト');"
+          >
+            <div class="center">
+              webテスト
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','就活','その他');">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','インターン');">
-        <div class="center">
-          インターン
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','資格');">
-        <div class="center">
+      <ons-list-item expandable>
+        <div class="center left-14">
           資格
         </div>
-        <div class="right">
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('キャリア','資格','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('キャリア','資格','国家公務員');"
           >
+            <div class="center">
+              国家公務員
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('キャリア','資格','公認会計士');"
+          >
+            <div class="center">
+              公認会計士
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','資格','税理士');">
+            <div class="center">
+              税理士
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('キャリア','資格','司法書士');"
+          >
+            <div class="center">
+              司法書士
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('キャリア','資格','宅地建物取引士');"
+          >
+            <div class="center">
+              宅地建物取引士
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('キャリア','資格','ITパスポート');"
+          >
+            <div class="center">
+              ITパスポート
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','資格','FP');">
+            <div class="center">
+              FP
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','資格','その他');">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','転職');">
-        <div class="center">
+      <ons-list-item expandable>
+        <div class="center left-14">
+          語学
+        </div>
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('キャリア','語学','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','語学','留学');">
+            <div class="center">
+              留学
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','語学','TOEIC');">
+            <div class="center">
+              TOEIC
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','語学','TOEFL');">
+            <div class="center">
+              TOEFL
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','語学','英検');">
+            <div class="center">
+              英検
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('キャリア','語学','その他');">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('ビジネス','転職','All');">
+        <div class="center left-14">
           転職
         </div>
         <div class="right">
           >
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('キャリア','その他');">
-        <div class="center">
+      <ons-list-item onclick="searchPageJump('ビジネス','インターン','All');">
+        <div class="center left-14">
+          インターン
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('ビジネス','その他','All');">
+        <div class="center left-14">
           その他
         </div>
         <div class="right">
@@ -111,8 +449,8 @@
         </div>
       </ons-list-item>
       <br />
-      <ons-list-item onclick="searchPageJump('ビジネス','All');">
-        <div class="center" style="font-weight:bold;font-size:1.2em;">
+      <ons-list-item onclick="searchPageJump('ビジネス','All','All');">
+        <div class="center left-14" style="font-weight:bold;font-size:1.2em;">
           <i
             class="fas fa-user-tie fa-fw"
             style="font-size:1.2em;margin-right:0.5em;"
@@ -123,81 +461,230 @@
           >
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','起業/経営');">
-        <div class="center">
+      <ons-list-item onclick="searchPageJump('ビジネス','起業/経営','All');">
+        <div class="center left-14">
           起業/経営
         </div>
         <div class="right">
           >
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','マーケティング');">
-        <div class="center">
+      <ons-list-item
+        onclick="searchPageJump('ビジネス','マーケティング','All');"
+      >
+        <div class="center left-14">
           マーケティング
         </div>
         <div class="right">
           >
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','IT/プログラミング');">
-        <div class="center">
+      <ons-list-item onclick="searchPageJump('ビジネス','ファイナンス','All');">
+        <div class="center left-14">
+          ファイナンス
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item
+        onclick="searchPageJump('ビジネス','IT/プログラミング','All');"
+      >
+        <div class="center left-14">
           IT/プログラミング
         </div>
         <div class="right">
           >
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','投資(FX/株)');">
-        <div class="center">
-          投資(FX/株)
+      <ons-list-item expandable>
+        <div class="center left-14">
+          投資
         </div>
-        <div class="right">
-          >
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('ビジネス','投資','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('ビジネス','投資','株');">
+            <div class="center">
+              株
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('ビジネス','投資','FX');">
+            <div class="center">
+              FX
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item onclick="searchPageJump('ビジネス','投資','その他');">
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','アフィリエイト');">
-        <div class="center">
-          アフィリエイト
+      <ons-list-item expandable>
+        <div class="center left-14">
+          メディア
         </div>
-        <div class="right">
+        <div class="expandable-content">
+          <ons-list-item onclick="searchPageJump('ビジネス','メディア','All');">
+            <div class="center">
+              全て
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('ビジネス','メディア','YouTube');"
           >
+            <div class="center">
+              YouTube
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('ビジネス','メディア','Instagram');"
+          >
+            <div class="center">
+              Instagram
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('ビジネス','メディア','Twitter');"
+          >
+            <div class="center">
+              Twitter
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('ビジネス','メディア','Facebook');"
+          >
+            <div class="center">
+              Facebook
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('ビジネス','メディア','TikTok');"
+          >
+            <div class="center">
+              TikTok
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('ビジネス','メディア','ブログ');"
+          >
+            <div class="center">
+              ブログ
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
+          <ons-list-item
+            onclick="searchPageJump('ビジネス','メディア','その他');"
+          >
+            <div class="center">
+              その他
+            </div>
+            <div class="right">
+              >
+            </div>
+          </ons-list-item>
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','ブログ');">
-        <div class="center">
-          ブログ
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','転売');">
-        <div class="center">
+      <ons-list-item onclick="searchPageJump('ビジネス','転売','All');">
+        <div class="center left-14">
           転売
         </div>
         <div class="right">
           >
         </div>
       </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','ライブ配信');">
-        <div class="center">
-          ライブ配信
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','YouTuber');">
-        <div class="center">
-          YouTuber
-        </div>
-        <div class="right">
-          >
-        </div>
-      </ons-list-item>
-      <ons-list-item onclick="searchPageJump('ビジネス','その他');">
-        <div class="center">
+      <ons-list-item onclick="searchPageJump('ビジネス','その他','All');">
+        <div class="center left-14">
           その他
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <br />
+      <ons-list-item onclick="searchPageJump('生活','All','All');">
+        <div class="center left-14" style="font-weight:bold;font-size:1.2em;">
+          <i
+            class="fas fa-coffee fa-fw"
+            style="font-size:1.2em;margin-right:0.5em;"
+          ></i
+          >生活
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('生活','美容','All');">
+        <div class="center left-14">
+          美容
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('生活','料理','All');">
+        <div class="center left-14">
+          料理
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('生活','ファッション','All');">
+        <div class="center left-14">
+          ファッション
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('生活','筋トレ','All');">
+        <div class="center left-14">
+          筋トレ
+        </div>
+        <div class="right">
+          >
+        </div>
+      </ons-list-item>
+      <ons-list-item onclick="searchPageJump('生活','趣味/その他','All');">
+        <div class="center left-14">
+          趣味/その他
         </div>
         <div class="right">
           >
@@ -206,7 +693,7 @@
     </div>
   </div>
   <script>
-    function searchPageJump(category1, category2) {
+    function searchPageJump(category1, category2, category3) {
       showLoad();
 
       myNavigator.bringPageTop("html/top/searchAfter.html");
@@ -218,14 +705,34 @@
           .where("category1", "==", category1);
         setTimeout(function() {
           $("#searchAfterToolbar").html(category1);
+          $("#searchAfterPageCategory1").val(category1);
+          $("#searchAfterPageCategory2").val("All");
+          $("#searchAfterPageCategory3").val("All");
         }, 500);
-      } else {
+      } else if (category2 != "All" && category3 == "All") {
         var products = db
           .collection("products")
           .where("category1", "==", category1)
           .where("category2", "==", category2);
         setTimeout(function() {
           $("#searchAfterToolbar").html(category1 + " > " + category2);
+          $("#searchAfterPageCategory1").val(category1);
+          $("#searchAfterPageCategory2").val(category2);
+          $("#searchAfterPageCategory3").val("All");
+        }, 500);
+      } else {
+        var products = db
+          .collection("products")
+          .where("category1", "==", category1)
+          .where("category2", "==", category2)
+          .where("category3", "==", category3);
+        setTimeout(function() {
+          $("#searchAfterToolbar").html(
+            category1 + ">" + category2 + ">" + category3
+          );
+          $("#searchAfterPageCategory1").val(category1);
+          $("#searchAfterPageCategory2").val(category2);
+          $("#searchAfterPageCategory3").val(category3);
         }, 500);
       }
       products
@@ -236,53 +743,7 @@
           if (results.size > 0) {
             results.forEach(doc => {
               nowDataCount++;
-              var product =
-                `
-              <div style="text-align: center;width:47%;padding:5px 1.5% 0px 1.5% !important;">
-                <ons-card class="mainCard searchCard_` +
-                nowDataCount +
-                `" onclick="giftDetailJump('` +
-                doc.id +
-                `')" style="padding-top:20px;padding-bottom:10px;height:230px;">
-                  <img class="user_icon_mainPage searchImage_` +
-                nowDataCount +
-                `"alt="" />
-                  <p class="mainUserName searchUserName_` +
-                nowDataCount +
-                `"></p>
-                  <p class="searchReview_` +
-                nowDataCount +
-                `"class="mainReview">
-                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
-                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
-                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
-                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
-                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
-                  (0)
-                  </p>
-                  <div style="display: flex;justify-content: center;align-items: center;height:57px;margin-top:7px;margin-bottom:7px;border-left:3px solid #ff9831;">
-                  <p class="mainPageItemText searchTitle_` +
-                nowDataCount +
-                `"></p></div>
-                  <p>
-                    <span class="salaly searchSalalyTime_` +
-                nowDataCount +
-                `"></span>
-                    <span class="howto searchHowTo_` +
-                nowDataCount +
-                `"></span>
-                  </p>
-                </ons-card>
-              </div>
-            `;
-              $("#searchProduct").append(product);
-
-              productSearchIndicate(
-                doc.id,
-                doc.data(),
-                nowDataCount,
-                results.size
-              );
+              productSearchGet(doc, nowDataCount, results);
             });
           } else {
             hideLoad();
@@ -293,7 +754,56 @@
           hideLoad();
         });
     }
-
+    function productSearchGet(doc, nowDataCount, results) {
+      var product =
+        `
+              <div style="text-align: center;width:47%;padding:5px 1.5% 0px 1.5% !important;">
+                <ons-card class="mainCard searchCard_` +
+        nowDataCount +
+        `" onclick="giftDetailJump('` +
+        doc.id +
+        `')" style="padding-top:10px;padding-bottom:10px;height:230px;">
+        <ons-row >
+                    <ons-col class="productTime searchProductTime_` +
+        nowDataCount +
+        `"></ons-col>
+                  </ons-row>
+                  <img class="user_icon_mainPage searchImage_` +
+        nowDataCount +
+        `"alt="" />
+                  <p class="mainUserName searchUserName_` +
+        nowDataCount +
+        `"></p>
+                  <p class="searchReview_` +
+        nowDataCount +
+        `"class="mainReview">
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
+                  (0)
+                  </p>
+                  <div style="display: flex;justify-content: center;align-items: center;height:57px;margin-top:7px;margin-bottom:7px;border-left:3px solid #ff9831;">
+                  <p class="mainPageItemText searchTitle_` +
+        nowDataCount +
+        `"></p></div>
+                  <ons-row style="width:100%;line-height:24px;">
+                    <ons-col class="salaly searchSalalyTime_` +
+        nowDataCount +
+        `" style="text-align:left;"></ons-col>
+                    <ons-col class="howto searchHowTo_` +
+        nowDataCount +
+        `" style="text-align:right;"></ons-col>
+                  </ons-row>
+                  
+                </ons-card>
+              </div>
+            `;
+      $("#searchProduct").append(product);
+      console.log(nowDataCount, results.size);
+      productSearchIndicate(doc.id, doc.data(), nowDataCount, results.size);
+    }
     function productSearchIndicate(docId, data, nowDataCount, size) {
       var userId = data.userId;
       var docRef = db.collection("users").doc(userId);
@@ -326,6 +836,8 @@
                   "¥" + data.price + "/" + data.time
                 );
                 $(".searchHowTo_" + nowDataCount).html(data.howtotalk);
+                var createTime = jikanCulc2(data.createTime);
+                $(".searchProductTime_" + nowDataCount).html(createTime);
                 reviewControl(data.userId).then(function(result) {
                   $(".searchReview_" + nowDataCount).empty();
                   for (var i = 1; i < 6; i++) {
@@ -348,7 +860,7 @@
                     syoryaku(".mainPageItemText");
                     syoryakuName(".mainUserName");
                   }, 1000);
-                  $("#searchProduct").height(240 * Math.ceil(nowDataCount / 2));
+                  $("#searchProduct").height(250 * Math.ceil(nowDataCount / 2));
                 }
               });
           } else {

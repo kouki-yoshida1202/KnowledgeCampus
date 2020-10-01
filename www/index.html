@@ -177,7 +177,11 @@
               var push = new ncmb.Push();
               push
                 .set("immediateDeliveryFlag", true)
-                .set("message", userName + "さんの商品を購入しました。")
+                .set(
+                  "message",
+                  userName +
+                    "さんの商品を購入しました。トーク画面で挨拶しましょう！"
+                )
                 .set("target", ["ios", "android"])
                 .set("searchCondition", {
                   userId: buyUserId
@@ -192,7 +196,9 @@
                     sendUserId: buyUserId,
                     catchUserId: buyUserId,
                     createTime: new Date(),
-                    message: userName + "さんの商品を購入しました。",
+                    message:
+                      userName +
+                      "さんの商品を購入しました。トーク画面で挨拶しましょう！",
                     readStatus: "Unread",
                     pushKind: "negotiation",
                     productId: productId,
