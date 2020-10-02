@@ -97,9 +97,9 @@
   </ons-bottom-toolbar>
   <div
     id="productUserInfomation"
-    style="width:85%;margin:0 auto;margin-top:0px;"
+    style="width:100%;margin:0 auto;margin-top:0px;background: white;padding-bottom:20px;padding-top:1.5rem;"
   >
-    <div style="height:70px;text-align: center;margin-top:1.5rem;">
+    <div style="height:70px;text-align: center;">
       <img
         id="productDetailUserImage"
         src="img/userSampleImageMan.png"
@@ -118,11 +118,15 @@
         style="display:flex;justify-content: center; width:100%;margin-top:5px;margin-bottom:5px;"
       ></p>
     </div>
-    <p id="productDetailText" class="navy" style="font-size:0.8em;"></p>
+    <p
+      id="productDetailText"
+      class="navy"
+      style="font-size:0.8em;width:85%;margin:0 auto;margin-top:15px;margin-bottom:15px;"
+    ></p>
   </div>
-  <div style="width:100%;margin:0 auto;margin-top:20px;margin-bottom:50px;">
+  <div style="width:100%;margin:0 auto;margin-bottom:50px;">
     <ons-list-header>商品タイトル</ons-list-header>
-    <ons-list-item class="productTitle">
+    <ons-list-item class="productTitle" style="background: white;">
       <ons-row id="productDetailTitle" style="font-weight: bold;"> </ons-row>
       <ons-row>
         <p style="margin-bottom:0px;">
@@ -139,7 +143,7 @@
       </ons-row>
     </ons-list-item>
     <ons-list-header>商品の説明</ons-list-header>
-    <ons-list-item id="explanationList" style="width:100%;">
+    <ons-list-item id="explanationList" style="width:100%;background: white;">
       <ons-row
         style="font-size:0.8em;padding-right:0.25em;width:100%;word-wrap:break-word;overflow-wrap : break-word;"
       >
@@ -149,7 +153,7 @@
         ></p>
       </ons-row>
     </ons-list-item>
-    <ons-list-item>
+    <ons-list-item style="background: white;">
       <ons-row id="productDetailHowToTalk" style="font-size:0.8em;"> </ons-row>
     </ons-list-item>
 
@@ -162,7 +166,7 @@
           </ons-col>
         </ons-row>
       </ons-list-header>
-      <div id="productDetailCommentZone"></div>
+      <div id="productDetailCommentZone" style="min-height: 100px;"></div>
       <ons-list-item>
         <ons-row style="padding:1em;">
           <ons-button
@@ -351,7 +355,7 @@
                   class="large-button-orange"
                   style="padding-left:2em;padding-right:2em;margin-top:1rem;"
                   onclick="productReport();"
-                  >通報する</ons-button
+                  >報告する</ons-button
                 >
               </ons-col>
             </ons-row>

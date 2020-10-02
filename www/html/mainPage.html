@@ -175,19 +175,19 @@
         <div class="item-label">全て</div>
       </ons-carousel-item>
       <ons-carousel-item id="carousel2" onclick="mainTapCarouselChange(1)">
-        <div class="item-label">ランキング</div>
-      </ons-carousel-item>
-      <ons-carousel-item id="carousel3" onclick="mainTapCarouselChange(2)">
         <div class="item-label">学業</div>
       </ons-carousel-item>
-      <ons-carousel-item id="carousel4" onclick="mainTapCarouselChange(3)">
+      <ons-carousel-item id="carousel3" onclick="mainTapCarouselChange(2)">
         <div class="item-label">キャリア</div>
       </ons-carousel-item>
-      <ons-carousel-item id="carousel5" onclick="mainTapCarouselChange(4)">
+      <ons-carousel-item id="carousel4" onclick="mainTapCarouselChange(3)">
         <div class="item-label">ビジネス</div>
       </ons-carousel-item>
-      <ons-carousel-item id="carousel6" onclick="mainTapCarouselChange(5)">
+      <ons-carousel-item id="carousel5" onclick="mainTapCarouselChange(4)">
         <div class="item-label">生活</div>
+      </ons-carousel-item>
+      <ons-carousel-item id="carousel6" onclick="mainTapCarouselChange(5)">
+        <div class="item-label">ランキング</div>
       </ons-carousel-item>
     </ons-carousel>
   </div>
@@ -210,6 +210,40 @@
       <ons-carousel-item style="min-height: 500px;">
         <div
           id="allProduct"
+          class="item-label"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
+        ></div>
+      </ons-carousel-item>
+
+      <ons-carousel-item style="min-height: 500px;">
+        <div
+          class="item-label"
+          id="studyProduct"
+          class="item-label"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
+        ></div>
+      </ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
+        <div
+          class="item-label"
+          id="careerProduct"
+          class="item-label"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
+        ></div>
+      </ons-carousel-item>
+
+      <ons-carousel-item style="min-height: 500px;">
+        <div
+          class="item-label"
+          id="businessProduct"
+          class="item-label"
+          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
+        ></div>
+      </ons-carousel-item>
+      <ons-carousel-item style="min-height: 500px;">
+        <div
+          class="item-label"
+          id="lifeProduct"
           class="item-label"
           style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
         ></div>
@@ -288,39 +322,6 @@
           >
           </ons-carousel>
         </div>
-      </ons-carousel-item>
-      <ons-carousel-item style="min-height: 500px;">
-        <div
-          class="item-label"
-          id="studyProduct"
-          class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
-        ></div>
-      </ons-carousel-item>
-      <ons-carousel-item style="min-height: 500px;">
-        <div
-          class="item-label"
-          id="careerProduct"
-          class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
-        ></div>
-      </ons-carousel-item>
-
-      <ons-carousel-item style="min-height: 500px;">
-        <div
-          class="item-label"
-          id="businessProduct"
-          class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
-        ></div>
-      </ons-carousel-item>
-      <ons-carousel-item style="min-height: 500px;">
-        <div
-          class="item-label"
-          id="lifeProduct"
-          class="item-label"
-          style="display: flex;justify-content: space-between;flex-wrap: wrap;padding-right:3%;padding-left:3%;"
-        ></div>
       </ons-carousel-item>
     </ons-carousel>
   </div>
@@ -456,6 +457,7 @@
     ("use strict");
     setTimeout(function() {
       productGet();
+      rankingIndicate();
       notificationGet();
       torihikiGet();
       var mainCarousel = document.getElementById("mainCarousel");
@@ -470,12 +472,12 @@
       $("#tabCarousel ons-carousel-item")
         .eq(carouselIndex)
         .addClass("active_tabCarousel");
-      if (carouselIndex == 1) {
-        if (rankingIndicateCount == 0) {
-          rankingIndicate();
-        }
-        rankingIndicateCount++;
-      }
+      // if (carouselIndex == 5) {
+      //   if (rankingIndicateCount == 0) {
+      //     rankingIndicate();
+      //   }
+      //   rankingIndicateCount++;
+      // }
     }
     function mainTapCarouselChange(carouselIndex) {
       $("#tabCarousel ons-carousel-item").removeClass("active_tabCarousel");
@@ -484,12 +486,12 @@
         .addClass("active_tabCarousel");
       var mainCarousel = document.getElementById("mainCarousel");
       mainCarousel.setActiveIndex(carouselIndex);
-      if (carouselIndex == 1) {
-        if (rankingIndicateCount == 0) {
-          rankingIndicate();
-        }
-        rankingIndicateCount++;
-      }
+      // if (carouselIndex == 5) {
+      //   if (rankingIndicateCount == 0) {
+      //     rankingIndicate();
+      //   }
+      //   rankingIndicateCount++;
+      // }
     }
 
     ons.ready(function() {
@@ -925,8 +927,9 @@
       var rankingArray = [];
       return new Promise(resolve => {
         negotiation.forEach(function(nego) {
+          console.log(nego.id, nego.data());
           var productId = nego.data().productId;
-
+          console.log(productId);
           var products = db
             .collection("products")
             .doc(productId)
@@ -970,14 +973,26 @@
     }
 
     document.addEventListener("deviceready", function() {
-      window.NCMB.monaca.setDeviceToken(
-        appKey,
-        clientKey,
-        result => {
-          console.log(result);
-        },
-        err => console.log("通知設定エラー：" + JSON.stringify(err))
-      );
+      var applicationKey =
+        "7e4e7a3c249ee77301994716f3a8830d1f713804cb2379a550e0814acb215ed1";
+      var clientKey =
+        "cba0bb9821169b593d88ebb8a7828f79638c911da3008212739e13b9189ff608";
+      // デバイストークンの取得処理
+      if (NCMB.monaca) {
+        NCMB.monaca.setDeviceToken(
+          applicationKey,
+          clientKey,
+          result => {
+            console.log(result);
+          },
+          err => console.log("通知設定エラー：" + JSON.stringify(err))
+        );
+      }
+    });
+    document.addEventListener("deviceready", function() {
+      setTimeout(function() {
+        getInstallationId();
+      }, 500);
       setTimeout(function() {
         getInstallationId();
       }, 5000);
@@ -1017,6 +1032,7 @@
 
     function torihikiGet() {
       var user = firebase.auth().currentUser;
+      console.log("torihikiGet");
       db.collection("negotiations")
         .get()
         .then(function(negoResults) {
@@ -1026,7 +1042,7 @@
               .collection("comments")
               .where("catchUserId", "==", user.uid)
               .where("readStatus", "==", "Unread")
-              .limit(20)
+              // .limit(20)
               .orderBy("createTime", "desc")
               .get()
               .then(function(commentResults) {

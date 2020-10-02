@@ -169,14 +169,20 @@
     }
     setInterval(function() {
       var user = firebase.auth().currentUser;
-      if (user === null) {
+      console.log(user);
+      if (user == null) {
         ons.notification.alert({
-          message: "ログイン情報が取得できません。ログアウトします。"
+          message: "ログイン情報が取得できません。ログアウトします。",
+          callback: function() {
+            logout();
+          }
         });
-        logout();
+      } else {
+        notificationGet();
+        torihikiGet();
+        buyProductComments();
+        syuppinProductComments();
       }
-      notificationGet();
-      torihikiGet();
     }, 30000);
     function logout() {
       firebase.auth().onAuthStateChanged(user => {

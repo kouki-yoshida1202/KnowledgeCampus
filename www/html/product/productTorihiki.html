@@ -75,6 +75,18 @@
       <ons-back-button></ons-back-button>
     </div>
     <div class="center" id="toolbar-title">取引画面</div>
+    <div
+      class="right"
+      id="toolbar-title"
+      style="display:flex;align-items: center;justify-content: flex-end;padding-right:5%;"
+      onclick="showProductTorihikiReportModal();"
+    >
+      <i
+        id="reportButton"
+        class="fas fa-exclamation-triangle fa-fw fa-lg"
+        style="color:#515c6f;"
+      ></i>
+    </div>
   </ons-toolbar>
   <ons-bottom-toolbar
     id="torihikiBottomBar"
@@ -182,12 +194,112 @@
       </div>
     </div>
   </ons-modal>
+  <ons-modal id="productTorihikiReportModal" direction="up">
+    <div style="text-align: center">
+      <ons-card>
+        <ons-list style="background-image: none;">
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: center;font-size:1.2em;">
+                  <span
+                    style="float:right;padding-right:0.5em;"
+                    onclick="hideProductTorihikiReportModal()"
+                    ><i class="fas fa-times"></i
+                  ></span>
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col>
+                <p style="text-align: center;font-size:0.9em;">
+                  <textarea
+                    id="reportTorihikiComment"
+                    class="textarea textarea--transparent"
+                    rows="10"
+                    placeholder="報告内容を出来るだけ細かく記入してください。"
+                  ></textarea>
+                </p>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-row>
+              <ons-col
+                width="100%"
+                vertical-align="center"
+                style="text-align: center;"
+              >
+                <ons-button
+                  class="large-button-orange"
+                  style="padding-left:2em;padding-right:2em;margin-top:1rem;"
+                  onclick="productTorihikiReport();"
+                  >報告する</ons-button
+                >
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+        </ons-list>
+      </ons-card>
+    </div>
+  </ons-modal>
   <input type="hidden" id="torihikiPageProductId" />
   <input type="hidden" id="torihikiPageProductUserId" />
   <input type="hidden" id="torihikiPagebuyUserId" />
   <input type="hidden" id="torihikiPageNagotiationId" />
   <input type="hidden" id="nowDataCountInput" />
   <script>
+    function productTorihikiReport() {
+      showLoad();
+      var negotiationId = $("#torihikiPageNagotiationId").val();
+      var reportComment = $("#reportTorihikiComment").val();
+      if (reportComment.trim() == "") {
+        ons.notification.alert({
+          message: "報告内容が未入力です。"
+        });
+        hideLoad();
+      } else {
+        var user = firebase.auth().currentUser;
+        var buyUserId = user.uid;
+        db.collection("reports")
+          .doc()
+          .set(
+            {
+              negotiationId: negotiationId,
+              reportUserId: user.uid,
+              reportComment: reportComment,
+              createTime: new Date()
+            },
+            { merge: true }
+          )
+          .then(function(userResult) {
+            ons.notification.alert({
+              message: "送信しました。"
+            });
+            $("#reportComment").val("");
+            hideProductTorihikiReportModal();
+            hideLoad();
+          })
+          .catch(function(error) {
+            console.log(error);
+            ons.notification.alert({
+              message: "送信失敗しました。"
+            });
+            hideLoad();
+          });
+      }
+    }
+    function showProductTorihikiReportModal() {
+      var modal = document.querySelector("#productTorihikiReportModal");
+      modal.show();
+    }
+
+    function hideProductTorihikiReportModal() {
+      var modal = document.querySelector("#productTorihikiReportModal");
+      modal.hide();
+    }
     setTimeout(function() {
       let productTorihikiPage = document.querySelector("#productTorihikiPage");
       original_main_height = productTorihikiPage.clientHeight;

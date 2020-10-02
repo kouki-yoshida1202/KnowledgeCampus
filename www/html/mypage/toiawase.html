@@ -16,7 +16,20 @@
       <p>お手数ですが用件を以下のメールアドレスまで送信してください。</p>
       <br />
       <p>メールアドレス</p>
-      <p>knowledge.campus.official@gmail.com</p>
+      <p style="text-align: center;">
+        <a
+          onclick="mailCopy()"
+          style="border-bottom:1px solid #0799d7;color:#0799d7;"
+          >knowledge.campus.official@gmail.com</a
+        >
+      </p>
     </ons-card>
   </div>
+  <script>
+    function mailCopy() {
+      // コピーする文章の取得
+      // テキストエリアの作成
+      window.plugins.socialsharing.share("knowledge.campus.official@gmail.com");
+    }
+  </script>
 </ons-page>

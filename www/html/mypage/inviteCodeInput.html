@@ -135,29 +135,36 @@
     );
 
     $("#inviteCodeSubmit").click(function() {
-      ons.notification.confirm({
-        message: "電話番号認証は完了していますか？",
-        title: "確認",
-        buttonLabels: ["はい", "いいえ"],
-        callback: function(buttonIndex) {
-          if (buttonIndex == 1) {
-            ons.notification.alert({
-              message: "電話番号認証に移ります",
-              title: "確認",
-              callback: function() {
-                window.open(
-                  "https://knowledgecampus-test.web.app/smsTest.html",
-                  "_system",
-                  "location=yes"
-                );
-              }
-            });
+      var inviteCodeInput = $("#inviteCodeInput").val();
+      if (inviteCodeInput == "" || inviteCodeInput == null) {
+        ons.notification.alert({
+          message: "認証コードを入力してください"
+        });
+      } else {
+        ons.notification.confirm({
+          message: "電話番号認証は完了していますか？",
+          title: "確認",
+          buttonLabels: ["はい", "いいえ"],
+          callback: function(buttonIndex) {
+            if (buttonIndex == 1) {
+              ons.notification.alert({
+                message: "電話番号認証に移ります",
+                title: "確認",
+                callback: function() {
+                  window.open(
+                    "https://knowledgecampus-test.web.app/smsTest.html",
+                    "_system",
+                    "location=yes"
+                  );
+                }
+              });
+            }
+            if (buttonIndex == 0) {
+              $("#inviteInputModal").show();
+            }
           }
-          if (buttonIndex == 0) {
-            $("#inviteInputModal").show();
-          }
-        }
-      });
+        });
+      }
     });
     function inviteInputLogin() {
       showLoad();

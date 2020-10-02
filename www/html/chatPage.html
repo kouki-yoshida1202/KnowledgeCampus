@@ -16,6 +16,18 @@
     >
       取引メッセージ
     </div>
+    ns-toolbar>
+    <div
+      class="right"
+      id="toolbar-title"
+      style="display:flex;align-items: center;justify-content:flex-end;padding-right:5%;"
+    >
+      <i
+        class="fas fa-redo fa-fw"
+        style="color:#515c6f;"
+        onclick="buyProductComments();syuppinProductComments();showChatLoad();"
+      ></i>
+    </div>
   </ons-toolbar>
   <div class="mainHeader">
     <ons-carousel
@@ -79,6 +91,13 @@
         tabChatCarouselChange(e.activeIndex);
       });
     }, 100);
+
+    function showChatLoad() {
+      showLoad();
+      setTimeout(function() {
+        hideLoad();
+      }, 3000);
+    }
     function chatPageTapCarouselChange(carouselIndex) {
       $("#tabChatCarousel ons-carousel-item").removeClass("active_tabCarousel");
       $("#tabChatCarousel ons-carousel-item")
