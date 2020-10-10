@@ -1,4 +1,4 @@
-<ons-page id="accountCreate">
+<ons-page id="accountCreatePage">
   <ons-toolbar>
     <div class="left">
       <ons-back-button> </ons-back-button>
@@ -109,7 +109,7 @@
       「新規登録」のボタンを押すことで、<span
         style="color:#0799d7;"
         id="riyouKiyaku"
-        onclick='cordova.InAppBrowser.open("https://knowledgecampus-test.web.app/riyouKiyaku.html", "_blank", "location=yes");'
+        onclick='window.open("https://knowledgecampus-test.web.app/riyouKiyaku.html", "_blank", "location=yes");'
         >利用規約</span
       >および
       <span style="color:#0799d7;" id="privacyPolicy" onclick=""
@@ -128,6 +128,28 @@
     </ons-button>
   </div>
   <script>
+    setTimeout(function() {
+      let accountCreatePage = document.querySelector("#accountCreatePage");
+      original_main_height = accountCreatePage.clientHeight;
+    }, 100);
+
+    //ソフトウェアキーボード表示処理
+    window.addEventListener("keyboardWillShow", event => {
+      //画面の高さをキーボードの高さを差し引いた値とする
+      $("#accountCreatePage").animate(
+        { height: original_main_height - event.keyboardHeight + "px" },
+        100
+      );
+    });
+
+    //ソフトウェアキーボード非表示処理
+    window.addEventListener("keyboardWillHide", () => {
+      //画面の高さを元の高さに戻す
+      $("#accountCreatePage").animate(
+        { height: original_main_height + "px" },
+        100
+      );
+    });
     var successCallback = function() {
       //端末登録後の処理
       alert("成功");
@@ -144,7 +166,7 @@
       .getDownloadURL()
       .then(url => {
         document.getElementById("riyouKiyaku").onclick = new Function(
-          'cordova.InAppBrowser.open("' + url + '", "_blank", "location=yes");'
+          'window.open("' + url + '", "_blank", "location=yes");'
         );
       });
 
@@ -155,7 +177,7 @@
       .getDownloadURL()
       .then(url => {
         document.getElementById("privacyPolicy").onclick = new Function(
-          'cordova.InAppBrowser.open("' + url + '", "_blank", "location=yes");'
+          'window.open("' + url + '", "_blank", "location=yes");'
         );
       });
 

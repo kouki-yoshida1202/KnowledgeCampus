@@ -1,4 +1,10 @@
 /**/
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+}
 .cp_iptxt {
   margin: 7px 3%;
   font-size: 0.8em;
@@ -122,25 +128,25 @@
   width: 98%;
 }
 
-#chat-detail-page .right {
+#chatDetailPage .right {
   margin-right: -5px;
 }
-#chat-detail-page .left {
+#chatDetailPage .left {
   margin-left: -5px;
 }
-#chat-detail-page .right ons-card {
+#chatDetailPage .right ons-card {
   border-radius: 50px 50px 0px 50px;
 }
-#chat-detail-page .left ons-card {
+#chatDetailPage .left ons-card {
   border-radius: 50px 50px 50px 0px;
 }
 
-#chat-detail-page .popover__content,
+#chatDetailPage .popover__content,
 #search-page .popover__content {
   width: 300px;
 }
 
-#chat-detail-page .popover__content .text-input,
+#chatDetailPage .popover__content .text-input,
 #search-page .popover__content .select-input {
   text-align: right;
 }
