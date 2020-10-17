@@ -64,44 +64,47 @@
       var storage = firebase.storage();
       ons.ready(function() {
         var myNavigator = document.getElementById("myNavigator");
-        // var obj = localStorage.getItem("first-time");
-        // console.log(obj);
-        // obj = false;
-        // if (obj == false) {
-        // ログインチェック
-        db.collection("mentenance")
-          .doc("mente")
-          .get()
-          .then(function(mente) {
-            var text = mente.data().text;
-            if (text != "") {
-              myNavigator.pushPage("html/loginPage.html");
-              setTimeout(function() {
-                ons.notification.alert({
-                  message: text
-                });
-                $("ons-button").attr("disabled", true);
-              }, 1000);
-            } else {
-              firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                  if (!user.emailVerified) {
-                    // メアド確認終わってない
-                    myNavigator.pushPage("html/loginPage.html");
-                  } else {
-                    // メアド確認終わってる
-                    myNavigator.pushPage("html/homePage.html");
-                  }
-                } else {
-                  myNavigator.pushPage("html/loginPage.html");
-                }
-              });
-            }
-          });
 
-        // } else {
-        //   myNavigator.pushPage("html/firstPage.html");
-        // }
+        if (window.localStorage.getItem("loggedIn") != 1) {
+          // 初回起動の場合
+          window.localStorage.setItem("loggedIn", 1);
+          console.log("1st time");
+          myNavigator.pushPage("html/firstPage.html");
+        } else {
+          //2回目以降
+          console.log("running this for more than one time");
+
+          // ログインチェック
+          db.collection("mentenance")
+            .doc("mente")
+            .get()
+            .then(function(mente) {
+              var text = mente.data().text;
+              if (text != "") {
+                myNavigator.pushPage("html/loginPage.html");
+                setTimeout(function() {
+                  ons.notification.alert({
+                    message: text
+                  });
+                  $("ons-button").attr("disabled", true);
+                }, 1000);
+              } else {
+                firebase.auth().onAuthStateChanged(user => {
+                  if (user) {
+                    if (!user.emailVerified) {
+                      // メアド確認終わってない
+                      myNavigator.pushPage("html/loginPage.html");
+                    } else {
+                      // メアド確認終わってる
+                      myNavigator.pushPage("html/homePage.html");
+                    }
+                  } else {
+                    myNavigator.pushPage("html/loginPage.html");
+                  }
+                });
+              }
+            });
+        }
       });
 
       if (ons.platform.isIPhoneX()) {
@@ -121,8 +124,23 @@
       function hideLoad() {
         $("body").LoadingOverlay("hide");
       }
-
+      function AutoLink(str) {
+        var regexp_url = /((h?)(ttps?:\/\/[a-zA-Z0-9.\-_@:/~?%&;=+#',()*!]+))/g; // ']))/;
+        var regexp_makeLink = function(all, url, h, href) {
+          return (
+            `<a style="color:#0799d7" onclick="window.open('` +
+            url +
+            `', '_system', 'location = yes')">` +
+            url +
+            `</a>`
+          );
+        };
+        console.log(str);
+        str = String(str);
+        return str.replace(regexp_url, regexp_makeLink);
+      }
       function handleOpenURL(url) {
+        // alert("handle呼ばれた");
         setTimeout(function() {
           var strValue = decodeURIComponent(url);
           var urlPrm = [];
@@ -132,9 +150,9 @@
             var kv = urlSearch[i].split("=");
             urlPrm[kv[0]] = kv[1];
           }
-          var productId = urlPrm.productId;
-          var productUserId = urlPrm.productUserId;
-          var buyUserId = urlPrm.buyUserId;
+          var productId = urlPrm.productIdComplete;
+          var productUserId = urlPrm.productUserIdComplete;
+          var buyUserId = urlPrm.buyUserIdComplete;
 
           db.collection("users")
             .doc(buyUserId)

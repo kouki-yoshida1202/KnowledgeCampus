@@ -69,13 +69,16 @@
       padding: 0;
     }
   </style>
-  <ons-bottom-toolbar> </ons-bottom-toolbar>
   <ons-bottom-toolbar
-    id="firstPageBottom"
-    style="background-color:#ff9831; text-align: center;color:white;line-height: 50px;font-weight: bold;width:90%;margin:0 auto;border-radius:10px;"
-    onclick="nextSlide()"
+    style="display: flex;justify-content: center;align-items: flex-start;"
   >
-    次へ
+    <ons-button
+      id="firstPageBottom"
+      style="background-color:#ff9831; text-align: center;color:white;height:45px;font-weight: bold;width:90%;margin:0 auto;border-radius:10px;display: flex;justify-content: center;align-items: center;"
+      onclick="nextSlide()"
+    >
+      次へ
+    </ons-button>
   </ons-bottom-toolbar>
   <div class="carousel-base" style="height: 100%;">
     <ons-carousel
@@ -98,14 +101,9 @@
           </div>
           <div class="cp_iptxt" style="margin-top:10%;">
             <p
-              style="color:#ff9831;font-size:1.5em;font-weight: bold;width:80%;text-align:left;margin:0 auto;"
+              style="color:#ff9831;font-size:1.4em;font-weight: bold;width:90%;text-align:center;margin:0 auto;"
             >
-              知識・経験の売買で
-            </p>
-            <p
-              style="color:#ff9831;font-size:1.5em;font-weight: bold;width:80%;text-align: right;margin:0 auto;"
-            >
-              より豊かな人生を
+              知識・経験の売買でまだ見ぬ自分を
             </p>
           </div>
         </div>
@@ -176,7 +174,10 @@
               >
             </ons-col>
             <ons-col vertical-align="center">
-              <ons-button style="width:80%;background-color: #0799d7;" ripple
+              <ons-button
+                style="width:80%;background-color: #0799d7;"
+                ripple
+                onclick="pushNotificationGet()"
                 >受け取る</ons-button
               >
             </ons-col>
@@ -280,6 +281,62 @@
       } else {
         carousel.next();
       }
+    }
+
+    function pushNotificationGet() {
+      // document.addEventListener("deviceready", function() {
+      NCMB.monaca.getInstallationId(id => {
+        ncmb.Installation.equalTo("objectId", id)
+          .fetch()
+          .then(installation => {
+            if (installation.length > 0) {
+              alert("既に通知ONになっています。");
+            } else {
+              var applicationKey =
+                "7e4e7a3c249ee77301994716f3a8830d1f713804cb2379a550e0814acb215ed1";
+              var clientKey =
+                "cba0bb9821169b593d88ebb8a7828f79638c911da3008212739e13b9189ff608";
+              // デバイストークンの取得処理
+              if (NCMB.monaca) {
+                NCMB.monaca.setDeviceToken(
+                  applicationKey,
+                  clientKey,
+                  result => {
+                    console.log(result);
+                    alert("通知ONにしました");
+                  },
+                  err => {
+                    console.log("通知設定エラー：" + JSON.stringify(err));
+                    alert("「設定」アプリより通知を許可してください。");
+                  }
+                );
+              }
+            }
+          })
+          .catch(err => {
+            console.log("通知設定エラー：" + JSON.stringify(err));
+            var applicationKey =
+              "7e4e7a3c249ee77301994716f3a8830d1f713804cb2379a550e0814acb215ed1";
+            var clientKey =
+              "cba0bb9821169b593d88ebb8a7828f79638c911da3008212739e13b9189ff608";
+            // デバイストークンの取得処理
+            if (NCMB.monaca) {
+              NCMB.monaca.setDeviceToken(
+                applicationKey,
+                clientKey,
+                result => {
+                  console.log(result);
+                  alert("通知ONにしました");
+                },
+                err => {
+                  console.log("通知設定エラー：" + JSON.stringify(err));
+                  alert("「設定」アプリより通知を許可してください。");
+                }
+              );
+            }
+          });
+      });
+      // });
     }
   </script>
 </ons-page>

@@ -109,7 +109,6 @@
       「新規登録」のボタンを押すことで、<span
         style="color:#0799d7;"
         id="riyouKiyaku"
-        onclick='window.open("https://knowledgecampus-test.web.app/riyouKiyaku.html", "_blank", "location=yes");'
         >利用規約</span
       >および
       <span style="color:#0799d7;" id="privacyPolicy" onclick=""
@@ -166,7 +165,7 @@
       .getDownloadURL()
       .then(url => {
         document.getElementById("riyouKiyaku").onclick = new Function(
-          'window.open("' + url + '", "_blank", "location=yes");'
+          'window.open("' + url + '", "_system", "usewkwebview=yes");'
         );
       });
 
@@ -177,7 +176,7 @@
       .getDownloadURL()
       .then(url => {
         document.getElementById("privacyPolicy").onclick = new Function(
-          'window.open("' + url + '", "_blank", "location=yes");'
+          'window.open("' + url + '", "_system", "usewkwebview=yes");'
         );
       });
 

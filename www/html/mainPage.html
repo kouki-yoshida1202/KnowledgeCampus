@@ -37,7 +37,6 @@
     #mainPage .toolbar {
       background: white !important;
     }
-
     .fa-star,
     .reviewAverage {
       color: #ffd43b;
@@ -201,6 +200,7 @@
       swipeable
       overscrollable
       auto-scroll
+      auto-refresh
       var="carousel"
       item-width="100%"
       initial-index="0"
@@ -472,12 +472,27 @@
       $("#tabCarousel ons-carousel-item")
         .eq(carouselIndex)
         .addClass("active_tabCarousel");
+      var height = $("#mainCarousel ons-carousel-item")
+        .eq(carouselIndex)
+        .children()
+        .height();
+      $("#mainCarousel ons-carousel-item")
+        .eq(carouselIndex)
+        .height(height);
+      var mainHeight = $("#mainCarousel ons-carousel-item")
+        .eq(carouselIndex)
+        .height();
+      $("#mainCarousel").height(mainHeight);
+
       // if (carouselIndex == 5) {
       //   if (rankingIndicateCount == 0) {
       //     rankingIndicate();
       //   }
       //   rankingIndicateCount++;
       // }
+      let element = document.getElementById("mainCarousel");
+      // 一番下にスクロールさせる
+      element.parentElement.scrollTop = 0;
     }
     function mainTapCarouselChange(carouselIndex) {
       $("#tabCarousel ons-carousel-item").removeClass("active_tabCarousel");
@@ -717,6 +732,7 @@
       $("#careerProduct").empty();
       $("#studyProduct").empty();
       $("#businessProduct").empty();
+      $("#lifeProduct").empty();
       var nowDataCount = 0;
       var products = db.collection("products");
       products
@@ -777,8 +793,9 @@
                 $("#studyProduct").append(product);
               } else if (doc.data().category1 == "ビジネス") {
                 $("#businessProduct").append(product);
+              } else if (doc.data().category1 == "生活") {
+                $("#lifeProduct").append(product);
               }
-
               productIndicate(
                 doc.id,
                 doc.data(),
@@ -984,8 +1001,18 @@
           clientKey,
           result => {
             console.log(result);
+            ons.notification.alert({
+              message: "通知ONにしました",
+              title: "成功"
+            });
           },
-          err => console.log("通知設定エラー：" + JSON.stringify(err))
+          err => {
+            console.log("通知設定エラー：" + JSON.stringify(err));
+            ons.notification.alert({
+              message: "「設定」アプリより通知を許可してください。",
+              title: "失敗"
+            });
+          }
         );
       }
     });
