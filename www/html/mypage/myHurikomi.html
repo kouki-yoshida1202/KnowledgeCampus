@@ -33,8 +33,18 @@
           </ons-col>
         </ons-row>
         <ons-row>
-          <p style="font-size:0.8em;color:gray;">
+          <p style="font-size:0.8em;color:gray;margin-bottom:0px;">
             ※振込手数料300円が発生します。
+          </p>
+        </ons-row>
+        <ons-row>
+          <p style="font-size:0.8em;color:gray;margin-bottom:0px;">
+            ※最低申請金額は1500円からです。
+          </p>
+        </ons-row>
+        <ons-row>
+          <p style="font-size:0.8em;color:gray;margin-top:5px;">
+            ※振込予定日は申請日から1週間以内（土日祝・年末年始・お盆休みを除く）。
           </p>
         </ons-row>
       </ons-list-item>
@@ -108,10 +118,10 @@
           title: "失敗",
           message: "申請金額を入力してください"
         });
-      } else if (Number(shinseiKingaku) < 300) {
+      } else if (Number(shinseiKingaku) < 1500) {
         ons.notification.alert({
           title: "失敗",
-          message: "300円以上の申請金額を入力してください"
+          message: "1500円以上の申請金額を入力してください"
         });
       } else if (Number(shinseiKingaku) > Number(myHurikomiUriageNowHidden)) {
         ons.notification.alert({

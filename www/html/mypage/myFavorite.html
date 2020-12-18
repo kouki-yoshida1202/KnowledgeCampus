@@ -30,9 +30,39 @@
     </div>
   </ons-toolbar>
   <div class="content">
+    <ons-pull-hook id="pull-hook-favo">
+      <i class="fas fa-spinner" style="font-size:1.3em;"></i>
+    </ons-pull-hook>
     <ons-list id="myFavoriteList" style="background-image: none;"> </ons-list>
   </div>
   <script>
+    ons.ready(function() {
+      var pullHook = document.getElementById("pull-hook-favo");
+      pullHook.onAction = function(done) {
+        favoriteGet();
+        setTimeout(function() {
+          done();
+        }, 1000);
+      };
+      pullHook.addEventListener("changestate", function(event) {
+        var message = "";
+
+        switch (event.state) {
+          case "initial":
+            message = '<i class="fas fa-spinner" style="font-size:1.3em;"></i>';
+            break;
+          case "preaction":
+            message = '<i class="fas fa-spinner" style="font-size:1.3em;"></i>';
+            break;
+          case "action":
+            message =
+              '<i class="fas fa-spinner fa-spin" style="font-size:1.3em;"></i>';
+            break;
+        }
+
+        pullHook.innerHTML = message;
+      });
+    });
     favoriteGet();
     function favoriteGet() {
       showLoad();
@@ -136,11 +166,10 @@
                                   <ons-col width="70%" vertical-align="center">
                                     <p style="margin-bottom:0px;margin-top:0px;font-size:0.9em;">` +
                             data.data().title +
-                            `<br />¥` +
+                            `</p><p style="margin-bottom:0px;margin-top:7px;font-size:0.9em;">¥` +
                             data.data().price +
-                            `</p>
-                                    <p style="margin-bottom:0px;font-size:0.9em;">
-                                      <i class="far fa-heart"></i>` +
+                            `</p><p style="margin-bottom:0px;font-size:0.9em;margin-top:7px;">
+                                      <i class="fas fa-heart" style="color:#ff9831"></i>` +
                             favoCount +
                             `<i class="far fa-comment-dots"></i>` +
                             commentCount +

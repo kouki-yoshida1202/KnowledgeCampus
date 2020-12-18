@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget xmlns="http://www.w3.org/ns/widgets" id="com.monaca.knowledgecampus" version="1.0.2" ios-CFBundleVersion="1.0.2.5">
+<widget xmlns="http://www.w3.org/ns/widgets" id="com.monaca.knowledgecampus" version="1.0.7">
   <name>ナレキャン</name>
   <description>Made with Monaca (http://monaca.mobi)</description>
   <author/>
@@ -45,13 +45,13 @@
     <icon src="/res/ios/icon/icon-small@2x.png" width="58" height="58"/>
     <icon src="/res/ios/icon/icon-small@3x.png" width="87" height="87"/>
     <icon src="/res/ios/icon/icon-83.5@2x~ipad.png" width="167" height="167"/>
-    <icon src="/res/ios/icon/icon-1024.png" width="1024" height="1024"/>
     <preference name="WKWebViewOnly" value="true"/>
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine"/>
     <feature name="CDVWKWebViewEngine">
       <param name="ios-package" value="CDVWKWebViewEngine"/>
     </feature>
     <splash src="/res/ios/screen/Default@2x~universal~anyany.png"/>
+    <icon src="/res/ios/icon/icon-1024.png" width="1024" height="1024"/>
     <splash src="/res/ios/screen/Default@2x~universal~anyany.png"/>
     <config-file platform="ios" parent="CFBundleLocalizations" target="*-Info.plist">
       <array>
@@ -61,6 +61,7 @@
   </platform>
   <platform name="android">
     <preference name="android-targetSdkVersion" value="29"/>
+    <resource-file src="google-services.json" target="app/google-services.json"/>
     <icon src="/res/android/icon/ldpi.png" density="ldpi"/>
     <icon src="/res/android/icon/mdpi.png" density="mdpi"/>
     <icon src="/res/android/icon/hdpi.png" density="hdpi"/>
@@ -96,6 +97,9 @@
   <edit-config target="NSPhotoLibraryAddUsageDescription" file="*-Info.plist" mode="merge">
     <string>need to photo library access to save pictures there</string>
   </edit-config>
+  <preference name="monaca:MonacaBackendUrl" value="https://cloud.monaca.mobi/json-rpc/"/>
+  <preference name="monaca:MonacaBackendId" value="5f64c627e78885bd6e162a5c"/>
+  <preference name="monaca:MonacaBackendApiKey" value="708dad024932e3c1e466be03d410aa9f5e99adee36c278bc9494ed9b5046bb90"/>
   <preference name="KeepRunning" value="true"/>
   <preference name="monaca:AndroidIsPackageNameSeparate" value="false"/>
   <preference name="Orientation" value="portrait"/>

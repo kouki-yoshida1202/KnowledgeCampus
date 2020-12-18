@@ -144,7 +144,7 @@
           vertical-align="center"
           style="text-align: right;"
         >
-          ¥750(25%)
+          ¥300(10%)
         </ons-col>
       </ons-row>
     </ons-list-item>
@@ -156,7 +156,7 @@
           width="70%"
           vertical-align="center"
           style="text-align: right;font-weight: bold;font-size:1.5rem;"
-          >¥2250</ons-col
+          >¥2700</ons-col
         >
       </ons-row>
     </ons-list-item>
@@ -229,11 +229,11 @@
     function riekiCalc() {
       var price = $("#syuppinPriceEdit").val();
       if (price != "" && price != 0) {
-        var tesuryo = Math.ceil(price * 0.25);
-        $("#syuppinTesuryoEdit").html("¥" + tesuryo + "(25%)");
+        var tesuryo = Math.ceil(price * 0.1);
+        $("#syuppinTesuryoEdit").html("¥" + tesuryo + "(10%)");
         $("#syuppinRiekiEdit").html("¥" + (price - tesuryo));
       } else {
-        $("#syuppinTesuryoEdit").html("¥0(25%)");
+        $("#syuppinTesuryoEdit").html("¥0(10%)");
         $("#syuppinRiekiEdit").html("¥0");
       }
     }

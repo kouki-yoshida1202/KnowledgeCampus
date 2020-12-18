@@ -190,11 +190,20 @@ body {
   font-weight: bold;
   background-color: #ff9831;
 }
+.round-cap-left:before {
+  background-color: darkgray; /* 線色 */
+  border-radius: 1.5px; /* 線幅の半分 */
+  content: "";
+  display: inline-block;
+  height: 55px; /* 線の長さ */
+  vertical-align: middle;
+  width: 3px; /* 線幅 */
+}
 .large-button-gray {
   border-radius: 5px;
   color: white;
   font-weight: bold;
-  background-color: gray;
+  background-color: darkgray;
 }
 
 ons-input,

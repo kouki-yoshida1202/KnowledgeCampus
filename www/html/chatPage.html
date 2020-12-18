@@ -6,6 +6,9 @@
     #chatPage .list-item__center {
       background-image: none;
     }
+    #chatPage .tab {
+      background-image: none;
+    }
   </style>
 
   <ons-toolbar>
@@ -39,7 +42,7 @@
       item-width="50%"
       initial-index="0"
       auto-scroll-ratio="0.2"
-      style="height:40px;"
+      style="height:40px;border-bottom:1px solid #efeff4;"
     >
       <ons-carousel-item
         class="active_tabCarousel"
@@ -49,11 +52,10 @@
           購入サービス
         </div>
       </ons-carousel-item>
-      <ons-carousel-item
-        style="line-height: 35px;"
-        onclick="chatPageTapCarouselChange(1)"
-      >
-        <div class="item-label">出品サービス</div>
+      <ons-carousel-item class="" onclick="chatPageTapCarouselChange(1)">
+        <div class="item-label" style="line-height: 35px;">
+          出品サービス
+        </div>
       </ons-carousel-item>
     </ons-carousel>
   </div>
@@ -138,11 +140,13 @@
       var user = firebase.auth().currentUser;
       db.collection("negotiations")
         .where("buyUserId", "==", user.uid)
+        .orderBy("createTime", "desc")
         .get()
         .then(function(negotiations) {
           negotiations.forEach(nego => {
             var negotiationId = nego.id;
             var productUserId = nego.data().productUserId;
+
             db.collection("negotiations")
               .doc(negotiationId)
               .collection("comments")
@@ -185,6 +189,7 @@
                         </div>
                       </ons-list-item>
                     `;
+                  console.log(buycommentlist);
                   $("#buyProductCommentsList").append(buycommentlist);
                   torihikiChatIndicate(
                     nego.id,
@@ -194,9 +199,6 @@
                   );
                   torihikiChatCounter++;
                 });
-              })
-              .catch(function(error) {
-                console.log(error);
               });
           });
         })
@@ -248,7 +250,7 @@
                   negoResult.data().buyUserId,
                   negoResult.data().productUserId
                 );
-                torihikiGet();
+                // torihikiGet();
                 buyProductComments();
               });
             });
@@ -277,6 +279,7 @@
       var user = firebase.auth().currentUser;
       db.collection("negotiations")
         .where("productUserId", "==", user.uid)
+        .orderBy("createTime", "desc")
         .get()
         .then(function(negotiations) {
           negotiations.forEach(nego => {
@@ -286,7 +289,7 @@
               .doc(negotiationId)
               .collection("comments")
               .where("sendUserId", "==", buyUserId)
-              .limit(10)
+              .limit(100)
               .orderBy("createTime", "desc")
               .get()
               .then(function(commentResults) {
@@ -333,14 +336,8 @@
                   );
                   syuppinChatCounter++;
                 });
-              })
-              .catch(function(error) {
-                console.log(error);
               });
           });
-        })
-        .catch(function(error) {
-          console.log(error);
         });
     }
 
@@ -387,7 +384,7 @@
                   negoResult.data().buyUserId,
                   negoResult.data().productUserId
                 );
-                torihikiGet();
+                // torihikiGet();
                 syuppinProductComments();
               });
             });

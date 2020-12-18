@@ -746,6 +746,7 @@
               productSearchGet(doc, nowDataCount, results);
             });
           } else {
+            console.log(results);
             hideLoad();
           }
         })
@@ -757,12 +758,17 @@
     function productSearchGet(doc, nowDataCount, results) {
       var product =
         `
-              <div style="text-align: center;width:47%;padding:5px 1.5% 0px 1.5% !important;">
+              <div style="text-align: center;width:47%;padding:5px 1.5% 3px 1.5% !important;">
                 <ons-card class="mainCard searchCard_` +
         nowDataCount +
         `" onclick="giftDetailJump('` +
         doc.id +
-        `')" style="padding-top:10px;padding-bottom:10px;height:230px;">
+        `')" style="height:240px;">
+        <ons-row class="searchProductCategory_` +
+        nowDataCount +
+        `" style="font-size:0.6em;border-radius:8px 8px 0px 0px;">
+                </ons-row>
+                <div class="card-box">
         <ons-row >
                     <ons-col class="productTime searchProductTime_` +
         nowDataCount +
@@ -784,24 +790,25 @@
                   <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
                   (0)
                   </p>
-                  <div style="display: flex;justify-content: center;align-items: center;height:57px;margin-top:7px;margin-bottom:7px;border-left:3px solid #ff9831;">
+                  <div style="display: flex;justify-content: center;align-items: center;height:57px;margin-top:7px;margin-bottom:7px;">
+                  <div class="round-cap-left"></div>
                   <p class="mainPageItemText searchTitle_` +
         nowDataCount +
         `"></p></div>
                   <ons-row style="width:100%;line-height:24px;">
                     <ons-col class="salaly searchSalalyTime_` +
         nowDataCount +
-        `" style="text-align:left;"></ons-col>
+        `" style="text-align:left;color:#515c6f;"></ons-col>
                     <ons-col class="howto searchHowTo_` +
         nowDataCount +
-        `" style="text-align:right;"></ons-col>
+        `" style="text-align:right;color:#515c6f;"></ons-col>
                   </ons-row>
-                  
+                  </div>
                 </ons-card>
               </div>
             `;
       $("#searchProduct").append(product);
-      console.log(nowDataCount, results.size);
+
       productSearchIndicate(doc.id, doc.data(), nowDataCount, results.size);
     }
     function productSearchIndicate(docId, data, nowDataCount, size) {
@@ -829,6 +836,25 @@
                 return url;
               })
               .then(function(url) {
+                if (data.category3 != "") {
+                  $(".searchProductCategory_" + nowDataCount).append(
+                    "<ons-col style='background:#ff969f;border-radius:8px 0px 0px 0px;color:white;font-weight:bold;'>" +
+                      data.category1 +
+                      "</ons-col><ons-col style='background:#96d4ff;color:white;font-weight:bold;'>" +
+                      data.category2 +
+                      "</ons-col><ons-col style='background:#4DB56A;border-radius:0px 8px 0px 0px;color:white;font-weight:bold;'>" +
+                      data.category3 +
+                      "</ons-col>"
+                  );
+                } else {
+                  $(".searchProductCategory_" + nowDataCount).append(
+                    "<ons-col style='background:#ff969f;border-radius:8px 0px 0px 0px;color:white;font-weight:bold;'>" +
+                      data.category1 +
+                      "</ons-col><ons-col style='background:#96d4ff;border-radius:0px 8px 0px 0px;color:white;font-weight:bold;'>" +
+                      data.category2 +
+                      "</ons-col>"
+                  );
+                }
                 $(".searchUserName_" + nowDataCount).html(doc.data().username);
                 $(".searchImage_" + nowDataCount).attr("src", url);
                 $(".searchTitle_" + nowDataCount).html(data.title);

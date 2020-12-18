@@ -141,7 +141,7 @@
           vertical-align="center"
           style="text-align: right;"
         >
-          ¥750(25%)
+          ¥300(10%)
         </ons-col>
       </ons-row>
     </ons-list-item>
@@ -153,7 +153,7 @@
           width="70%"
           vertical-align="center"
           style="text-align: right;font-weight: bold;font-size:1.5rem;"
-          >¥2250</ons-col
+          >¥2700</ons-col
         >
       </ons-row>
     </ons-list-item>
@@ -188,7 +188,7 @@
     window.addEventListener("keyboardWillShow", event => {
       //画面の高さをキーボードの高さを差し引いた値とする
       $("#syuppinPage").animate(
-        { height: original_main_height - event.keyboardHeight + "px" },
+        { height: original_main_height - event.keyboardHeight + 100 + "px" },
         100
       );
     });
@@ -214,11 +214,11 @@
       var price = $(this).val();
       console.log(price);
       if (price != "" && price != 0) {
-        var tesuryo = Math.ceil(price * 0.25);
-        $("#syuppinTesuryo").html("¥" + tesuryo + "(25%)");
+        var tesuryo = Math.ceil(price * 0.1);
+        $("#syuppinTesuryo").html("¥" + tesuryo + "(10%)");
         $("#syuppinRieki").html("¥" + (price - tesuryo));
       } else {
-        $("#syuppinTesuryo").html("¥0(25%)");
+        $("#syuppinTesuryo").html("¥0(10%)");
         $("#syuppinRieki").html("¥0");
       }
     });
@@ -304,7 +304,7 @@
           console.log("Document successfully written!");
           hideLoad();
           if (releasestatus == "syuppin") {
-            var message = "商品を出品しました";
+            var message = "サービスを出品しました";
           } else if (releasestatus == "shitagaki") {
             var message = "下書き保存しました";
           }

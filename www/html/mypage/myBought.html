@@ -1,7 +1,8 @@
 <ons-page id="myBoughtPage">
   <style>
     #myBoughtPage .fa-heart,
-    #myBoughtPage .fa-comment-dots {
+    #myBoughtPage .fa-comment-dots,
+    #myBoughtPage .fa-cart-arrow-down {
       margin-right: 0.5rem;
     }
     #myBoughtPage .fa-comment-dots {
@@ -36,7 +37,7 @@
       item-width="50%"
       initial-index="0"
       auto-scroll-ratio="0.2"
-      style="height:40px;"
+      style="height:40px;border-bottom:1px solid #efeff4;"
     >
       <ons-carousel-item
         class="active_tabCarousel"
@@ -180,46 +181,82 @@
           return (url = "img/userSampleImageMan.png");
         })
         .then(function(url) {
-          var myTorihiki = "";
-          myTorihiki +=
-            `
-                    <ons-list-item onclick="torihikiPageJump('` +
-            negotiationData.productId +
-            `','` +
-            negotiationData.buyUserId +
-            `','` +
-            negotiationData.productUserId +
-            `')">
-                      <ons-row>
-                        <ons-col width="20%" vertical-align="center">
-                          <img
-                            class="mySyuppinImage list-item__thumbnail"
-                            src="` +
-            url +
-            `"
-                            style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
-                          />
-                        </ons-col>
-                        <ons-col width="70%" vertical-align="center">
-                          <p style="margin-bottom:0px;margin-top:0px;font-size:0.9em;">` +
-            data.title +
-            `<br />¥` +
-            data.price +
-            `</p>
-                        </ons-col>
-                        <ons-col width="10%" vertical-align="center">＞</ons-col>
-                      </ons-row>
-                    </ons-list-item>
-                `;
-          if (negotiationData.status == "取引中") {
-            $("#myBoughtList").append(myTorihiki);
-          } else if (negotiationData.status == "取引完了") {
-            $("#myBoughtCompleteList").append(myTorihiki);
-          }
+          db.collection("favorite")
+            .where("productId", "==", negotiationData.productId)
+            .get()
+            .then(function(result) {
+              return result.size;
+            })
+            .then(function(favoCount) {
+              return favoCount;
+            })
+            .then(function(favoCount) {
+              db.collection("products")
+                .doc(negotiationData.productId)
+                .collection("comments")
+                .get()
+                .then(function(commentResults) {
+                  db.collection("negotiations")
+                    .where("productId", "==", negotiationData.productId)
+                    .get()
+                    .then(function(buyCount) {
+                      var buyCount = buyCount.size;
+                      var commentCount = commentResults.size;
+                      var fotterInfo =
+                        `<i class="fas fa-heart"></i>` +
+                        favoCount +
+                        `<i class="far fa-comment-dots" style="margin-left:0.5rem;"></i >` +
+                        commentCount +
+                        `<i class="fas fa-cart-arrow-down" style="margin-left:0.5rem;"></i >` +
+                        buyCount;
+                      var myTorihiki = "";
+                      myTorihiki +=
+                        `
+                                <ons-list-item onclick="torihikiPageJump('` +
+                        negotiationData.productId +
+                        `','` +
+                        negotiationData.buyUserId +
+                        `','` +
+                        negotiationData.productUserId +
+                        `')">
+                                  <ons-row>
+                                    <ons-col width="20%" vertical-align="center">
+                                      <img
+                                        class="mySyuppinImage list-item__thumbnail"
+                                        src="` +
+                        url +
+                        `"
+                                        style="width:45px;height:45px;border-radius: 50%;object-fit:cover;"
+                                      />
+                                    </ons-col>
+                                    <ons-col width="70%" vertical-align="center">
+                                      <p style="margin-bottom:0px;margin-top:0px;font-size:0.9em;">` +
+                        data.title +
+                        `</p><p style="margin-bottom:0px;margin-top:7px;font-size:0.9em;">¥` +
+                        data.price +
+                        `</p>
+                                          <p style="margin-bottom:0px;margin-top:7px;font-size:0.9em;">
+                                            ` +
+                        fotterInfo +
+                        `
+                                          </p>
+                                    </ons-col>
+                                    <ons-col width="10%" vertical-align="center">＞</ons-col>
+                                  </ons-row>
+                                </ons-list-item>
+                            `;
+                      if (negotiationData.status == "取引中") {
+                        $("#myBoughtList").append(myTorihiki);
+                      } else if (negotiationData.status == "取引完了") {
+                        $("#myBoughtCompleteList").append(myTorihiki);
+                      }
 
-          if (nowDataCount == size) {
-            hideLoad();
-          }
+                      if (nowDataCount == size) {
+                        hideLoad();
+                      }
+                    });
+                });
+            });
         });
     }
   </script>

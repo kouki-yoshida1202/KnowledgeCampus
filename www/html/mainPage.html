@@ -22,8 +22,8 @@
     }
 
     .active_tabCarousel {
-      color: #0799d7;
-      border-bottom: 3px solid #0799d7;
+      color: #ff9831;
+      border-bottom: 3px solid #ff9831;
       font-weight: bold;
     }
 
@@ -90,6 +90,9 @@
       z-index: 2;
       background-color: white;
     }
+    #mainPage > .mainHeader {
+      background-color: transparent;
+    }
 
     .mainUserName {
       font-size: 0.9em;
@@ -98,11 +101,9 @@
 
     #mainPage ons-card {
       text-align: center;
-      padding: 7px;
+      padding: 0px;
       margin: 0px;
-      height: 230px;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      height: 240px;
     }
     #mainPage .mainReview {
       font-size: 0.8em;
@@ -113,24 +114,28 @@
     #tabCarousel > .ons-swiper-target {
       justify-content: space-between;
     }
+
+    .card-box {
+      padding: 7px;
+    }
   </style>
   <ons-toolbar>
     <div
       class="left"
       id="toolbar-title"
-      style="display:flex;align-items: center;justify-content: center;"
+      style="width:5%;"
       onclick="window.location.href = 'index.html';"
     >
-      <img
+      <!-- <img
         src="img/appstore.png"
         alt=""
         style="height:30px;width:30px;margin:0 auto;"
-      />
+      /> -->
     </div>
     <div
       class="center"
       id="toolbar-title"
-      style="display:flex;align-items: center;justify-content: center;"
+      style="display:flex;align-items: center;justify-content: center;width:90%;"
       onclick="myNavigator.bringPageTop('html/top/searchBefore.html');"
     >
       <ons-search-input
@@ -164,7 +169,7 @@
       item-width="16%"
       centerd
       initial-index="2"
-      style="height:33px;border-bottom:1px solid #f0f0f0;padding-top:5px;font-size:0.8em;"
+      style="height:33px;border-bottom:1px solid #f0f0f0;padding-top:5px;font-size:0.8em;background-color: white;"
     >
       <ons-carousel-item
         class="active_tabCarousel"
@@ -189,10 +194,11 @@
         <div class="item-label">ランキング</div>
       </ons-carousel-item>
     </ons-carousel>
+    <img src="img/campain.jpg" alt="" style="width:100%;height:auto;" />
   </div>
 
   <div class="content page__content">
-    <ons-pull-hook id="pull-hook" style="margin-top:33px;" height="105px">
+    <ons-pull-hook id="pull-hook" style="margin-top:100px;" height="105px">
       <i class="fas fa-spinner" style="font-size:1.3em;"></i>
     </ons-pull-hook>
     <ons-carousel
@@ -343,8 +349,13 @@
                   <ons-card
                     vertical-align="center"
                     width="50%"
-                    style="text-align: center;height:230px;position: relative;"
+                    style="text-align: center;height:240px;position: relative;"
                   >
+                  <ons-row class="rankingProductCategory_` +
+        i +
+        `" style="font-size:0.6em;border-radius:8px 8px 0px 0px;">
+                </ons-row>
+                <div class="card-box">
                   <ons-row >
                     <ons-col id="rankingProductTime_` +
         i +
@@ -392,8 +403,9 @@
                       (0)
                     </p>
                     <div
-                      style="display: flex;justify-content: center;align-items: center;height:57px;margin-top:7px;margin-bottom:7px;border-left:3px solid #ff9831;"
+                      style="display: flex;justify-content: center;align-items: center;height:57px;margin-top:7px;margin-bottom:7px;"
                     >
+                    <div class="round-cap-left"></div>
                       <p id="rankingText_` +
         i +
         `"class="mainPageItemText"></p>
@@ -406,13 +418,13 @@
         i +
         `"class="howto"style="text-align:right;"></ons-col>
                   </ons-row>
-                  
                     <div
-                      style="position: absolute;top:10px;left:10px;color:white;font-weight: bold;"
+                      style="position: absolute;top:35px;left:40px;color:white;font-weight: bold;"
                     >
                       <i class="fas fa-crown fa-lg" style="color:` +
         color +
         `";></i>
+                    </div>
                     </div>
                   </ons-card>
                 </ons-carousel-item>
@@ -459,7 +471,7 @@
       productGet();
       rankingIndicate();
       notificationGet();
-      torihikiGet();
+      // torihikiGet();
       var mainCarousel = document.getElementById("mainCarousel");
       mainCarousel.addEventListener("postchange", function(e) {
         // alert(e.activeIndex);
@@ -628,6 +640,9 @@
               var time = productInfo.data().time;
               var title = productInfo.data().title;
               var createTime = productInfo.data().createTime;
+              var category1 = productInfo.data().category1;
+              var category2 = productInfo.data().category2;
+              var category3 = productInfo.data().category3;
               var productArray = [
                 userId,
                 howto,
@@ -636,7 +651,10 @@
                 title,
                 rankingArrayCount,
                 rank.productId,
-                createTime
+                createTime,
+                category1,
+                category2,
+                category3
               ];
               rankingArrayCount++;
               return productArray;
@@ -650,33 +668,59 @@
               var rankingArrayCount = productArray[5];
               var productId = productArray[6];
               var createTime = productArray[7];
-
+              var category1 = productArray[8];
+              var category2 = productArray[9];
+              var category3 = productArray[10];
               db.collection("users")
                 .doc(userId)
                 .get()
                 .then(function(userInfo) {
                   var username = userInfo.data().username;
-                  ref = firebase
+                  firebase
                     .storage()
                     .ref()
-                    .child("profilePicture/" + userId);
-                  ref
+                    .child("profilePicture/" + userId)
                     .getDownloadURL()
                     .then(url => {
-                      // 画像取得できた
                       return url;
                     })
-                    .catch(function() {
+                    .catch(function(error) {
                       // 画像取得できないとき
                       url = "img/userSampleImageMan.png";
                       return url;
                     })
                     .then(function(url) {
-                      document.getElementById(
-                        "rankingCard_" + rankingArrayCount
-                      ).onclick = new Function(
-                        "giftDetailJump('" + productId + "')"
-                      );
+                      // document.getElementById(
+                      //   "rankingCard_" + rankingArrayCount
+                      // ).onclick = new Function(
+                      //   "giftDetailJump('" + productId + "')"
+                      // );
+                      if (category3 != "") {
+                        $(".rankingProductCategory_" + rankingArrayCount)
+                          .empty()
+                          .append(
+                            "<ons-col style='background:#ff969f;border-radius:8px 0px 0px 0px;color:white;font-weight:bold;'>" +
+                              category1 +
+                              "</ons-col><ons-col style='background:#96d4ff;color:white;font-weight:bold;'>" +
+                              category2 +
+                              "</ons-col><ons-col style='background:#4DB56A;border-radius:0px 8px 0px 0px;color:white;font-weight:bold;'>" +
+                              category3 +
+                              "</ons-col>"
+                          );
+                      } else {
+                        $(".rankingProductCategory_" + rankingArrayCount)
+                          .empty()
+                          .append(
+                            "<ons-col style='background:#ff969f;border-radius:8px 0px 0px 0px;color:white;font-weight:bold;'>" +
+                              category1 +
+                              "</ons-col><ons-col style='background:#96d4ff;border-radius:0px 8px 0px 0px;color:white;font-weight:bold;'>" +
+                              category2 +
+                              "</ons-col>"
+                          );
+                      }
+                      $("#rankingCard_" + rankingArrayCount).click(function() {
+                        giftDetailJump(productId);
+                      });
                       $("#rankingImage_" + rankingArrayCount).attr("src", url);
                       $("#rankingUserName_" + rankingArrayCount).html(username);
                       $("#rankingText_" + rankingArrayCount).html(title);
@@ -704,6 +748,9 @@
                           "(" + result[0] + ")"
                         );
                       });
+                    })
+                    .catch(function(error) {
+                      console.log(error);
                     });
 
                   setTimeout(function() {
@@ -712,6 +759,9 @@
                     syoryakuName(".mainUserName");
                   }, 1000);
                 });
+            })
+            .catch(function(error) {
+              console.log(error);
             });
         }
       });
@@ -745,10 +795,15 @@
               nowDataCount++;
               var product =
                 `
-              <div style="text-align: center;width:47%;padding:5px 1.5% 0px 1.5% !important;">
+              <div style="text-align: center;width:47%;padding:5px 1.5% 3px 1.5% !important;">
                 <ons-card class="mainCard mainCard_` +
                 nowDataCount +
                 `">
+                <ons-row class="mainProductCategory_` +
+                nowDataCount +
+                `" style="font-size:0.6em;border-radius:8px 8px 0px 0px;">
+                </ons-row>
+                <div class="card-box">
                 <ons-row >
                     <ons-col class="productTime mainProductTime_` +
                 nowDataCount +
@@ -770,10 +825,12 @@
                   <img src="img/starOff.png" alt="" style="height:14px;margin-right:3px;"/>
                   (0)
                   </p>
-                  <div style="display: flex;justify-content: center;align-items: center;height:57px;margin-top:7px;margin-bottom:7px;border-left:3px solid #ff9831;">
+                  <div style="display: flex;justify-content: center;align-items: center;height:57px;margin-top:7px;margin-bottom:7px;">
+                  <div class="round-cap-left"></div>
                   <p class="mainPageItemText mainTitle_` +
                 nowDataCount +
-                `"></p></div>
+                `"></p>
+                </div>
                   <ons-row style="width:100%;line-height:24px;">
                     <ons-col class="salaly mainSalalyTime_` +
                 nowDataCount +
@@ -782,7 +839,7 @@
                 nowDataCount +
                 `" style="text-align:right;"></ons-col>
                   </ons-row>
-                  
+                  </div>
                 </ons-card>
               </div>
             `;
@@ -855,6 +912,26 @@
                     giftDetailJump(docId);
                   };
                 }
+                if (data.category3 != "") {
+                  $(".mainProductCategory_" + nowDataCount).append(
+                    "<ons-col style='background:#ff969f;border-radius:8px 0px 0px 0px;color:white;font-weight:bold;'>" +
+                      data.category1 +
+                      "</ons-col><ons-col style='background:#96d4ff;color:white;font-weight:bold;'>" +
+                      data.category2 +
+                      "</ons-col><ons-col style='background:#4DB56A;border-radius:0px 8px 0px 0px;color:white;font-weight:bold;'>" +
+                      data.category3 +
+                      "</ons-col>"
+                  );
+                } else {
+                  $(".mainProductCategory_" + nowDataCount).append(
+                    "<ons-col style='background:#ff969f;border-radius:8px 0px 0px 0px;color:white;font-weight:bold;'>" +
+                      data.category1 +
+                      "</ons-col><ons-col style='background:#96d4ff;border-radius:0px 8px 0px 0px;color:white;font-weight:bold;'>" +
+                      data.category2 +
+                      "</ons-col>"
+                  );
+                }
+
                 $(".mainUserName_" + nowDataCount).html(doc.data().username);
                 $(".mainImage_" + nowDataCount).attr("src", url);
                 $(".mainTitle_" + nowDataCount).html(data.title);
@@ -898,7 +975,6 @@
               });
           } else {
             // doc.data() will be undefined in this case
-            console.log("No such document!");
           }
         })
         .catch(function(error) {
@@ -944,15 +1020,16 @@
       var rankingArray = [];
       return new Promise(resolve => {
         negotiation.forEach(function(nego) {
-          console.log(nego.id, nego.data());
           var productId = nego.data().productId;
-          console.log(productId);
+
           var products = db
             .collection("products")
             .doc(productId)
             .get()
             .then(function(product) {
+              console.log(product.data());
               var category1 = product.data().category1;
+
               return category1;
             })
             .then(function(category1) {
@@ -974,6 +1051,9 @@
               if (counter == negotiation.size) {
                 resolve(rankingArray);
               }
+            })
+            .catch(function(error) {
+              console.log(error);
             });
         });
       });
@@ -1001,17 +1081,9 @@
           clientKey,
           result => {
             console.log(result);
-            ons.notification.alert({
-              message: "通知ONにしました",
-              title: "成功"
-            });
           },
           err => {
             console.log("通知設定エラー：" + JSON.stringify(err));
-            ons.notification.alert({
-              message: "「設定」アプリより通知を許可してください。",
-              title: "失敗"
-            });
           }
         );
       }
@@ -1045,8 +1117,7 @@
       db.collection("notifications")
         .where("catchUserId", "==", user.uid)
         .where("readStatus", "==", "Unread")
-        .get()
-        .then(function(notifications) {
+        .onSnapshot(function(notifications) {
           if (notifications.size > 0) {
             $("#mainPushBadge").show();
             var unReadCount = notifications.size;
@@ -1054,46 +1125,6 @@
           } else {
             $("#mainPushBadge").hide();
           }
-        });
-    }
-
-    function torihikiGet() {
-      var user = firebase.auth().currentUser;
-      console.log("torihikiGet");
-      db.collection("negotiations")
-        .get()
-        .then(function(negoResults) {
-          negoResults.forEach(nego => {
-            db.collection("negotiations")
-              .doc(nego.id)
-              .collection("comments")
-              .where("catchUserId", "==", user.uid)
-              .where("readStatus", "==", "Unread")
-              // .limit(20)
-              .orderBy("createTime", "desc")
-              .get()
-              .then(function(commentResults) {
-                if (commentResults.size > 0) {
-                  var unReadCount = commentResults.size;
-                  // document
-                  //   .getElementById("chatTab")
-                  //   .setAttribute("badge", unReadCount);
-                  //   $('.fa-null').delete();
-                  //   $('#chatTab .tabbar__button').append();
-                  $("#chatTab .notification").html(unReadCount);
-                } else {
-                  // document.getElementById("chatTab").setAttribute("badge", "");
-                  // $(".fa-null").delete();
-                  $("#chatTab .notification").html("");
-                }
-              })
-              .catch(function(error) {
-                console.log(error);
-              });
-          });
-        })
-        .catch(function(error) {
-          console.log(error);
         });
     }
 

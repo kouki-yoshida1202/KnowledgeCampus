@@ -1,4 +1,12 @@
 <ons-page id="accountCreatePage">
+  <style>
+    #accountCreatePage .list-item {
+      padding: 0px;
+    }
+    #accountCreatePage .list-item__center {
+      padding-left: 10px;
+    }
+  </style>
   <ons-toolbar>
     <div class="left">
       <ons-back-button> </ons-back-button>
@@ -223,6 +231,7 @@
                     .set(
                       {
                         username: userName,
+                        mail: mailAddress,
                         point: 0,
                         text: "",
                         ginkoukind: "普通",
@@ -241,7 +250,10 @@
                       ons.notification.alert({
                         title: "メール送信",
                         message:
-                          "認証メールを送信しました。メールに記載のURLを押下することで登録が完了します。"
+                          "認証メールを送信しました。メールに記載のURLを押下することで登録が完了します。",
+                        callback: function() {
+                          window.location.href = "index.html";
+                        }
                       });
                       hideLoad();
                     })

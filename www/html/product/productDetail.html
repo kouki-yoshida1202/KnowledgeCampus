@@ -71,9 +71,9 @@
       <ons-col
         id="productDetailMyPoint"
         width="100%"
-        style="text-align: center;font-size:0.9em;color:white;font-weight: bold;line-height: 25px;margin-bottom:5px;"
+        style="text-align: center;font-size:0.9em;color:white;font-weight: bold;line-height: 25px;margin-bottom:5px;background-color: #0799d7;"
         vertical-align="center"
-        >0P/¥0持っています</ons-col
+        >友人招待で300p獲得できます！</ons-col
       >
     </ons-row>
     <ons-row>
@@ -121,7 +121,7 @@
     <p
       id="productDetailText"
       class="navy"
-      style="font-size:0.8em;width:85%;margin:0 auto;margin-top:15px;margin-bottom:15px;"
+      style="font-size:0.8em;width:85%;margin:0 auto;margin-top:15px;margin-bottom:15px;word-break:break-all;"
     ></p>
   </div>
   <div style="width:100%;margin:0 auto;margin-bottom:50px;">
@@ -130,7 +130,7 @@
       <ons-row id="productDetailTitle" style="font-weight: bold;"> </ons-row>
       <ons-row>
         <p style="margin-bottom:0px;">
-          <i class="far fa-heart" onclick="favoCheck()"></i
+          <i class="far fa-heart" onclick="favoCheck();"></i
           ><span id="favoCount">0</span>
           <i
             class="far fa-comment-dots"
@@ -267,7 +267,8 @@
           <ons-list-item>
             <ons-row>
               <ons-col width="50%" vertical-align="center">
-                支払い金額
+                支払い金額<br />
+                <span style="font-size:0.75em;">※最低支払い金額は50円から</span>
               </ons-col>
               <ons-col
                 id="productDetailModalShiharai"
@@ -315,8 +316,8 @@
   </ons-modal>
   <ons-modal id="productDetailReportModal" direction="up">
     <div style="text-align: center">
-      <ons-card>
-        <ons-list style="background-image: none;">
+      <ons-card style="background: #efeff4;">
+        <ons-list style="background-image: none;background: #efeff4;">
           <ons-list-item>
             <ons-row>
               <ons-col>
@@ -339,6 +340,7 @@
                     class="textarea textarea--transparent"
                     rows="10"
                     placeholder="報告内容を出来るだけ細かく記入してください。"
+                    style="background: white;"
                   ></textarea>
                 </p>
               </ons-col>
@@ -417,7 +419,8 @@
           )
           .then(function(userResult) {
             ons.notification.alert({
-              message: "送信しました。"
+              title: "完了",
+              message: "報告内容を送信しました。"
             });
             $("#reportComment").val("");
             hideProductDetailReportModal();
@@ -474,6 +477,7 @@
             .then(function(userResult) {
               var uriagenow = userResult.data().uriagenow;
               var pointnow = userResult.data().point;
+              var buyUserName = userResult.data().username;
 
               if (uriage > uriagenow) {
                 ons.notification.alert({
@@ -491,27 +495,48 @@
                   .get()
                   .then(function(result) {
                     var productUserId = result.data().userId;
+                    var productTitle = result.data().title;
+                    var productTime = result.data().time;
                     var createTime = new Date();
-                    window.open(
-                      "https://www.knowledgecampus.info/KCpayButton.html?mailaddress=" +
-                        mailaddress +
-                        "&buyUserId=" +
-                        buyUserId +
-                        "&productId=" +
-                        productId +
-                        "&buyPrice=" +
-                        shiharai +
-                        "&productUserId=" +
-                        productUserId +
-                        "&createTime=" +
-                        createTime +
-                        "&uriage=" +
-                        uriage +
-                        "&point=" +
-                        point,
-                      "_system",
-                      "usewkwebview=yes"
-                    );
+
+                    db.collection("users")
+                      .doc(productUserId)
+                      .get()
+                      .then(function(productUserInfo) {
+                        var productUserMail = productUserInfo.data().mail;
+                        var productUserName = productUserInfo.data().username;
+
+                        window.open(
+                          "https://www.knowledgecampus.info/KCpayButton.html?mailaddress=" +
+                            mailaddress +
+                            "&buyUserId=" +
+                            buyUserId +
+                            "&productId=" +
+                            productId +
+                            "&buyPrice=" +
+                            shiharai +
+                            "&productUserId=" +
+                            productUserId +
+                            "&createTime=" +
+                            createTime +
+                            "&uriage=" +
+                            uriage +
+                            "&point=" +
+                            point +
+                            "&productTitle=" +
+                            productTitle +
+                            "&productUserMail=" +
+                            productUserMail +
+                            "&productUserName=" +
+                            productUserName +
+                            "&productTime=" +
+                            productTime +
+                            "&buyUserName=" +
+                            buyUserName,
+                          "_system",
+                          "usewkwebview=yes"
+                        );
+                      });
                   });
               }
             })
@@ -526,112 +551,134 @@
       }
     }
     function favoCheck() {
-      showLoad();
+      var favoClick = 1;
       var productId = $("#productDetailId").val();
       var user = firebase.auth().currentUser;
       var myUserId = user.uid;
-      db.collection("products")
-        .doc(productId)
-        .get()
-        .then(function(result) {
-          var productUserId = result.data().userId;
-          if (myUserId == productUserId) {
-            ons.notification.alert({
-              title: "注意",
-              message: "自分の商品にいいねはできません"
-            });
-            var myProduct = true;
-          } else {
-            var myProduct = false;
-          }
-          return myProduct;
-        })
-        .then(function(myProduct) {
-          if (myProduct == true) return;
-          db.collection("favorite")
-            .where("favoUserId", "==", myUserId)
-            .where("productId", "==", productId)
-            .get()
-            .then(function(result) {
-              if (result.size > 0) {
-                // いいね解除した
-                result.forEach(result => {
-                  var favoDocId = result.id;
-                  db.collection("favorite")
-                    .doc(favoDocId)
-                    .delete()
-                    .then(function() {
-                      hideLoad();
-                      $(".fa-heart").removeClass("favoOn");
-                      var favoCount = Number($("#favoCount").html()) - 1;
-                      $("#favoCount").html(favoCount);
-                      ons.notification.alert({
-                        title: "解除",
-                        message: "いいね解除しました"
+      if (favoClick == 1) {
+        console.log("aiueo");
+        favoClick++;
+        db.collection("products")
+          .doc(productId)
+          .get()
+          .then(function(result) {
+            var productUserId = result.data().userId;
+            if (myUserId == productUserId) {
+              var myProduct = true;
+            } else {
+              var myProduct = false;
+            }
+            return myProduct;
+          })
+          .then(function(myProduct) {
+            if (myProduct == true) return;
+            showLoad();
+            db.collection("favorite")
+              .where("favoUserId", "==", myUserId)
+              .where("productId", "==", productId)
+              .get()
+              .then(function(result) {
+                if (result.size > 0) {
+                  // いいね解除した
+                  result.forEach(result => {
+                    var favoDocId = result.id;
+                    db.collection("favorite")
+                      .doc(favoDocId)
+                      .delete()
+                      .then(function() {
+                        hideLoad();
+                        $(".fa-heart")
+                          .removeClass("favoOn")
+                          .removeClass("fas")
+                          .addClass("far");
+                        var favoCount = Number($("#favoCount").html()) - 1;
+                        $("#favoCount").html(favoCount);
+                        ons.notification.alert({
+                          title: "解除",
+                          message: "いいね解除しました"
+                        });
+                        favoClick = 1;
+                      })
+                      .catch(function(error) {
+                        console.log(error);
+                        hideLoad();
+                        favoClick = 1;
                       });
+                  });
+                } else {
+                  //いいねする
+                  db.collection("favorite")
+                    .doc()
+                    .set(
+                      {
+                        favoUserId: myUserId,
+                        productId: productId,
+                        createTime: new Date()
+                      },
+                      { merge: true }
+                    )
+                    .then(function(result) {
+                      $(".fa-heart")
+                        .addClass("favoOn")
+                        .removeClass("far")
+                        .addClass("fas");
+                      var favoCount = Number($("#favoCount").html()) + 1;
+                      $("#favoCount").html(favoCount);
+                      db.collection("users")
+                        .doc(user.uid)
+                        .get()
+                        .then(function(myUserInfo) {
+                          var userName = myUserInfo.data().username;
+                          var productUserId = $(
+                            "#productDetailproductUserId"
+                          ).val();
+                          var push = new ncmb.Push();
+
+                          push
+                            .set("immediateDeliveryFlag", true)
+                            .set(
+                              "message",
+                              userName + "さんからいいねされました。"
+                            )
+                            .set("target", ["ios", "android"])
+                            .set("searchCondition", {
+                              userId: productUserId
+                            })
+                            .send();
+                          db.collection("notifications")
+                            .doc()
+                            .set(
+                              {
+                                sendUserId: user.uid,
+                                catchUserId: productUserId,
+                                createTime: new Date(),
+                                message:
+                                  userName + "さんからいいねされました。",
+                                readStatus: "Unread",
+                                pushKind: "comment",
+                                productId: productId,
+                                buyUserId: "",
+                                productUserId: ""
+                              },
+                              { merge: true }
+                            );
+                          hideLoad();
+                          favoClick = 1;
+                        });
                     })
                     .catch(function(error) {
                       console.log(error);
                       hideLoad();
+                      favoClick = 1;
                     });
-                });
-              } else {
-                //いいねする
-                db.collection("favorite")
-                  .doc()
-                  .set(
-                    {
-                      favoUserId: myUserId,
-                      productId: productId,
-                      createTime: new Date()
-                    },
-                    { merge: true }
-                  )
-                  .then(function(result) {
-                    $(".fa-heart").addClass("favoOn");
-                    var favoCount = Number($("#favoCount").html()) + 1;
-                    $("#favoCount").html(favoCount);
-                    var userName = user.data().username;
-                    var productUserId = $("#productDetailproductUserId").val();
-                    var push = new ncmb.Push();
-
-                    push
-                      .set("immediateDeliveryFlag", true)
-                      .set("message", userName + "さんからいいねされました。")
-                      .set("target", ["ios", "android"])
-                      .set("searchCondition", {
-                        userId: productUserId
-                      })
-                      .send();
-                    db.collection("notifications")
-                      .doc()
-                      .set(
-                        {
-                          sendUserId: user.uid,
-                          catchUserId: productUserId,
-                          createTime: new Date(),
-                          message: userName + "さんからいいねされました。",
-                          readStatus: "Unread",
-                          pushKind: "comment",
-                          productId: productId,
-                          buyUserId: "",
-                          productUserId: ""
-                        },
-                        { merge: true }
-                      );
-                    hideLoad();
-                  })
-                  .catch(function(error) {
-                    console.log(error);
-                    hideLoad();
-                  });
-              }
-            })
-            .catch(function(error) {
-              console.log(error);
-              hideLoad();
-            });
-        });
+                }
+              })
+              .catch(function(error) {
+                console.log(error);
+                hideLoad();
+              });
+          });
+      }
     }
 
     function showProductDetailModal() {
@@ -663,10 +710,20 @@
         .get()
         .then(function(doc) {
           // 商品情報取得
+          var user = firebase.auth().currentUser;
+          var myUserId = user.uid;
+          var productUserId = doc.data().userId;
           var explanation = doc.data().explanation;
+          if (myUserId == productUserId) {
+            $(".fa-heart")
+              .removeClass("far")
+              .addClass("fas");
+          } else {
+            $(".fa-heart").click(function() {});
+          }
           $("#productDetailTitle").html(doc.data().title);
           $("#productDetailExplanation").html(
-            explanation.replace(/<5060>/g, "<br>")
+            AutoLink(explanation.replace(/<5060>/g, "<br>"))
           );
           $("#productDetailHowToTalk").html(
             "通話手段: " + doc.data().howtotalk
@@ -694,7 +751,9 @@
           var price = productData.price;
           docRef.get().then(function(doc) {
             $("#productDetailUserName").html(doc.data().username);
-            $("#productDetailText").html(doc.data().text);
+            $("#productDetailText").html(
+              doc.data().text.replace(/<5060>/g, "<br>")
+            );
 
             var user = firebase.auth().currentUser;
             var myUserId = user.uid;
@@ -704,14 +763,6 @@
               .then(function(myResult) {
                 var uriagenow = myResult.data().uriagenow;
                 var pointnow = myResult.data().point;
-                $("#productDetailMyPoint").html(
-                  pointnow + "P/¥" + uriagenow + "持っています"
-                );
-                if (pointnow == 0 && uriagenow == 0) {
-                  $("#productDetailMyPoint").css("background", "red");
-                } else {
-                  $("#productDetailMyPoint").css("background", "#0799d7");
-                }
                 if (price - pointnow < 50) {
                   $("#productDetailModalMyPoint").val(price - 50);
                   $("#productDetailModalMyUriage").val(0);
@@ -824,10 +875,19 @@
             .where("favoUserId", "==", myUserId)
             .get()
             .then(function(result) {
-              if (result.size > 0) {
-                $(".fa-heart").addClass("favoOn");
-              } else {
-                $(".fa-heart").removeClass("favoOn");
+              var productUserId = $("#productDetailproductUserId").val();
+              if (productUserId != myUserId) {
+                if (result.size > 0) {
+                  $(".fa-heart")
+                    .addClass("favoOn")
+                    .removeClass("far")
+                    .addClass("fas");
+                } else {
+                  $(".fa-heart")
+                    .removeClass("favoOn")
+                    .removeClass("fas")
+                    .addClass("far");
+                }
               }
             });
           db.collection("favorite")
@@ -898,7 +958,7 @@
                         <span class="list-item__subtitle">
                           <ons-card id="commentProduct_` +
                     nowDataCount +
-                    `">
+                    `"style="word-break:break-all;">
                           </ons-card>
                         </span>
                       </div>

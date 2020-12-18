@@ -1,25 +1,33 @@
 <ons-page>
   <style>
-    #BanModal .list-item__center{
+    #BanModal .list-item__center {
       background-image: none;
     }
 
-    #BanModal p{
-      margin-top:0px;margin-bottom:0px;
-      color:white;
+    #BanModal p {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      color: white;
     }
   </style>
-  <ons-tabbar position="bottom">
+
+  <ons-tabbar position="bottom" id="ons_bottombar">
     <ons-tab label="ホーム" page="html/mainPage.html" icon="fa-home" active>
     </ons-tab>
-    <ons-tab id="chatTab"label="取引" page="html/chatPage.html"badge=""icon="fa-comment">
+    <ons-tab
+      id="chatTab"
+      label="取引"
+      page="html/chatPage.html"
+      badge=""
+      icon="fa-comment"
+    >
     </ons-tab>
     <ons-tab label="出品" page="html/syuppinPage.html" icon="fa-history">
     </ons-tab>
     <ons-tab label="マイページ" page="html/myPage.html" icon="fa-user">
     </ons-tab>
   </ons-tabbar>
-  </ons-modal>
+
   <ons-modal id="BanModal" direction="up">
     <div style="text-align: center;padding:20px;">
       <ons-card style="background: linear-gradient(#E5575D,#F57730);">
@@ -29,8 +37,11 @@
               <ons-col>
                 <p style="text-align: center;font-size:1.2em;color:white;">
                   禁止事項
-                  <span style="float:right;padding-right:0.5em;" onclick="hideBanModal()"><i
-                      class="fas fa-times"></i></span>
+                  <span
+                    style="float:right;padding-right:0.5em;"
+                    onclick="hideBanModal()"
+                    ><i class="fas fa-times"></i
+                  ></span>
                 </p>
               </ons-col>
             </ons-row>
@@ -93,7 +104,11 @@
             <ons-row>
               <ons-col>
                 <p style="text-align: center;font-size:0.9em;">
-                  詳しくは<span style="border-bottom:1px solid white;"onclick='window.open("https://knowledgecampus-test.web.app/riyouKiyaku.html", "_system", "usewkwebview=yes");'>利用規約</span>をご覧ください。
+                  詳しくは<span
+                    id="homePageRiyouKiyaku"
+                    style="border-bottom:1px solid white;"
+                    >利用規約</span
+                  >をご覧ください。
                 </p>
               </ons-col>
             </ons-row>
@@ -103,6 +118,14 @@
     </div>
   </ons-modal>
   <script>
+    window.addEventListener("native.keyboardshow", function() {
+      $("#ons_bottombar").attr("hide-tabs", "true");
+    });
+
+    window.addEventListener("native.keyboardhide", function() {
+      $("#ons_bottombar").attr("hide-tabs", "false");
+    });
+
     var otherCount = 0;
     function otherPageJump(otherUserId) {
       myNavigator.bringPageTop("html/otherPage.html");
@@ -115,6 +138,48 @@
         }
       }, 200);
     }
+    firebase
+      .storage()
+      .ref()
+      .child("riyoukiyaku.pdf")
+      .getDownloadURL()
+      .then(url => {
+        document.getElementById("homePageRiyouKiyaku").onclick = new Function(
+          'window.open("' + url + '", "_system", "usewkwebview=yes");'
+        );
+      });
+    var user = firebase.auth().currentUser;
+
+    db.collection("negotiations")
+      // .get()
+      .onSnapshot(function(negoResults) {
+        negoResults.forEach(nego => {
+          db.collection("negotiations")
+            .doc(nego.id)
+            .collection("comments")
+            .where("catchUserId", "==", user.uid)
+            .where("readStatus", "==", "Unread")
+            // .limit(20)
+            // .orderBy("createTime", "desc")
+            // .get()
+            .onSnapshot(function(commentResults) {
+              console.log(commentResults.size);
+              if (commentResults.size > 0) {
+                var unReadCount = commentResults.size;
+                // document
+                //   .getElementById("chatTab")
+                //   .setAttribute("badge", unReadCount);
+                //   $('.fa-null').delete();
+                //   $('#chatTab .tabbar__button').append();
+                $("#chatTab .notification").html(unReadCount);
+              } else {
+                // document.getElementById("chatTab").setAttribute("badge", "");
+                // $(".fa-null").delete();
+                $("#chatTab .notification").html("");
+              }
+            });
+        });
+      });
 
     function syoryaku(className) {
       $(className).each(function() {
@@ -126,25 +191,23 @@
       });
     }
     function syoryakuName(className) {
-        $(className).each(function () {
-          var txt = $(this).text();
-          if (txt.length > 9) {
-            txt = txt.substr(0, 9);
-            $(this).text(txt + "…");
-          }
-        });
-      }
+      $(className).each(function() {
+        var txt = $(this).text();
+        if (txt.length > 9) {
+          txt = txt.substr(0, 9);
+          $(this).text(txt + "…");
+        }
+      });
+    }
 
     function showBanModal() {
-        var modal = document.querySelector("#BanModal");
-        modal.show();
-      }
+      var modal = document.querySelector("#BanModal");
+      modal.show();
+    }
 
-      function hideBanModal() {
-        var modal = document.querySelector("#BanModal");
-        modal.hide();
-      }
-
-      
+    function hideBanModal() {
+      var modal = document.querySelector("#BanModal");
+      modal.hide();
+    }
   </script>
 </ons-page>

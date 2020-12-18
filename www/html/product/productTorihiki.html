@@ -90,7 +90,7 @@
   </ons-toolbar>
   <ons-bottom-toolbar
     id="torihikiBottomBar"
-    style="line-height: 35px;height:50px"
+    style="line-height: 35px;height:50px;background-color: darkgray;background-image: none;"
   >
     <ons-row style="padding-top:5px;">
       <ons-col
@@ -100,7 +100,7 @@
       >
         <ons-input
           id="torihikiCommentInput"
-          style="background-color: #efeff4;width:90%;line-height: 31px;padding-top:0px;padding-bottom:0px;"
+          style="background-color: white;width:90%;line-height: 31px;padding-top:0px;padding-bottom:0px;"
           placeholder="コメント入力欄"
         >
         </ons-input>
@@ -119,7 +119,7 @@
     <ons-list>
       <ons-list-header>
         評価<span style="margin-left:0.5em;font-size: 0.8em;"
-          >(通話が完了したら相手を評価しましょう。)</span
+          >(通話が完了したら相手を評価しましょう)</span
         >
       </ons-list-header>
       <ons-list-item>
@@ -446,7 +446,39 @@
                               })
                               .send();
                             // 通知Firebase
-
+                            db.collection("users")
+                              .doc(reviewSentUserId)
+                              .get()
+                              .then(function(productUserInfo) {
+                                var productUserMail = productUserInfo.data()
+                                  .mail;
+                                db.collection("products")
+                                  .doc(productId)
+                                  .get()
+                                  .then(function(productInfo) {
+                                    var productTitle = productInfo.data().title;
+                                    var productPrice = productInfo.data().price;
+                                    var productTime = productInfo.data().time;
+                                    $.ajax({
+                                      type: "post",
+                                      url:
+                                        "https://www.knowledgecampus.info/torihikiReview.php",
+                                      data: {
+                                        userName: userName,
+                                        productUserMail: productUserMail,
+                                        reviewCount: reviewCount,
+                                        reviewComment: reviewComment,
+                                        productTime: productTime,
+                                        productPrice: productPrice,
+                                        productId: productId,
+                                        productTitle: productTitle
+                                      },
+                                      success: function(data) {
+                                        console.log("----success.----");
+                                      }
+                                    });
+                                  });
+                              });
                             db.collection("notifications")
                               .doc()
                               .set(
@@ -546,7 +578,7 @@
                     <span class="list-item__subtitle">
                       <ons-card id="torihikiComment_` +
               nowDataCount +
-              `">
+              `" style="width:100%;word-break:break-all;">
                       </ons-card>
                     </span>
                   </div>
@@ -579,6 +611,39 @@
                     userId: sendUserId
                   })
                   .send();
+                db.collection("users")
+                  .doc(sendUserId)
+                  .get()
+                  .then(function(sendUserInfo) {
+                    var sendUserMail = sendUserInfo.data().mail;
+                    var sendUserName = sendUserInfo.data().username;
+                    db.collection("products")
+                      .doc(productId)
+                      .get()
+                      .then(function(productInfo) {
+                        var productTitle = productInfo.data().title;
+                        var productPrice = productInfo.data().price;
+                        var productTime = productInfo.data().time;
+                        $.ajax({
+                          type: "post",
+                          url:
+                            "https://www.knowledgecampus.info/torihikiMessage.php",
+                          data: {
+                            userName: userName,
+                            productTitle: productTitle,
+                            sendUserMail: sendUserMail,
+                            commentInput: commentInput,
+                            commentUserName: sendUserName,
+                            productId: productId,
+                            productPrice: productPrice,
+                            productTime: productTime
+                          },
+                          success: function(data) {
+                            console.log("----success.----");
+                          }
+                        });
+                      });
+                  });
               });
           })
           .catch(function(error) {
@@ -655,7 +720,7 @@
                               <span class="list-item__subtitle">
                                 <ons-card id="torihikiComment_` +
                         nowDataCount +
-                        `">
+                        `" style="word-break:break-all;word-break:break-all; style="width:100%;"">
                                 </ons-card>
                               </span>
                             </div>

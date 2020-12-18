@@ -6,7 +6,7 @@
     <div class="center">メール/パスワード設定</div>
   </ons-toolbar>
   <ons-list class="content">
-    <ons-list style="margin-top:1rem;">
+    <ons-list>
       <ons-list-header>メールアドレス再設定</ons-list-header>
       <ons-list-item>
         <ons-row>
@@ -44,7 +44,6 @@
             <ons-button
               modifier="large"
               class="large-button-orange"
-              style="background: #0799d7;"
               onclick="myMailEdit()"
               >メールアドレス変更</ons-button
             >
@@ -78,7 +77,7 @@
           >
             <ons-button
               modifier="large"
-              class="large-button-orange"
+              class="large-button-gray"
               onclick="myPassEdit()"
               >パスワード変更</ons-button
             >
@@ -135,15 +134,25 @@
                       .currentUser.sendEmailVerification()
                       .then(function() {
                         // Update successful.
-                        hideLoad();
-                        ons.notification.alert({
-                          title: "ログアウトします",
-                          message:
-                            "認証メールを送信しました。ご確認くださいませ。",
-                          callback: function() {
-                            window.location.href = "index.html";
-                          }
-                        });
+                        db.collection("users")
+                          .doc(user.uid)
+                          .set(
+                            {
+                              mail: mailAddress
+                            },
+                            { merge: true }
+                          )
+                          .then(function() {
+                            hideLoad();
+                            ons.notification.alert({
+                              title: "ログアウトします",
+                              message:
+                                "認証メールを送信しました。ご確認くださいませ。",
+                              callback: function() {
+                                logout();
+                              }
+                            });
+                          });
                       });
                   });
               })
@@ -179,7 +188,7 @@
             title: "ログアウトします",
             message: "パスワード再設定メールを送信しました。ご確認ください。",
             callback: function() {
-              window.location.href = "index.html";
+              logout();
             }
           });
           myNavigator.popPage();

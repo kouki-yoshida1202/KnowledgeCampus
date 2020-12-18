@@ -29,7 +29,9 @@
     </div>
     <div class="center" id="toolbar-title"></div>
   </ons-toolbar>
-  <ons-bottom-toolbar style="line-height: 35px;height:50px">
+  <ons-bottom-toolbar
+    style="line-height: 35px;height:50px;background-color: darkgray;background-image: none;"
+  >
     <ons-row style="padding-top:5px;">
       <ons-col
         width="80%"
@@ -38,7 +40,7 @@
       >
         <ons-input
           id="productCommentInput"
-          style="background-color: #efeff4;width:90%;line-height: 31px;padding-top:0px;padding-bottom:0px;"
+          style="background-color: white;width:90%;line-height: 31px;padding-top:0px;padding-bottom:0px;"
           placeholder="コメント入力欄"
         ></ons-input>
       </ons-col>
@@ -259,7 +261,7 @@
                     <span class="list-item__subtitle">
                       <ons-card id="comment_` +
               nowDataCount +
-              `">
+              `" style="width:100%;">
                       </ons-card>
                     </span>
                   </div>
@@ -282,6 +284,9 @@
               .get()
               .then(function(product) {
                 var productUserId = product.data().userId;
+                var productTitle = product.data().title;
+                var productPrice = product.data().price;
+                var productTime = product.data().time;
                 var user = firebase.auth().currentUser;
                 if (user.uid != productUserId) {
                   db.collection("users")
@@ -319,6 +324,28 @@
                           },
                           { merge: true }
                         );
+                      db.collection("users")
+                        .doc(productUserId)
+                        .get()
+                        .then(function(productUserInfo) {
+                          var productUserMail = productUserInfo.data().mail;
+                          $.ajax({
+                            type: "post",
+                            url: "https://www.knowledgecampus.info/comment.php",
+                            data: {
+                              productId: productId,
+                              userName: userName,
+                              productTitle: productTitle,
+                              productUserMail: productUserMail,
+                              commentInput: commentInput,
+                              productPrice: productPrice,
+                              productTime: productTime
+                            },
+                            success: function(data) {
+                              console.log("----success.----");
+                            }
+                          });
+                        });
                     });
                 }
               });
@@ -367,7 +394,7 @@
                     <span class="list-item__subtitle">
                       <ons-card id="comment_` +
                 nowDataCount +
-                `">
+                `" style="word-break:break-all;">
                       </ons-card>
                     </span>
                   </div>

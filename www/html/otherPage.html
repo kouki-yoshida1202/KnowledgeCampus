@@ -18,6 +18,13 @@
       <ons-back-button></ons-back-button>
     </div>
     <div class="center" id="toolbar-title"></div>
+    <div
+      class="right navy-font"
+      style="margin-right:15px;"
+      onclick="otherAlert($('#otherUserId').val());"
+    >
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
   </ons-toolbar>
   <div
     style="width:100%;background:white;padding-top:1rem;padding-bottom:0.5rem;margin-bottom:0.5rem;"
@@ -42,7 +49,11 @@
           onclick="reviewPageJump($('#otherUserId').val());"
         ></p>
       </div>
-      <p id="otherPageText" class="navy" style="font-size:0.8em;"></p>
+      <p
+        id="otherPageText"
+        class="navy"
+        style="font-size:0.8em;word-break:break-all;"
+      ></p>
     </div>
   </div>
   <div
@@ -98,7 +109,34 @@
           console.log("Error getting document:", error);
         });
     }
-
+    function otherAlert(otherID) {
+      ons.notification.confirm({
+        message: "ブロックしますか？",
+        title: "確認",
+        buttonLabels: ["Cancel", "OK"],
+        callback: function(buttonIndex) {
+          if (buttonIndex == 1) {
+            var myUserId = firebase.auth().currentUser.uid;
+            db.collection("users")
+              .doc(otherID)
+              .get()
+              .then(function(otherInfo) {
+                var otherName = otherInfo.data().username;
+                db.collection("blocks")
+                  .add({
+                    senderUserID: myUserId,
+                    receiverUserID: otherID,
+                    receiverName: otherName,
+                    createTime: new Date()
+                  })
+                  .then(function() {
+                    alert("完了しました。");
+                  });
+              });
+          }
+        }
+      });
+    }
     function productOtherGet() {
       showLoad();
       var otherUserId = $("#otherUserId").val();
