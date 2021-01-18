@@ -212,7 +212,6 @@
     $("#syuppinPrice").keyup(function() {
       // 選択されているvalue属性値を取り出す
       var price = $(this).val();
-      console.log(price);
       if (price != "" && price != 0) {
         var tesuryo = Math.ceil(price * 0.1);
         $("#syuppinTesuryo").html("¥" + tesuryo + "(10%)");
@@ -301,7 +300,6 @@
         .doc()
         .set(setProductData)
         .then(function() {
-          console.log("Document successfully written!");
           hideLoad();
           if (releasestatus == "syuppin") {
             var message = "サービスを出品しました";

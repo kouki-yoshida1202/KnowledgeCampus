@@ -71,7 +71,9 @@
         .then(function(doc) {
           if (doc.exists) {
             $("#otherPageUserName").html(doc.data().username);
-            $("#otherPageText").html(doc.data().text);
+            $("#otherPageText").html(
+              doc.data().text.replace(/<5060>/g, "<br>")
+            );
 
             firebase
               .storage()

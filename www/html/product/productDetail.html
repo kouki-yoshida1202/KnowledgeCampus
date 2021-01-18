@@ -111,7 +111,6 @@
       id="productDetailUserName"
       style="text-align: center;margin-top:5px;margin-bottom:5px;"
     ></p>
-
     <div>
       <p
         id="productDetailUserReview"
@@ -828,11 +827,14 @@
             document.getElementById(
               "productDetailButton"
             ).onclick = new Function(
+              // "myProductEdit('" +
+              //   JSON.stringify(productData) +
+              //   "','" +
+              //   docId +
+              //   "');"
               "myProductEdit('" +
-                JSON.stringify(productData) +
-                "','" +
-                docId +
-                "');"
+              docId +
+              "');"
             );
           } else {
             db.collection("negotiations")
@@ -1056,50 +1058,100 @@
         });
     }
 
-    function myProductEdit(productData, productDocumentUid) {
-      var productData = JSON.parse(productData);
-      myNavigator.bringPageTop("html/product/syuppinEditPage.html");
+    // function myProductEdit(productData, productDocumentUid) {
+    //   var productData = JSON.parse(productData);
+    //   myNavigator.bringPageTop("html/product/syuppinEditPage.html");
 
-      document.addEventListener(
-        "init",
-        function(event) {
-          if (event.target.matches("#syuppinEditPage")) {
-            console.log(productData.explanation);
-            $("#productDocumentUid").val(productDocumentUid);
-            //初期値で入れておく
-            $("#syuppinCategory1Edit").val(productData.category1);
-            $("#syuppinCategory2Edit").val(productData.category2);
-            $("#syuppinCategory3Edit").val(productData.category3);
-            $("#syuppinTitleEdit").val(productData.title);
-            $("#syuppinExplanationEdit").val(
-              productData.explanation.replace(/<5060>/g, "\n")
-            );
-            $("#howToTalkEdit").val(productData.howtotalk);
-            $("#howToTalkOtherEdit").val(productData.howtotalkother);
-            $("#syuppinTimeEdit").val(productData.time);
-            $("#syuppinPriceEdit").val(productData.price);
-            if (productData.category3 == "") {
-              $("#syuppinCategoryEdit").html(
-                productData.category1 +
-                  " ><br>" +
-                  productData.category2 +
-                  "&emsp;"
-              );
-            } else {
-              $("#syuppinCategoryEdit").html(
-                productData.category1 +
-                  " ><br>" +
-                  productData.category2 +
-                  " ><br>" +
-                  productData.category3 +
-                  "&emsp;"
-              );
-            }
-            riekiCalc();
-          }
-        },
-        false
-      );
-    }
+    //   document.addEventListener(
+    //     "init",
+    //     function(event) {
+    //       if (event.target.matches("#syuppinEditPage")) {
+    //         console.log(productData.explanation);
+    //         $("#productDocumentUid").val(productDocumentUid);
+    //         //初期値で入れておく
+    //         $("#syuppinCategory1Edit").val(productData.category1);
+    //         $("#syuppinCategory2Edit").val(productData.category2);
+    //         $("#syuppinCategory3Edit").val(productData.category3);
+    //         $("#syuppinTitleEdit").val(productData.title);
+    //         $("#syuppinExplanationEdit").val(
+    //           productData.explanation.replace(/<5060>/g, "\n")
+    //         );
+    //         $("#howToTalkEdit").val(productData.howtotalk);
+    //         $("#howToTalkOtherEdit").val(productData.howtotalkother);
+    //         $("#syuppinTimeEdit").val(productData.time);
+    //         $("#syuppinPriceEdit").val(productData.price);
+    //         if (productData.category3 == "") {
+    //           $("#syuppinCategoryEdit").html(
+    //             productData.category1 +
+    //               " ><br>" +
+    //               productData.category2 +
+    //               "&emsp;"
+    //           );
+    //         } else {
+    //           $("#syuppinCategoryEdit").html(
+    //             productData.category1 +
+    //               " ><br>" +
+    //               productData.category2 +
+    //               " ><br>" +
+    //               productData.category3 +
+    //               "&emsp;"
+    //           );
+    //         }
+    //         riekiCalc();
+    //       }
+    //     },
+    //     false
+    //   );
+    // }
+    function myProductEdit( productDocumentUid) {
+        db.collection('products').doc(productDocumentUid).get().then(function(result){
+          var productData = result.data();
+          myNavigator.bringPageTop("html/product/syuppinEditPage.html");
+
+          document.addEventListener(
+            "init",
+            function (event) {
+              if (event.target.matches("#syuppinEditPage")) {
+                console.log(productData.explanation);
+                $("#productDocumentUid").val(productDocumentUid);
+                //初期値で入れておく
+                $("#syuppinCategory1Edit").val(productData.category1);
+                $("#syuppinCategory2Edit").val(productData.category2);
+                $("#syuppinCategory3Edit").val(productData.category3);
+                $("#syuppinTitleEdit").val(productData.title);
+                $("#syuppinExplanationEdit").val(
+                  productData.explanation.replace(/<5060>/g, "\n")
+                );
+                $("#howToTalkEdit").val(productData.howtotalk);
+                $("#howToTalkOtherEdit").val(productData.howtotalkother);
+                $("#syuppinTimeEdit").val(productData.time);
+                $("#syuppinPriceEdit").val(productData.price);
+                if (productData.category3 == "") {
+                  $("#syuppinCategoryEdit").html(
+                    productData.category1 +
+                    " ><br>" +
+                    productData.category2 +
+                    "&emsp;"
+                  );
+                } else {
+                  $("#syuppinCategoryEdit").html(
+                    productData.category1 +
+                    " ><br>" +
+                    productData.category2 +
+                    " ><br>" +
+                    productData.category3 +
+                    "&emsp;"
+                  );
+                }
+                riekiCalc();
+              }
+            },
+            false
+          );
+        }).catch(function(error){
+          console.log(error);
+        });
+        
+      }
   </script>
 </ons-page>
